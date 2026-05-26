@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.8.5] - 2026-05-27 — In-place Scope / 长文保长度
+
+针对 [#4](https://github.com/MrGeDiao/shuorenhua/issues/4) 反馈"长文被改完明显缩水"（约 1800 字 → minimal 约 1500 字 → aggressive 约 1000 字）。本版结论：问题不在三档力度，而在长文默认走 structural 动作时，删句、并句、重排段落会叠加。
+
+### Added
+- 新增 `in-place` edit scope，和 `minimal / standard / aggressive` 三档力度**正交**。`in-place` 下只做句内替换、删短语和降调，不默认删整句、并句或重排段落。它不是第四档力度，而是改写动作的边界。
+- `evals/benchmark.md` 新增 4 条用例（66 → 70 条，38 SF + 28 SNF → 40 SF + 30 SNF）：
+  - `SF-39`：长 `public-writing` 在 `in-place` 下应去掉拔高骨架，但保留字数、句数和关键转场
+  - `SF-40`：多类骨架叠加时，`in-place` 应做句内替代，而不是删段落
+  - `SNF-29`：重复短语承担长文节奏时，不应被当作水分误删
+  - `SNF-30`：正常承接句挂在事实上下文里，不应被误杀为总结式收尾
+- `evals/real-samples.md` 新增 `RS-19` 高拟真合成长文样本（不直接转录 issue #4 原文），并为 long-form 场景增加 `长度节奏` 评分维度。
+- 新增 `evals/results-v1.8.5.md`，归档本轮静态复核。
+
+### Changed
+- `SKILL.md` 在执行顺序里加入 scope 判断，定义 `structural` / `in-place` 两种改写边界。默认走 `structural`；中文 `public-writing` 长文（约 1000 字以上）或用户明确要求保长度、保句数、保段落节奏时切到 `in-place`。
+- `references/operation-manual.md` 给二元对比、总结式收尾、narrator 腔、价值拔高骨架四类骨架补 `in-place` 替代动作，保留原有 structural 默认动作不变。
+- `references/positive-style.md` 和 `references/scene-guardrails.md` 加长文节奏边界：重复和转场不一定是水分，删之前先看它是不是在承担段落呼吸。
+- `evals/run-eval.md` 同步 scope 判断和 70 条 benchmark 的评测范围。
+- `README.md` 同步版本、计数和 In-place Scope 能力说明。
+
+### Tested
+- 静态复核 `SF-39` / `SF-40` / `SNF-29` / `SNF-30`：4 条新增 benchmark 都能被 `SKILL.md` + `references/operation-manual.md` 当前的 scope 规则解释。
+- 静态复核 `RS-19`：推荐改法保留五段结构、三处时间锚点和关键转场，不把长文压成摘要。
+- 没有跑模型实测。本版的"通过率"是静态走查口径，不是任何具体模型在线跑出来的结果——模型实跑留给后续轮次。
+
+### Notes
+- 本版不动 `minimal / standard / aggressive` 三档力度本身，也不新增第四档；调整集中在"动作边界"这一条新的正交轴上。
+- `in-place` 不是凑字数。字数留存率（目标 ≥ 0.90，硬下限 0.85）是回读指标，真正约束的是不删整句、不并句、不重排段落。
+- "约 1000 字"是这一轮反馈得到的工程默认值，不是稳定结论；后续需要更多真实长文 bad case 校准。
+
 ## [1.8.4] - 2026-05-17 — Maintenance Surface / 维护入口对齐
 
 ### Added

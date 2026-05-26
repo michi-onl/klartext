@@ -28,7 +28,7 @@ description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI
 - 去 AI 味，主要处理的是模板感、收束腔、虚假主语、语域混搭和表演性技术腔。
 - 保留技术性。专业词、系统主语、事故复盘用语、PRD/发布说明中的术语默认可保留。
 - 优先保信息，再谈风格。任何改写都不能新增事实、删核心事实或改变责任主体。
-- 不用机械同义词替换表。优先删句、并句、降调、换主语、去总结式收尾。
+- 不用机械同义词替换表。默认可以删句、并句、降调、换主语、去总结式收尾；如果进入 `in-place` scope，就只做句内改写。
 - 短语表默认只列代表项，不追求穷举所有变体。遇到新口癖，先按现有模式归类，再决定要不要补词。
 
 ## Execution order
@@ -39,11 +39,12 @@ description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI
 2. 查禁改项：先划 `protected spans`，看有没有必须保留的术语、系统主语、引用原文、命令或正式语体
 3. 判 Tier：`Tier 1 / Tier 2 / Tier 3`，按问题命中强度判断，不要把 Tier 当作改写力度
 4. 再判档位：`minimal / standard / aggressive`
-5. 先执行本文件里的最小规则；只要环境里能读 `references/`，默认继续按问题类型补看 [Protected Spans](./references/protected-spans.md)、[Positive Style Contract](./references/positive-style.md)、[微操作手册](./references/operation-manual.md)、[结构反模式](./references/structures.md) 和相关短语表；如果目标是“改完能直接发”，或文本明显属于 README、release note、论坛帖、issue 回复，再补看 [Scene Packs](./references/scene-packs.md)、[真实样本评测](./evals/real-samples.md) 和 [改写示例](./references/examples.md)
-6. 回读拆成两步：先做保真回读，再按需做残留味回读
-7. 输出：默认只给单一推荐版本；用户明确要求“先标问题，不改写”时切到 `annotation mode`
+5. 判 scope：`structural / in-place`，判断这次能不能动句子和段落结构
+6. 先执行本文件里的最小规则；只要环境里能读 `references/`，默认继续按问题类型补看 [Protected Spans](./references/protected-spans.md)、[Positive Style Contract](./references/positive-style.md)、[微操作手册](./references/operation-manual.md)、[结构反模式](./references/structures.md) 和相关短语表；如果目标是“改完能直接发”，或文本明显属于 README、release note、论坛帖、issue 回复，再补看 [Scene Packs](./references/scene-packs.md)、[真实样本评测](./evals/real-samples.md) 和 [改写示例](./references/examples.md)
+7. 回读拆成两步：先做保真回读，再按需做残留味回读
+8. 输出：默认只给单一推荐版本；用户明确要求“先标问题，不改写”时切到 `annotation mode`
 
-执行第 5 步时，先按“模式”处理，再按“词条”兜底：
+执行第 6 步时，先按“模式”处理，再按“词条”兜底：
 
 - 同一类调试腔、暴力动作腔、主动出击腔、总结提示腔，默认按同一模式处理，不要求逐词命中
 - 只有当新说法改变了误杀边界，或明显不属于现有模式时，才把它当作新增词条处理
@@ -168,6 +169,48 @@ description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI
 - 先保护事实和术语，再做重写
 - `docs` 默认不要升到 `aggressive`
 
+## 3.5 Edit scope
+
+Scope 表示这次能不能改动句子和段落结构，和 `minimal / standard / aggressive` 是两条轴。
+
+### `structural`
+
+默认 scope。适用于短文本、明确要求重写的文本、AI 味密度很高且不需要保留原节奏的文本。
+
+允许动作：
+
+- 删整句空总结
+- 合并相邻事实句
+- 轻量调整句序或段落落点
+- 按场景重写局部结构
+
+### `in-place`
+
+适用于长 `public-writing`、观点文、复盘文、评论文，以及用户明确说“保长度 / 别缩水 / 字数 / 节奏 / 别删 / 尽量原样”的情况。
+
+默认触发条件：
+
+- 主场景是 `public-writing`，且中文原文约 1000 字以上
+- 用户 prompt 明确要求保留长度、句数、段落节奏或原文结构
+
+禁止动作：
+
+- 不删整句
+- 不合并相邻句
+- 不重排段落
+- 不把多段压成一段
+
+允许动作：
+
+- 句内替换词或短语
+- 删除句内提示层、空泛修饰和语气垫片
+- 把句内拔高语气降回普通判断
+- 在单句内部拆短过满结构，但不改变段落顺序
+
+删短语前先做语义独立性检查：删掉短语后，剩余部分必须仍是完整、可读、没有悬空指代的陈述句。否则改用句内替换，不要硬删。
+
+`aggressive + in-place` 可以存在，但默认先提醒用户：长文 `aggressive` 很容易明显缩水；如果用户真正要保长度，优先改成 `standard + in-place`。用户明确坚持时，再执行 `aggressive + in-place`，但仍遵守不删整句、不并句、不重排的边界。
+
 ## 4. Tier severity
 
 Tier 表示问题命中强度，与 [严重度分级](./references/severity.md) 保持一致，不表示改写力度。
@@ -286,6 +329,12 @@ Tier 表示问题命中强度，与 [严重度分级](./references/severity.md) 
 5. 删改后是否出现生硬断裂
 
 如果删掉一句后段落突然没了落点，就补一条事实句，不要补口号句。
+
+`in-place` scope 下额外检查：
+
+- 输出字数低于原文字数 85% 时，回退检查是否误删整句、并句或压段落
+- 句数变化超过约 10% 时，回退检查是否偷偷做了 structural 改写
+- 关键事实句、转场句和承担节奏的重复句，不能因为“看起来像模板”就默认删除
 
 ### Pass 2 | Residual Audit
 
