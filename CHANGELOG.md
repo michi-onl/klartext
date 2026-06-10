@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.7] - 2026-06-10 — Maintenance Surface 2 / 安装口径与 bounded 下沉
+
+### Changed
+- `install/claude-code.md` 重写：Claude Code 会按 `SKILL.md` frontmatter 的 description 自动发现并触发 skill，移除“不会自动发现、CLAUDE.md 说明不能省略”的过时断言；CLAUDE.md 触发说明降级为可选增强；新增软链接“跟随更新”安装方式。
+- `install/` 全部平台文档补「长文改写的三档 scope」小节（structural / bounded / in-place 与长文默认值）——v1.8.6 的 scope 能力此前没有下沉到任何安装入口。
+- `install/chatgpt-gpt-instructions.md` 执行流程补 scope 判断一行（需维护者手动同步到 Custom GPT 后台）。
+- `references/examples.md` 新增 Bounded 双合同示例（正文 + 建议删除清单，合成文本，含「句内洗 vs 进清单」的边界说明）。
+- `references/positive-style.md` 长文节奏边界补一句 bounded 口径：节奏句不进清单，进清单的必须是纯空句。
+
+### Notes
+- 本版不改 `SKILL.md` 与 `evals/`，是 v1.8.4 之后第二个维护面版本。
+- 仓库杂项：移除空的 `docs/` 目录；`CLAUDE.md → AGENTS.md` 软链纳入版本控制，Claude Code 用户 clone 后直接生效。
+
 ## [1.8.6] - 2026-06-03 — Bounded Scope / 长文去味与保长度的中间态
 
 针对 [#4](https://github.com/MrGeDiao/shuorenhua/issues/4) 复测反馈:v1.8.5 的 `in-place` 把长度接住了(实测 95–96%),但去 AI 味效果明显弱于 `structural`——长文里整句级的空话(无源引用、价值拔高收尾)在 `in-place` 下规则上删不掉,只会被软化保留。本版在 `structural` 和 `in-place` 之间补一个 `bounded` scope。

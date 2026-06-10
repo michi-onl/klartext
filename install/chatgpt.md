@@ -82,6 +82,16 @@ messages = [
 
 三种模式：`rewrite-safe`（默认用于 chat/public-writing，直接删无证据权威铺垫）、`audit-only`（默认用于 docs/status，只标缺来源）、`rewrite-with-placeholder`（保留结构但暴露缺来源）。不指定时按场景默认值走。
 
+## 长文改写的三档 scope
+
+长文（约 1000 字以上的 `public-writing`）改写时，可以指定三档 scope，和力度档位正交：
+
+- `structural`：自由删句、并句、重排，去味最彻底，但长度不可控（实测同一篇可能 -18% 到 -39%）
+- `bounded`（长文默认）：实句只做句内清理；整句空话不直接删，列成「建议删除（待确认）」清单交你拍板
+- `in-place`：一句都不删，只做句内降调，适合“完全原样”的要求
+
+在指令里直接说就行，例如：「用 bounded scope 改写，整句空话列出来给我确认、别直接删。」
+
 ## 什么时候需要补 `references/`
 
 - AI 腔很重，普通去词表改写效果不够
