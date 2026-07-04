@@ -39,9 +39,9 @@ mkdir -p tasks/current/eval-runs/2026-06-18-codex \
 |-------|------|
 | `SF01-14` | SF-01 到 SF-14 |
 | `SF15-28` | SF-15 到 SF-28 |
-| `SF29-42` | SF-29 到 SF-42 |
+| `SF29-45` | SF-29 到 SF-45 |
 | `SNF01-16` | SNF-01 到 SNF-16 |
-| `SNF17-33` | SNF-17 到 SNF-33 |
+| `SNF17-35` | SNF-17 到 SNF-35 |
 
 新增或补跑用例可以单独成批。v1.9.0 的 `SNF-32` 就按 `SNF32` 单条 follow-up 跑，输出命名为 `rewrite-SNF32.md` / `judge-...-SNF32.md`；v1.9.1 的边界复跑也可以单独命名为 `targeted-v1.9.1`。
 

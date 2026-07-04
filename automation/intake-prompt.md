@@ -37,7 +37,7 @@
 - 价值拔高骨架
 - 语域混搭
 - 无源引用
-- 其他结构反模式（见 `references/structures.md` 19 类）
+- 其他结构反模式（见 `references/structures.md` 20 类）
 
 漏列任何一族会把已覆盖样本错误推到"候选新模式"——遇到拿不准的归类，先回 `operation-manual.md` 比对家族编号和识别信号，再决定是不是真新模式。
 
