@@ -1,19 +1,19 @@
 {
-  "name": "shuorenhua",
+  "name": "klartext",
   "owner": {
-    "name": "MrGeDiao"
+    "name": "michi-onl"
   },
   "metadata": {
-    "description": "说人话：中文 AI 味清理 skill 的官方 marketplace。",
+    "description": "klartext: marketplace for the German-English de-AI rewrite skill (a fork of shuorenhua).",
     "version": "2.0.0"
   },
   "plugins": [
     {
-      "name": "shuorenhua",
-      "description": "中文 AI 味清理 skill：先保信息，再谈风格。",
+      "name": "klartext",
+      "description": "German-English de-AI rewrite skill: information first, then style.",
       "version": "2.0.0",
       "author": {
-        "name": "MrGeDiao"
+        "name": "michi-onl"
       },
       "source": "./"
     }

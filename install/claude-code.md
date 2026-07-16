@@ -1,110 +1,110 @@
-# Claude Code 安装
+# Claude Code install
 
-## 方式 1：plugin 一键安装（推荐）
+## Option 1: plugin, one command (recommended)
 
 ```text
-/plugin marketplace add MrGeDiao/shuorenhua
-/plugin install shuorenhua@shuorenhua
+/plugin marketplace add michi-onl/shuorenhua
+/plugin install klartext@klartext
 ```
 
-在 Claude Code 对话里执行这两条命令即可，skill 自动发现和触发。升级用 `/plugin` 面板或 `claude plugin update shuorenhua`。
+Run these two commands in a Claude Code conversation; the skill is discovered and triggered automatically. Upgrade via the `/plugin` panel or `claude plugin update klartext`.
 
-plugin 自带全量文件（`SKILL.md` + `references/`），lite / full 的区分不再需要。已经用下面方式 2-4 手动装过的，先移除旧安装再装 plugin，避免同一个 skill 重复触发。
+The plugin ships all files (`SKILL.md` + `references/`), so the lite / full split is no longer needed. If you already installed manually via options 2–4 below, remove the old install first to avoid the same skill triggering twice.
 
-## lite / full 怎么选（手动安装时）
+## lite / full (for manual installs)
 
-- `lite`：只加载 `SKILL.md`。适合临时改写和轻量审稿。
-- `full`：加载 `SKILL.md` + `references/`。适合项目级安装、公开文本、技术文档和需要误杀防护的场景。
+- `lite`: load only `SKILL.md`. Good for quick rewrites and light review.
+- `full`: load `SKILL.md` + `references/`. Good for project-level installs, public text, technical docs, and cases that need false-positive protection.
 
-Claude Code 会基于 `SKILL.md` 开头的 description 自动发现并触发 skills 目录里的 skill，装好即用。
+Claude Code discovers and triggers skills in the skills directory based on the `description` at the top of `SKILL.md` — ready to use once installed.
 
-## 方式 2：项目级
+## Option 2: project-level
 
 ```bash
-mkdir -p .claude/skills/shuorenhua
-cp SKILL.md .claude/skills/shuorenhua/
-cp -r references .claude/skills/shuorenhua/
+mkdir -p .claude/skills/klartext
+cp SKILL.md .claude/skills/klartext/
+cp -r references .claude/skills/klartext/
 ```
 
-这是 full 用法，也是项目级安装的默认建议。规则跟项目一起进版本管理，团队成员 clone 即用。
+This is the full usage and the default recommendation for project-level installs. The rules go into version control with the project; teammates get it on clone.
 
-## 方式 3：全局
+## Option 3: global
 
 ```bash
-git clone https://github.com/MrGeDiao/shuorenhua.git
+git clone https://github.com/michi-onl/shuorenhua.git
 mkdir -p ~/.claude/skills
-cp -r shuorenhua ~/.claude/skills/shuorenhua
+cp -r shuorenhua ~/.claude/skills/klartext
 ```
 
-整个仓库拷进去即可，多出来的 evals、install 文件不影响触发。想要最小安装，只拷 `SKILL.md`（lite）或 `SKILL.md` + `references/`（full）。
+Copy the whole repo in; the extra evals and install files don't affect triggering. For a minimal install, copy only `SKILL.md` (lite) or `SKILL.md` + `references/` (full).
 
-## 方式 4：跟随更新
+## Option 4: follow updates
 
 ```bash
-git clone https://github.com/MrGeDiao/shuorenhua.git
-ln -s "$PWD/shuorenhua" ~/.claude/skills/shuorenhua
+git clone https://github.com/michi-onl/shuorenhua.git
+ln -s "$PWD/shuorenhua" ~/.claude/skills/klartext
 ```
 
-软链接指向本地仓库，之后 `git pull` 即升级，不用重新拷贝。
+The symlink points at your local repo, so `git pull` upgrades it — no re-copying.
 
-## 触发说明（可选）
+## Trigger note (optional)
 
-Claude Code 会基于 SKILL.md 开头的 description 自动触发这个 skill。如果你想在长期项目里提高命中稳定性、或限定它只处理对外文本，可以在项目的 `CLAUDE.md` 里补一段触发说明（可选，不是必需）：
+Claude Code triggers this skill automatically from the description at the top of `SKILL.md`. To improve hit stability in a long-lived project, or to restrict it to external text, add a trigger note to the project's `CLAUDE.md` (optional, not required):
 
 ```markdown
-## 写作风格
-当任务涉及“去 AI 味”“说人话”“自然一点”“别像模板”这类改写时，遵循 `.claude/skills/shuorenhua/SKILL.md`。
-对外文本优先按它处理；代码、日志、配置和命令输出不套这个 skill。
+## Writing style
+When a task involves "de-AI", "auf Deutsch natürlicher", "sound human", "not like a template", follow `.claude/skills/klartext/SKILL.md`.
+Apply it to external text first; don't apply it to code, logs, config, or command output.
 ```
 
-## 使用
+## Usage
 
-对话里直接说：
+Just say, in the conversation:
 
 ```text
-用说人话规则改写这段文本。
+Rewrite this text with the klartext rules.
 ```
 
-或者更具体：
+Or more specifically:
 
 ```text
-把这段 status 更新按说人话规则轻改，保留术语和系统主语，不要改成口语闲聊体。
+Lightly edit this status update with the klartext rules; keep the terms and system subjects, don't turn it into casual chat.
 ```
 
-如果你想先判断"哪里像 AI"，不要直接改稿：
+To first judge "where it sounds AI" without rewriting:
 
 ```text
-先不要改写，只按 annotation mode 标出下面这段文字里的问题：...
+Don't rewrite yet, just flag the problems in this text in annotation mode: ...
 ```
 
-适合这几类场景：
+Good for:
 
-- 你想先看这段话该不该改
-- 你要做审稿或 review，不想直接替作者重写
-- 你怀疑有无源引用、语域混搭或工程师腔，但还不想动正文
+- You want to see first whether this text should change
+- You're doing review, not rewriting for the author
+- You suspect unsourced citations, register mixing, or engineer-speak, but don't want to touch the body yet
 
-处理无源引用时，可以指定模式：
+For unsourced citations, you can specify a mode:
 
 ```text
-用说人话规则改写这段文本，无源引用按 audit-only 处理。
+Rewrite this text with the klartext rules; handle unsourced citations as audit-only.
 ```
 
-三种模式：`rewrite-safe`（默认用于 chat/public-writing，直接删无证据权威铺垫）、`audit-only`（默认用于 docs/status，只标缺来源）、`rewrite-with-placeholder`（保留结构但暴露缺来源）。不指定时按场景默认值走。
+Three modes: `rewrite-safe` (default for chat/public-writing, delete unsupported authority framing), `audit-only` (default for docs/status, only flag the missing source), `rewrite-with-placeholder` (keep the structure but expose the missing source). Without one, the scene default applies.
 
-## 长文改写的三档 scope
+## Three scopes for long-form rewrites
 
-长文（约 1000 字以上的 `public-writing`）改写时，可以指定三档 scope，和力度档位正交：
+For long text (roughly 1000+ words of `public-writing`), you can specify one of three scopes, orthogonal to the strength level:
 
-- `structural`：自由删句、并句、重排，去味最彻底，但长度不可控（实测同一篇可能 -18% 到 -39%）
-- `bounded`（长文默认）：实句只做句内清理；整句空话不直接删，列成「建议删除（待确认）」清单交你拍板
-- `in-place`：一句都不删，只做句内降调，适合“完全原样”的要求
+- `structural`: freely delete/merge/reorder, most thorough de-flavoring, but length is unpredictable (measured: the same piece may be -18% to -39%)
+- `bounded` (long-form default): real sentences get only intra-sentence cleanup; whole empty sentences aren't deleted directly but listed as "Suggested deletions (to confirm)" for you to decide
+- `in-place`: delete nothing, only lower tone intra-sentence, for "exactly as-is" requests
 
-在指令里直接说就行，例如：「用 bounded scope 改写，整句空话列出来给我确认、别直接删。」
+Just say it in the instruction, e.g. "Rewrite in bounded scope; list the whole empty sentences for me to confirm, don't delete them directly."
 
-## 验证
+## Verification
 
 ```text
-在当今快速发展的人工智能时代，如何打造一个真正赋能开发者的工具，已经成为业界不容忽视的关键议题。
+In einer Zeit, in der KI die Softwareentwicklung grundlegend neu gestaltet, ist die Frage, wie man ein wahrhaft entwickler-befähigendes Tool schafft, zu einer nicht zu unterschätzenden Schlüsselfrage geworden.
 ```
 
-输出不再保留 `打造 / 赋能 / 不容忽视 / 关键议题`，且信息没有改散，说明接好了。
+If the output drops `grundlegend neu gestaltet / entwickler-befähigend / nicht zu unterschätzen / Schlüsselfrage` and doesn't scatter the information, it's wired up.

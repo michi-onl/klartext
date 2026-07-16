@@ -1,152 +1,153 @@
-# 社区样本 Intake 自动化方案
+# Community sample intake automation
 
-## 目标
+## Goal
 
-把"社区又在吐槽什么新口癖"从一次次手工收词，改成稳定的 intake 流程：
+Turn "what new tic is the community complaining about" from ad-hoc manual word-collecting into a stable intake process:
 
-- 先判断是否已被现有规则覆盖
-- 再区分"现有模式变体"还是"真正新模式"
-- 最后只输出建议，不自动改仓库
+- First judge whether it's already covered by existing rules
+- Then distinguish "variant of an existing pattern" from "genuinely new pattern"
+- Finally output suggestions only, don't auto-edit the repo
 
-这套自动化的目标不是直接扩词表，而是帮维护者减少筛选成本。
+The goal of this automation is not to expand the word table directly, but to cut the maintainer's screening cost.
 
-## 推荐输入
+## Recommended input
 
-每次运行接收一批社区样本，来源可以混合：
+Each run takes a batch of community samples; sources may be mixed:
 
-- 梗图截图
-- 对话截图
-- 文本摘录
-- issue / comment 里贴出来的例子
+- Meme screenshots
+- Chat screenshots
+- Text excerpts
+- Examples pasted in issues / comments
 
-输入最好附最少上下文：
+Input should carry minimal context:
 
-- 来源平台
-- 原始文本或 OCR 文本
-- 一句说明：为什么觉得它像 AI 味
+- Source platform
+- Original or OCR text
+- One line: why it looks AI-flavored
 
-## 自动化流程
+## Automation flow
 
-### 1. 抽取样本
+### 1. Extract samples
 
-- 从截图里做 OCR，尽量保留原句
-- 去掉无关 UI 文案，只保留候选句子
-- 同一张图里重复出现的词先去重
+- OCR from screenshots, keeping the original sentence where possible
+- Drop irrelevant UI text, keep only candidate sentences
+- Deduplicate words repeated within one image
 
-### 2. 归并到现有问题族
+### 2. Merge into existing problem families
 
-对每条样本，优先归到已有模式（以 `references/operation-manual.md` 和 `references/phrases-zh.md` 的分类为权威，按出现频率列出主要家族）：
+For each sample, prefer an existing pattern (with `references/operation-manual.md` and `references/phrases-de.md` categories as authority, listing the main families by frequency):
 
-- 工程师腔 / 调试腔
-- 商业黑话
-- 庸医问诊腔
-- 暴力动作腔
-- 主动出击腔
-- 总结提示腔
-- 总结式收尾
-- 过度接住 / 心理判断腔
-- 郑重预告 / 身份认证式夸奖
-- narrator 腔
-- 自媒体 / 小红书腔
-- 过渡废话
-- 二元对比句
-- 价值拔高骨架
-- 语域混搭
-- 无源引用
-- 其他结构反模式（见 `references/structures.md` 20 类）
+- engineer-speak / debug-speak
+- business jargon
+- quack-doctor probing
+- violence-speak
+- proactive pushiness
+- summary-cue speak
+- summary ending
+- over-catching / psych-judgment speak
+- solemn preview / identity-certification praise
+- narrator voice
+- influencer / clickbait voice
+- transition filler
+- binary-contrast sentence
+- value-inflation skeleton
+- register mixing
+- unsourced citation
+- Nominalstil overload (German-specific)
+- other structural anti-patterns (see `references/structures.md`, 21 classes)
 
-如果能稳定归类，就不要急着建议加新词。**漏掉某个已覆盖家族会把已覆盖样本错误推到"候选新模式"，破坏"已覆盖 → 无动作"边界**——遇到不确定的归类，优先回去比对 `operation-manual.md` 的家族编号，而不是直接归到"其他"。
+If it classifies cleanly, don't rush to suggest a new word. **Missing a covered family wrongly pushes a covered sample into "candidate new pattern" and breaks the "covered → no action" boundary** — when unsure, go back and compare against the family numbers in `operation-manual.md` rather than dumping it in "other".
 
-### 3. 输出三档结论
+### 3. Output a three-tier conclusion
 
-每条样本只落一个结论：
+Each sample lands exactly one conclusion:
 
-- `已覆盖`
-  - 词表或结构表里已经有代表项
-  - 不需要动作
-- `变体归并`
-  - 词表未逐字收录，但现有模式已经能吃住
-  - 建议补 benchmark 或操作说明，不建议加词
-- `候选新模式`
-  - 现有模式解释不动
-  - 或它明显改变了误杀边界
-  - 才建议人工评估是否入库
+- `covered`
+  - The word table or structure table already has a representative item
+  - No action needed
+- `variant merge`
+  - Not listed verbatim, but an existing pattern already absorbs it
+  - Suggest a benchmark or operation-manual note, not a new word
+- `candidate new pattern`
+  - No existing pattern explains it
+  - Or it clearly changes the false-positive boundary
+  - Only then suggest a human review for whether to add it
 
-### 4. 生成建议，不直接写仓库
+### 4. Generate suggestions, don't write the repo directly
 
-每次运行输出一份 intake 报告，固定包含：
+Each run outputs an intake report, always containing:
 
-- `本轮样本数`
-- `已覆盖`
-- `变体归并`
-- `候选新模式`
-- `建议动作`
+- `Sample count this round`
+- `Covered`
+- `Variant merge`
+- `Candidate new pattern`
+- `Suggested action`
 
-`建议动作` 只允许这 4 类：
+`Suggested action` allows only these 4:
 
-- `无动作`
-- `补 benchmark`
-- `补 operation-manual`
-- `考虑新增词条或结构`
+- `no action`
+- `add benchmark`
+- `add operation-manual`
+- `consider adding a word or structure`
 
-### 5. 人工确认后再落库
+### 5. Land in the repo only after human confirmation
 
-只有人工确认后，才进行后续动作：
+Only after human confirmation do you take follow-up actions:
 
-- 更新 `evals/benchmark.md`
-- 更新 `references/operation-manual.md`
-- 如果是新结构模式，更新 `references/structures.md`
-- 必要时才更新 `references/phrases-zh.md`
+- Update `evals/benchmark.md`
+- Update `references/operation-manual.md`
+- For a new structural pattern, update `references/structures.md`
+- Update `references/phrases-de.md` only when necessary
 
-默认不要让自动化直接编辑这些文件。
+By default, don't let the automation edit these files directly.
 
-## 推荐输出格式
+## Recommended output format
 
-报告必须包含 6 段：`本轮样本数` / `已覆盖` / `变体归并` / `候选新模式` / `建议动作` / `一句总判断`。这一格式由 `intake-prompt.md` 的强约束钉死，运行入口和 changelog 也按此口径校验。
+The report must contain 6 sections: `Sample count this round` / `Covered` / `Variant merge` / `Candidate new pattern` / `Suggested action` / `One-line verdict`. This format is pinned by the hard constraints in `intake-prompt.md`; the run entry and changelog are validated against it.
 
 ```md
-# 本周社区口癖 intake
+# Weekly community-tic intake
 
-本轮样本数：3
+Sample count this round: 3
 
-## 已覆盖
-- "拍板" → 暴力动作腔，词表已覆盖；建议动作：无动作
+## Covered
+- "festnageln" → violence-speak, already in the table; action: no action
 
-## 变体归并
-- "扒开" → 庸医问诊腔变体，建议补 benchmark
-- "拽出来" → 庸医问诊腔变体，建议补 operation-manual 示例
+## Variant merge
+- "freilegen" → quack-doctor-probing variant, suggest add benchmark
+- "rausziehen" → quack-doctor-probing variant, suggest add operation-manual example
 
-## 候选新模式
-- 暂无
+## Candidate new pattern
+- none
 
-## 建议动作
-- 无动作：1 条
-- 新增 1 条 SF benchmark
-- 更新 operation-manual 的变体归并说明
+## Suggested action
+- no action: 1
+- add 1 SF benchmark
+- update the operation-manual variant-merge note
 
-总判断：本轮不需要新增词条，现有模式可以吃住。
+Verdict: no new word needed this round, existing patterns absorb it.
 ```
 
-## 调度建议
+## Scheduling
 
-- 频率：每周 1 次够了
-- 触发方式：固定时间跑，或在维护者手工投喂一批样本后跑
-- 输出位置：开一个 inbox 项，而不是直接改文件
+- Frequency: once a week is enough
+- Trigger: run at a fixed time, or after the maintainer feeds in a batch
+- Output location: open an inbox item rather than editing files directly
 
-## 不建议做的事
+## Don't do
 
-- 不要看到一个新词就自动追加到词表
-- 不要从单张梗图直接推出"必须加规则"
-- 不要跳过误杀判断
-- 不要让自动化自动提交 PR
+- Don't auto-append every new word to the table
+- Don't derive "must add a rule" from a single meme
+- Don't skip the false-positive check
+- Don't let the automation auto-open a PR
 
-## 如果以后真要接到 Codex Automation
+## If you later wire it into Codex automation
 
-自动化 prompt 应只做 intake，不做仓库写操作。核心要求：
+The automation prompt should do intake only, no repo writes. Core requirements:
 
-- 先读取 `SKILL.md`、`references/phrases-zh.md`、`references/structures.md`、`references/operation-manual.md`
-- 把输入样本归到"已覆盖 / 变体归并 / 候选新模式"
-- 输出建议动作和理由
-- 除非用户明确要求，否则不要修改仓库文件
+- First read `SKILL.md`, `references/phrases-de.md`, `references/structures.md`, `references/operation-manual.md`
+- Classify input samples into "covered / variant merge / candidate new pattern"
+- Output the suggested action and reasoning
+- Don't modify repo files unless the user explicitly asks
 
-可直接复用的 prompt 模板见 `./intake-prompt.md`，运行入口见 `./README.md`。
+A reusable prompt template is in `./intake-prompt.md`; the run entry is in `./README.md`.

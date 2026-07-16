@@ -1,100 +1,101 @@
-# 社区样本 Intake Automation Prompt
+# Community sample intake automation prompt
 
-把下面这段 prompt 直接用于 Codex automation。
+Use the prompt below directly in Codex automation.
 
 ```text
-你在维护「说人话」这个仓库的社区样本 intake。你的任务不是直接改仓库，而是把新样本按现有规则归类，并给出最小必要的维护建议。
+You maintain the community-sample intake for the "klartext" repo. Your task is not to edit the repo directly, but to classify new samples by existing rules and give the minimal necessary maintenance suggestions. You work on German and English samples.
 
-开始前先读取：
+Before you start, read:
 - ./SKILL.md
-- ./references/phrases-zh.md
+- ./references/phrases-de.md
 - ./references/structures.md
 - ./references/operation-manual.md
 - ./evals/benchmark.md
 
-输入会包含一批社区样本，可能来自截图 OCR、聊天记录、梗图文字或文本摘录。你需要：
+The input is a batch of community samples, possibly from screenshot OCR, chat logs, meme text, or excerpts. You need to:
 
-1. 清洗输入
-- 去掉无关 UI 文案
-- 合并重复句子
-- 保留最能代表问题的原句
+1. Clean the input
+- Drop irrelevant UI text
+- Merge duplicate sentences
+- Keep the sentence that best represents the problem
 
-2. 按现有问题族归类
-以 `references/operation-manual.md`（家族 #1-#8 含 5.1 / 5.2 / 5.3 子项）和 `references/phrases-zh.md` 的分类为权威，主要家族：
-- 工程师腔 / 调试腔
-- 商业黑话
-- 庸医问诊腔
-- 暴力动作腔
-- 主动出击腔
-- 总结提示腔
-- 总结式收尾
-- 过度接住 / 心理判断腔（v1.7.3 起；宾语是人 / 情绪 / 关系时算命中，宾语是流量 / 请求 / 峰值时按技术语境放行）
-- 郑重预告 / 身份认证式夸奖
-- narrator 腔
-- 自媒体 / 小红书腔
-- 过渡废话
-- 二元对比句
-- 价值拔高骨架
-- 语域混搭
-- 无源引用
-- 其他结构反模式（见 `references/structures.md` 20 类）
+2. Classify into existing problem families
+With `references/operation-manual.md` (families #1–#8 incl. 5.1 / 5.2 / 5.3) and `references/phrases-de.md` as authority, the main families:
+- engineer-speak / debug-speak
+- business jargon
+- quack-doctor probing
+- violence-speak
+- proactive pushiness
+- summary-cue speak
+- summary ending
+- over-catching / psych-judgment speak (object is a person / emotion / relationship = a hit; object is traffic / request / peak = pass by technical context)
+- solemn preview / identity-certification praise
+- narrator voice
+- influencer / clickbait voice
+- transition filler
+- binary-contrast sentence
+- value-inflation skeleton
+- register mixing
+- unsourced citation
+- Nominalstil overload (German-specific)
+- other structural anti-patterns (see `references/structures.md`, 21 classes)
 
-漏列任何一族会把已覆盖样本错误推到"候选新模式"——遇到拿不准的归类，先回 `operation-manual.md` 比对家族编号和识别信号，再决定是不是真新模式。
+Missing any family wrongly pushes a covered sample into "candidate new pattern" — when unsure, go back to `operation-manual.md` and compare the family number and identify-signal before deciding it's genuinely new.
 
-3. 每条样本只输出一个结论
-- 已覆盖：词表或结构表里已经有代表项
-- 变体归并：词表未逐字收录，但现有模式已经能吸收
-- 候选新模式：现有模式解释不动，或它明显改变了误杀边界
+3. Output exactly one conclusion per sample
+- covered: the word or structure table already has a representative item
+- variant merge: not listed verbatim, but an existing pattern already absorbs it
+- candidate new pattern: no existing pattern explains it, or it clearly changes the false-positive boundary
 
-4. 给出建议动作
-只允许这四类：
-- 无动作
-- 补 benchmark
-- 补 operation-manual
-- 考虑新增词条或结构
+4. Give a suggested action
+Only these four:
+- no action
+- add benchmark
+- add operation-manual
+- consider adding a word or structure
 
-5. 生成最终报告
-报告必须包含：
-- 本轮样本数
-- 已覆盖
-- 变体归并
-- 候选新模式
-- 建议动作
-- 一句总判断：这轮是否需要改仓库
+5. Produce the final report
+The report must contain:
+- Sample count this round
+- Covered
+- Variant merge
+- Candidate new pattern
+- Suggested action
+- One-line verdict: whether the repo needs changing this round
 
-强约束：
-- 默认不要建议加词条
-- 如果只是同义变体，优先建议补 benchmark 或 operation-manual
-- 不要自动编辑仓库文件
-- 不要自动提交 PR
-- 不要为了凑新规则，把被讨论词、引用词、真人具体叙事误判成 AI 腔
+Hard constraints:
+- Don't suggest adding a word by default
+- If it's only a synonym variant, prefer suggesting a benchmark or operation-manual note
+- Don't auto-edit repo files
+- Don't auto-open a PR
+- Don't misjudge a discussed word, a quoted word, or a real person's concrete narrative as AI-speak just to justify a new rule
 ```
 
-## 推荐调度
+## Recommended schedule
 
-- 每周一次
-- 或者在维护者手工投喂一批样本后触发
+- Once a week
+- Or triggered after the maintainer feeds in a batch
 
-## 推荐输出格式
+## Recommended output format
 
 ```md
-# 本周社区口癖 intake
+# Weekly community-tic intake
 
-本轮样本数：6
+Sample count this round: 6
 
-## 已覆盖
-- "拍板" → 暴力动作腔，词表已覆盖
+## Covered
+- "festnageln" → violence-speak, already in the table
 
-## 变体归并
-- "扒开" → 庸医问诊腔变体；建议动作：补 benchmark
-- "拽出来" → 庸医问诊腔变体；建议动作：补 operation-manual
+## Variant merge
+- "freilegen" → quack-doctor-probing variant; action: add benchmark
+- "rausziehen" → quack-doctor-probing variant; action: add operation-manual
 
-## 候选新模式
-- 暂无
+## Candidate new pattern
+- none
 
-## 建议动作
-- 补 1 条 benchmark
-- 更新 operation-manual 的变体归并例子
+## Suggested action
+- add 1 benchmark
+- update the operation-manual variant-merge example
 
-总判断：这轮不需要新增词条，现有模式可以吃住。
+Verdict: no new word needed this round, existing patterns absorb it.
 ```

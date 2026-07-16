@@ -1,82 +1,76 @@
-# OpenClaw 安装
+# OpenClaw install
 
-## lite / full 怎么选
+## lite / full
 
-- `lite`：只放 `SKILL.md`。适合 token 紧张或只做基础改写。
-- `full`：放 `SKILL.md` + `references/`。适合长期 workspace、对外文本、技术文档和需要误杀防护的场景。
+- `lite`: ship only `SKILL.md`. Good for tight tokens or basic rewrites.
+- `full`: ship `SKILL.md` + `references/`. Good for long-lived workspaces, external text, technical docs, and cases that need false-positive protection.
 
-## 1. 把 skill 放进 workspace
+## 1. Put the skill into the workspace
 
 ```bash
-mkdir -p workspace/skills/shuorenhua
-cp SKILL.md workspace/skills/shuorenhua/
-cp -r references workspace/skills/shuorenhua/
+mkdir -p workspace/skills/klartext
+cp SKILL.md workspace/skills/klartext/
+cp -r references workspace/skills/klartext/
 ```
 
-上面是 full 用法。token 紧张时只放 `SKILL.md` 也能完成基础改写；`references/` 能让场景判断和误杀防护更稳。
+The above is the full usage. When tokens are tight, shipping only `SKILL.md` still does basic rewrites; `references/` makes scene detection and false-positive protection steadier.
 
-## 2. 触发方式选一个
+## 2. Pick one trigger method
 
-**方式 A：按需触发（默认）**
+**Method A: on-demand trigger (default)**
 
-把文件放进 `workspace/skills/` 后，OpenClaw 会按 skill 的 `name` 和 `description` 判断何时启用。对话里说"用说人话规则改写"就能触发，不需要额外配置。
+Once the files are in `workspace/skills/`, OpenClaw decides when to enable the skill from its `name` and `description`. Say "rewrite this with the klartext rules" in the conversation and it triggers, no extra config.
 
-**方式 B：设为默认写作风格**
+**Method B: set as the default writing style**
 
-如果希望所有对外文本都自动套用，在 `workspace/SOUL.md` 中加：
+To auto-apply to all external text, add to `workspace/SOUL.md`:
 
 ```markdown
-## 说人话
-所有对外文本（消息、文档、摘要、公开写作）遵循 `skills/shuorenhua/SKILL.md` 的规则。
-内部技术输出（代码、日志、配置）不受约束。
+## klartext
+All external text (messages, docs, summaries, public writing) follows the rules in `skills/klartext/SKILL.md`.
+Internal technical output (code, logs, config) is exempt.
 ```
 
-## 3. 同步到 VM
+## 3. Sync to the VM
 
 ```bash
-git add workspace/skills/shuorenhua
-git commit -m "feat: add shuorenhua skill"
+git add workspace/skills/klartext
+git commit -m "feat: add klartext skill"
 git push
 ```
 
-VM 上 `git pull` 后即生效。如果 VM 配了自动拉取，push 之后直接就能用。
+`git pull` on the VM makes it live. If the VM auto-pulls, it works right after push.
 
-## 使用提示
+## Usage tips
 
-如果你想先判断"哪里像 AI"，不要直接改稿：
-
-```text
-先不要改写，只按 annotation mode 标出下面这段文字里的问题：...
-```
-
-适合这几类场景：
-
-- 你想先看这段话该不该改
-- 你要做审稿或 review，不想直接替作者重写
-- 你怀疑有无源引用、语域混搭或工程师腔，但还不想动正文
-
-处理无源引用时，可以指定模式：
+To first judge "where it sounds AI" without rewriting:
 
 ```text
-用说人话规则改写这段文本，无源引用按 audit-only 处理。
+Don't rewrite yet, just flag the problems in this text in annotation mode: ...
 ```
 
-三种模式：`rewrite-safe`（默认用于 chat/public-writing，直接删无证据权威铺垫）、`audit-only`（默认用于 docs/status，只标缺来源）、`rewrite-with-placeholder`（保留结构但暴露缺来源）。不指定时按场景默认值走。
-
-## 长文改写的三档 scope
-
-长文（约 1000 字以上的 `public-writing`）改写时，可以指定三档 scope，和力度档位正交：
-
-- `structural`：自由删句、并句、重排，去味最彻底，但长度不可控（实测同一篇可能 -18% 到 -39%）
-- `bounded`（长文默认）：实句只做句内清理；整句空话不直接删，列成「建议删除（待确认）」清单交你拍板
-- `in-place`：一句都不删，只做句内降调，适合“完全原样”的要求
-
-在指令里直接说就行，例如：「用 bounded scope 改写，整句空话列出来给我确认、别直接删。」
-
-## 验证
+For unsourced citations, you can specify a mode:
 
 ```text
-用说人话规则改写这段文本：在当今快速发展的人工智能时代，如何打造一个真正赋能开发者的工具，已经成为业界不容忽视的关键议题。
+Rewrite this text with the klartext rules; handle unsourced citations as audit-only.
 ```
 
-输出里不再保留 `打造 / 赋能 / 不容忽视 / 关键议题`，且信息没有改散，说明 skill 生效了。
+Three modes: `rewrite-safe` (default for chat/public-writing, delete unsupported authority framing), `audit-only` (default for docs/status, only flag the missing source), `rewrite-with-placeholder` (keep the structure but expose the missing source). Without one, the scene default applies.
+
+## Three scopes for long-form rewrites
+
+For long text (roughly 1000+ words of `public-writing`), you can specify one of three scopes, orthogonal to the strength level:
+
+- `structural`: freely delete/merge/reorder, most thorough de-flavoring, but length is unpredictable (measured: the same piece may be -18% to -39%)
+- `bounded` (long-form default): real sentences get only intra-sentence cleanup; whole empty sentences aren't deleted directly but listed as "Suggested deletions (to confirm)" for you to decide
+- `in-place`: delete nothing, only lower tone intra-sentence, for "exactly as-is" requests
+
+Just say it in the instruction, e.g. "Rewrite in bounded scope; list the whole empty sentences for me to confirm, don't delete them directly."
+
+## Verification
+
+```text
+Rewrite this text with the klartext rules: In einer Zeit, in der KI die Softwareentwicklung grundlegend neu gestaltet, ist die Frage, wie man ein wahrhaft entwickler-befähigendes Tool schafft, zu einer nicht zu unterschätzenden Schlüsselfrage geworden.
+```
+
+If the output drops `grundlegend neu gestaltet / entwickler-befähigend / nicht zu unterschätzen / Schlüsselfrage` without scattering the information, the skill is active.

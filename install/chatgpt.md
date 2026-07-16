@@ -1,102 +1,92 @@
-# ChatGPT / 通用 LLM 安装
+# ChatGPT / generic LLM install
 
-## lite / full 怎么选
+## lite / full
 
-- `lite`：只加载 `SKILL.md`。适合直接贴对话、API system prompt、上下文紧张或偶尔改写。
-- `full`：加载 `SKILL.md` + `references/`。适合 Custom GPT、Project、公开文本、技术文档和需要误杀防护的场景。
+- `lite`: load only `SKILL.md`. Good for pasting into a chat, an API system prompt, tight context, or occasional rewrites.
+- `full`: load `SKILL.md` + `references/`. Good for a Custom GPT, a Project, public text, technical docs, and cases that need false-positive protection.
 
-ChatGPT / 通用 LLM 场景默认从 lite 开始；如果要长期使用、处理 README / release note / issue 回复，或担心术语和事实被误杀，再升级到 full。
+For ChatGPT / generic LLMs, start from lite; upgrade to full for long-term use, README / release note / issue replies, or when you worry about terms and facts getting false-positived.
 
 ## ChatGPT
 
-### 方案一：Custom GPT（推荐）
+### Approach 1: Custom GPT (recommended)
 
-`SKILL.md` 有 12,000+ 字符，超过 Custom Instructions 的 1,500 字限制。用 Custom GPT 可以绕过这个限制，规则完整加载，不用删减。
+`SKILL.md` is long — well over the 1,500-character limit of Custom Instructions. A Custom GPT gets around that and loads the full rules without trimming.
 
-**直接使用：** [说人话 GPT](https://chatgpt.com/g/g-6a5829b1163481919e1e45851f6bc709-shuo-ren-hua)（需要 ChatGPT Plus / Pro）
+To build one:
 
-如果你想自建一个，步骤如下：
+1. Open the [ChatGPT GPT Editor](https://chatgpt.com/gpts/editor) and create a new GPT
+2. Name it "klartext", description "German-English de-AI rewrite assistant"
+3. Paste the content below the divider in [`install/chatgpt-gpt-instructions.md`](chatgpt-gpt-instructions.md) into Instructions
+4. Upload Knowledge Files: `SKILL.md` + every `.md` file under `references/` (full usage)
+5. Save and publish as "Only me" or "Anyone with a link"
 
-1. 打开 [ChatGPT GPT Editor](https://chatgpt.com/gpts/editor)，新建一个 GPT
-2. 名称填"说人话"，描述填"去 AI 味的中英文改写助手"
-3. 将 [`install/chatgpt-gpt-instructions.md`](chatgpt-gpt-instructions.md) 中分隔线以下的内容粘贴到 Instructions
-4. 上传 Knowledge Files：`SKILL.md` + `references/` 目录下所有 `.md` 文件（full 用法）
-5. 保存，发布为 "Only me" 或 "Anyone with a link"
+Then just open that GPT and chat.
 
-用的时候直接打开这个 GPT 对话就行。
+### Approach 2: Projects
 
-### 方案二：Projects
+If you have ChatGPT Plus / Pro, you can also use Projects:
 
-如果你有 ChatGPT Plus / Pro，也可以用 Projects：
+1. Create a Project
+2. Upload `SKILL.md` and the `references/` files you need to Project Files; full is recommended for long-term use, lite (only `SKILL.md`) for temporary projects
+3. In Project Instructions write: `Rewrite the user's text by the rules in the project file SKILL.md.`
 
-1. 新建一个 Project
-2. 把 `SKILL.md` 和需要的 `references/` 文件上传到 Project Files；长期使用建议走 full，临时项目可以先只放 `SKILL.md`
-3. Project Instructions 里写一句：`按照项目文件中 SKILL.md 的规则改写用户提供的文本。`
+Project files have no strict character limit; the effect is similar to a Custom GPT.
 
-Projects 的文件没有严格字符限制，效果和 Custom GPT 类似。
+### Approach 3: paste into the chat (lightweight)
 
-### 方案三：直接贴对话（轻量用法）
+Don't want to build a GPT or Project? Paste the `SKILL.md` content at the start of the conversation. Good for one-off use. This is the lite usage.
 
-不想建 GPT 也不想建 Project，直接在对话开头贴 `SKILL.md` 内容也能用。适合偶尔用一次的场景。
+> **Note:** Custom Instructions (Settings > Personalization) have a 1,500-character cap and can't hold the full `SKILL.md`. Not recommended.
 
-这是 lite 用法。
+## Claude (Web / Project)
 
-> **注意：** Custom Instructions（Settings > Personalization）有 1,500 字符上限，放不下完整的 `SKILL.md`。不建议用这个方式。
-
-## Claude（Web / Project）
-
-1. 创建一个 Project
-2. 将 `SKILL.md` 内容添加到 Project Instructions
-3. 需要更稳的误杀防护时，再把相关 `references/` 文件加入 Project Knowledge
+1. Create a Project
+2. Add the `SKILL.md` content to Project Instructions
+3. For steadier false-positive protection, add the relevant `references/` files to Project Knowledge
 
 ## API / System Prompt
 
 ```python
 messages = [
     {"role": "system", "content": open("SKILL.md").read()},
-    {"role": "user", "content": "改写以下文本：..."}
+    {"role": "user", "content": "Rewrite the following text: ..."}
 ]
 ```
 
-如果已有主 system prompt，把 `SKILL.md` 当成一个风格模块拼进去，不要整段覆盖。
+If you already have a main system prompt, splice `SKILL.md` in as a style module — don't overwrite the whole thing.
 
-## 使用提示
+## Usage tips
 
-如果你想先判断"哪里像 AI"，不要直接改稿，在对话里说：
-
-```text
-先不要改写，只按 annotation mode 标出下面这段文字里的问题：...
-```
-
-适合这几类场景：
-
-- 你想先看这段话该不该改
-- 你要做审稿或 review，不想直接替作者重写
-- 你怀疑有无源引用、语域混搭或工程师腔，但还不想动正文
-
-处理无源引用时，可以指定模式：
+To first judge "where it sounds AI" without rewriting, say in the chat:
 
 ```text
-用说人话规则改写这段文本，无源引用按 audit-only 处理。
+Don't rewrite yet, just flag the problems in this text in annotation mode: ...
 ```
 
-三种模式：`rewrite-safe`（默认用于 chat/public-writing，直接删无证据权威铺垫）、`audit-only`（默认用于 docs/status，只标缺来源）、`rewrite-with-placeholder`（保留结构但暴露缺来源）。不指定时按场景默认值走。
+For unsourced citations, you can specify a mode:
 
-## 长文改写的三档 scope
+```text
+Rewrite this text with the klartext rules; handle unsourced citations as audit-only.
+```
 
-长文（约 1000 字以上的 `public-writing`）改写时，可以指定三档 scope，和力度档位正交：
+Three modes: `rewrite-safe` (default for chat/public-writing, delete unsupported authority framing), `audit-only` (default for docs/status, only flag the missing source), `rewrite-with-placeholder` (keep the structure but expose the missing source). Without one, the scene default applies.
 
-- `structural`：自由删句、并句、重排，去味最彻底，但长度不可控（实测同一篇可能 -18% 到 -39%）
-- `bounded`（长文默认）：实句只做句内清理；整句空话不直接删，列成「建议删除（待确认）」清单交你拍板
-- `in-place`：一句都不删，只做句内降调，适合“完全原样”的要求
+## Three scopes for long-form rewrites
 
-在指令里直接说就行，例如：「用 bounded scope 改写，整句空话列出来给我确认、别直接删。」
+For long text (roughly 1000+ words of `public-writing`), you can specify one of three scopes, orthogonal to the strength level:
 
-## 什么时候需要补 `references/`
+- `structural`: freely delete/merge/reorder, most thorough de-flavoring, but length is unpredictable (measured: the same piece may be -18% to -39%)
+- `bounded` (long-form default): real sentences get only intra-sentence cleanup; whole empty sentences aren't deleted directly but listed as "Suggested deletions (to confirm)" for you to decide
+- `in-place`: delete nothing, only lower tone intra-sentence, for "exactly as-is" requests
 
-- AI 腔很重，普通去词表改写效果不够
-- 中英文混合，需要精细场景判断
-- 技术文案，担心误杀术语
-- 需要处理结构问题，不只是删词
+Just say it in the instruction, e.g. "Rewrite in bounded scope; list the whole empty sentences for me to confirm, don't delete them directly."
 
-优先补：`structures.md` / `severity.md` / `operation-manual.md` / `boundary-cases.md`
+## When to add `references/`
+
+- Heavy AI flavor where a plain word-table rewrite isn't enough
+- German-English mixing that needs fine scene detection
+- Technical copy where you worry about false-positiving terms
+- Structural problems, not just word deletion
+
+Add first: `structures.md` / `severity.md` / `operation-manual.md` / `boundary-cases.md`
