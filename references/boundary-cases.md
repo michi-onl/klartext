@@ -1,223 +1,223 @@
-# 边界案例集
+# Boundary Cases
 
-这些例子不是展示“怎么改得更狠”，而是展示“什么时候该轻改、什么时候不该误杀”。
+These examples don't show "how to edit harder"; they show "when to edit lightly and when not to false-positive".
 
-## 1. 技术状态更新
+## 1. Technical status update
 
-### 原文
+### Original
 
-这次排查基本把范围收窄到缓存层了。昨天已经把主链路日志补齐，今天会继续把两个异常分支对上，看看是不是同一类失效路径。如果这个判断成立，修复应该能比较快落下去。
+Die Fehlersuche hat den Bereich im Grunde auf den Cache-Layer eingegrenzt. Gestern die Logs der Hauptstrecke nachgezogen, heute gleiche ich die zwei Fehlerpfade weiter ab, um zu sehen, ob es derselbe Ausfallpfad ist. Wenn die Einschätzung stimmt, sollte sich der Fix recht schnell durchziehen lassen.
 
-### 推荐改法
+### Recommended edit
 
-这次排查基本已经定位到缓存层。昨天补齐了主链路日志，今天会继续核对两个异常分支，确认是不是同一类失效路径。如果判断成立，修复会比较快。
+Die Fehlersuche hat den Bereich auf den Cache-Layer eingegrenzt. Gestern die Logs der Hauptstrecke ergänzt, heute gleiche ich die zwei Fehlerpfade ab und prüfe, ob es derselbe Ausfallpfad ist. Wenn die Einschätzung stimmt, geht der Fix schnell.
 
-### 为什么这样改
+### Why this way
 
-- 去掉了表演性的工程师腔：`收窄`、`对上`、`落下去`
-- 保留了状态同步最重要的三件事：当前判断、已做动作、下一步
+- Removed performative engineer-speak: `durchziehen`, the padded `im Grunde`
+- Kept the three most important status items: current judgment, done action, next step
 
-### 不该改的点
+### What not to change
 
-- 不要删掉“缓存层”“异常分支”“失效路径”这些专业信息
-- 不要把它改成泛泛的“问题已经比较清楚了”
+- Don't delete `Cache-Layer`, `Fehlerpfade`, `Ausfallpfad` — the technical information
+- Don't turn it into a vague "das Problem ist jetzt ziemlich klar"
 
-## 2. 官方公告风
+## 2. Official-announcement style
 
-### 原文
+### Original
 
-为保障系统稳定性，我们将于今晚 23:00-23:30 对支付服务进行例行维护。维护期间，部分用户可能出现短时下单失败的情况。维护完成后将自动恢复，不需要额外操作。
+Zur Sicherstellung der Systemstabilität führen wir heute Abend von 23:00–23:30 eine planmäßige Wartung des Bezahldienstes durch. Während der Wartung kann es bei einigen Nutzern kurzzeitig zu fehlgeschlagenen Bestellungen kommen. Nach Abschluss der Wartung wird der Dienst automatisch wiederhergestellt, ohne dass eine weitere Aktion nötig ist.
 
-### 推荐改法
+### Recommended edit
 
-为保障系统稳定性，我们将于今晚 23:00-23:30 对支付服务进行例行维护。维护期间，部分用户可能出现短时下单失败。维护完成后会自动恢复，无需额外操作。
+Zur Sicherung der Systemstabilität warten wir heute Abend von 23:00–23:30 den Bezahldienst. Während der Wartung kann es bei einigen Nutzern kurzzeitig zu fehlgeschlagenen Bestellungen kommen. Danach läuft der Dienst automatisch wieder, ohne weitere Aktion.
 
-### 为什么这样改
+### Why this way
 
-- 这里只做轻改，去掉一点模板化措辞
-- 正式公告风本来就是目标语域，不应该强行改口语
+- Only a light edit here, removing a bit of template phrasing
+- Formal-announcement style is the target register; don't force it colloquial
 
-### 不该改的点
+### What not to change
 
-- 不要把“为保障系统稳定性”硬删掉
-- 不要改成聊天式提醒或自媒体语气
+- Don't hard-delete "Zur Sicherung der Systemstabilität"
+- Don't turn it into a chat reminder or influencer tone
 
-## 3. 正常 PRD 腔
+## 3. Normal PRD voice
 
-### 原文
+### Original
 
-当用户首次进入工作台且没有历史项目时，页面展示空状态卡片，引导其创建第一个项目。该卡片在用户创建成功后立即消失，后续不再展示。
+Wenn ein Nutzer den Arbeitsbereich zum ersten Mal betritt und keine früheren Projekte hat, zeigt die Seite eine Empty-State-Karte und leitet zum Anlegen des ersten Projekts. Diese Karte verschwindet unmittelbar nach dem erfolgreichen Anlegen und wird danach nicht mehr angezeigt.
 
-### 推荐改法
+### Recommended edit
 
-当用户首次进入工作台且没有历史项目时，页面展示空状态卡片，引导其创建第一个项目。用户创建成功后，卡片立即消失，后续不再展示。
+Wenn ein Nutzer den Arbeitsbereich zum ersten Mal betritt und keine früheren Projekte hat, zeigt die Seite eine Empty-State-Karte und leitet zum Anlegen des ersten Projekts. Nach dem erfolgreichen Anlegen verschwindet die Karte sofort und wird danach nicht mehr angezeigt.
 
-### 为什么这样改
+### Why this way
 
-- 原文本身就是正常产品语体，不需要“大手术”
-- 只把第二句收得更直接一点
+- The original is already normal product register, no "big surgery" needed
+- Only the second sentence tightened a little
 
-### 不该改的点
+### What not to change
 
-- 不要为了“像人”把条件句拆坏
-- 不要把“空状态卡片”之类的产品术语换成口语
+- Don't break the conditional clause for "sounding human"
+- Don't swap product terms like "Empty-State-Karte" for colloquialisms
 
-## 4. 已经较口语的文本
+## 4. Already-colloquial text
 
-### 原文
+### Original
 
-这版我先不继续抠细节了，核心问题其实已经看出来了。后面先把流程走通，再看哪里真的影响体验。
+Diese Version bohr ich die Details nicht weiter auf, das Kernproblem hab ich eigentlich schon gesehen. Erst mal den Ablauf durchziehen, dann schauen, was wirklich das Erlebnis beeinflusst.
 
-### 推荐改法
+### Recommended edit
 
-这版我先不继续抠细节了，核心问题已经比较清楚。后面先把流程走通，再看哪些地方真的影响体验。
+Diese Version geh ich nicht weiter ins Detail, das Kernproblem ist schon ziemlich klar. Erst mal den Ablauf zum Laufen bringen, dann schauen, was wirklich das Erlebnis beeinflusst.
 
-### 为什么这样改
+### Why this way
 
-- 只轻微顺一下，不把口语感抹掉
-- 原文本来就自然，过度矫正反而会更假
+- Only lightly smoothed, colloquial feel not scrubbed
+- The original is already natural; over-correcting makes it faker
 
-### 不该改的点
+### What not to change
 
-- 不要硬改成汇报腔
-- 不要加“本质上”“归根到底”之类的总结句
+- Don't force it into report voice
+- Don't add summary sentences like "im Grunde" / "letztlich"
 
-## 5. 文档段落中的系统主语
+## 5. System subject in a docs paragraph
 
-### 原文
+### Original
 
-系统在检测到配置变更后会重新加载规则；如果新规则校验失败，则继续使用上一版配置，并在日志中记录错误原因。
+Das System lädt die Regeln nach dem Erkennen einer Konfigurationsänderung neu; schlägt die Validierung der neuen Regeln fehl, wird weiter die vorherige Konfiguration verwendet und der Fehlergrund im Log vermerkt.
 
-### 推荐改法
+### Recommended edit
 
-系统在检测到配置变更后会重新加载规则；如果新规则校验失败，则继续使用上一版配置，并在日志中记录错误原因。
+Das System lädt die Regeln nach dem Erkennen einer Konfigurationsänderung neu; schlägt die Validierung der neuen Regeln fehl, wird weiter die vorherige Konfiguration verwendet und der Fehlergrund im Log vermerkt.
 
-### 为什么这样改
+### Why this way
 
-- 不改。这里的系统主语、条件关系和日志说明都合理
-- 去 AI 味不是反对抽象主语，更不是把文档写散
+- No change. The system subject, conditional relation, and log note are all reasonable here
+- De-AI is not opposition to abstract subjects, and definitely not scattering the doc
 
-### 不该改的点
+### What not to change
 
-- 不要把“系统”硬改成人
-- 不要把条件从句改成口语解释
+- Don't force "das System" into a person
+- Don't turn the conditional clause into a colloquial explanation
 
-## 6. 英文图算法里的字面动词
+## 6. Literal verbs in an English graph algorithm
 
-### 原文
-
-The system navigates the network topology using Dijkstra's algorithm, traversing each node to find the shortest path.
-
-### 推荐改法
+### Original
 
 The system navigates the network topology using Dijkstra's algorithm, traversing each node to find the shortest path.
 
-### 为什么这样改
+### Recommended edit
 
-- 不改。这里的 `navigates` 和 `traversing` 是字面技术动作，不是商业黑话
-- 去 AI 味不应该把算法描述改得更含糊
+The system navigates the network topology using Dijkstra's algorithm, traversing each node to find the shortest path.
 
-### 不该改的点
+### Why this way
 
-- 不要把 `navigates` 机械替换成 `handles`
-- 不要把算法路径搜索写散
+- No change. `navigates` and `traversing` are literal technical actions here, not business jargon
+- De-AI should not make the algorithm description vaguer
 
-## 7. 学术语体中的正常被动
+### What not to change
 
-### 原文
+- Don't mechanically swap `navigates` for `handles`
+- Don't scatter the path-search description
+
+## 7. Normal passive in academic register
+
+### Original
 
 The experiment was conducted by researchers at MIT. Results were published in Nature in 2024.
 
-### 推荐改法
+### Recommended edit
 
 The experiment was conducted by researchers at MIT. Results were published in Nature in 2024.
 
-### 为什么这样改
+### Why this way
 
-- 不改。这里是标准学术语体，信息也没有被被动语态掩盖
-- 去 AI 味不是强制把所有英文句子都改成主动语态
+- No change. Standard academic register, and information isn't hidden by the passive
+- De-AI is not forcing every English sentence into the active voice
 
-### 不该改的点
+### What not to change
 
-- 不要把学术摘要硬改成口语句
-- 不要为了“更直接”删掉发表来源
+- Don't force an academic abstract into colloquial sentences
+- Don't delete the publication source for "being more direct"
 
-## 8. 具备具体证据的真人 debug 对话
+## 8. Real debug dialogue with concrete evidence
 
-### 原文
+### Original
 
-刚查了下，root cause 是连接池打满了，max_connections 才 20，高峰期不够用。我把它调到 100，观察了半小时，没再报错。
+Grad geschaut, die Root Cause ist der volle Verbindungspool, max_connections steht nur auf 20, zu Spitzenzeiten reicht das nicht. Ich hab ihn auf 100 gesetzt, eine halbe Stunde beobachtet, kein Fehler mehr.
 
-### 推荐改法
+### Recommended edit
 
-刚查了下，root cause 是连接池打满了，max_connections 才 20，高峰期不够用。我把它调到 100，观察了半小时，没再报错。
+Grad geschaut, die Root Cause ist der volle Verbindungspool, max_connections steht nur auf 20, zu Spitzenzeiten reicht das nicht. Ich hab ihn auf 100 gesetzt, eine halbe Stunde beobachtet, kein Fehler mehr.
 
-### 为什么这样改
+### Why this way
 
-- 不改。这里有具体参数、操作和结果，是正常工程沟通，不是表演性调试腔
-- 这类对话的关键是信息密度，不是强行去口头技术词
+- No change. Concrete params, action, and result here — normal engineering communication, not performative debug-speak
+- What matters in this dialogue is information density, not forcing out spoken technical words
 
-### 不该改的点
+### What not to change
 
-- 不要把 `root cause` 机械改成更书面或更口语的词
-- 不要删掉 `20 -> 100` 和 `观察了半小时` 这些关键证据
+- Don't mechanically change `Root Cause` to something more formal or more colloquial
+- Don't delete `20 -> 100` and `eine halbe Stunde beobachtet` — the key evidence
 
-## 9. 混合场景：技术博客嵌事故复盘
+## 9. Mixed scene: tech blog embedding an incident postmortem
 
-### 原文
+### Original
 
-> 上个月我们把网关从 Nginx 换到了 Envoy。这篇文章聊聊为什么换、踩了什么坑。
+> Letzten Monat haben wir das Gateway von Nginx auf Envoy umgestellt. Dieser Beitrag erzählt, warum wir umgestellt haben und in welche Fallen wir getappt sind.
 >
-> 值得注意的是，在当今云原生快速发展的时代，选择一个真正赋能团队的网关方案已经成为不容忽视的关键议题。
+> Es ist wichtig zu beachten, dass in der heutigen, sich rasant entwickelnden Cloud-native-Zeit die Wahl einer wahrhaft team-befähigenden Gateway-Lösung zu einer nicht zu unterschätzenden Schlüsselfrage geworden ist.
 >
-> 切换当天出了一次事故。事故复盘如下：
+> Am Umstellungstag gab es einen Vorfall. Postmortem:
 >
-> 根因：Envoy 默认连接超时 15 秒，我们的长连接服务需要 300 秒。流量切过去后，长连接全断了，触发上游大面积重连。修复动作：`idle_timeout` 从 15s 改到 300s，灰度验证 2 小时后全量。错误率从 12% 降到 0.1%。
+> Root Cause: Envoys Default-Connection-Timeout ist 15 Sekunden, unser Long-Connection-Dienst braucht 300 Sekunden. Nach dem Umschalten des Traffics rissen alle Long Connections ab und lösten upstream massenhaft Reconnects aus. Fix: `idle_timeout` von 15s auf 300s, nach 2 Stunden Canary auf voll. Fehlerrate von 12 % auf 0,1 %.
 >
-> 综上所述，这次迁移充分体现了团队在技术创新领域的持续探索与不懈追求。未来可期！
+> Zusammenfassend zeigt diese Migration eindrucksvoll das anhaltende Streben und den unermüdlichen Innovationsgeist des Teams. Die Zukunft ist vielversprechend!
 
-### 场景判断
+### Scene call
 
-1. **判主场景**：整篇是对外技术博客 → 主场景 `public-writing`，默认档位 `standard`
-2. **识别次场景**：中间嵌了一段事故复盘 → 局部 `docs` 语域
-3. **以主场景禁改项为上限**：`public-writing` 不硬造金句、不改成吆喝腔
+1. **Main scene**: the whole piece is an external tech blog → main scene `public-writing`, default level `standard`
+2. **Secondary scene**: a postmortem is embedded in the middle → local `docs` register
+3. **Cap by the main scene's no-touch items**: `public-writing` doesn't force punchlines or hype tone
 
-### 推荐改法
+### Recommended edit
 
-> 上个月我们把网关从 Nginx 换到了 Envoy。这篇文章聊聊为什么换、踩了什么坑。
+> Letzten Monat haben wir das Gateway von Nginx auf Envoy umgestellt. Dieser Beitrag erzählt, warum wir umgestellt haben und in welche Fallen wir getappt sind.
 >
-> 切换当天出了一次事故。事故复盘如下：
+> Am Umstellungstag gab es einen Vorfall. Postmortem:
 >
-> 根因：Envoy 默认连接超时 15 秒，我们的长连接服务需要 300 秒。流量切过去后，长连接全断了，触发上游大面积重连。修复动作：`idle_timeout` 从 15s 改到 300s，灰度验证 2 小时后全量。错误率从 12% 降到 0.1%。
+> Root Cause: Envoys Default-Connection-Timeout ist 15 Sekunden, unser Long-Connection-Dienst braucht 300 Sekunden. Nach dem Umschalten des Traffics rissen alle Long Connections ab und lösten upstream massenhaft Reconnects aus. Fix: `idle_timeout` von 15s auf 300s, nach 2 Stunden Canary auf voll. Fehlerrate von 12 % auf 0,1 %.
 
-### 为什么这样改
+### Why this way
 
-- **第二段整段删掉**：命中开场套话（`值得注意的是`）、商业黑话（`赋能`）、空洞拔高（`关键议题`），属于 `public-writing` 主场景下的 `standard` 改写范围
-- **复盘段原样保留**：虽然"根因"是 Tier 1 词，但这里是事故复盘的标准术语（误杀防护 #6），有具体参数和数据支撑，属于次场景 `docs` 的保护范围
-- **末段整段删掉**：总结式收尾 + 正能量收尾（`综上所述` `充分体现` `持续探索` `不懈追求` `未来可期`），全是 Tier 1 命中
+- **Second paragraph deleted whole**: hits throat-clearing opener (`Es ist wichtig zu beachten`), business jargon (`team-befähigend`), empty inflation (`Schlüsselfrage`) — inside the `public-writing` main scene's `standard` range
+- **Postmortem paragraph kept as-is**: though "Root Cause" is a Tier 1 word, it's standard postmortem terminology here (false-positive protection #6), backed by concrete params and data — inside the secondary `docs` scene's protection
+- **Last paragraph deleted whole**: summary ending + uplifting ending (`Zusammenfassend` `zeigt eindrucksvoll` `anhaltendes Streben` `unermüdlicher Innovationsgeist` `Die Zukunft ist vielversprechend`), all Tier 1 hits
 
-### 不该改的点
+### What not to change
 
-- 不要把复盘段里的"根因"改成"原因"——这里是技术复盘语域，不是日常聊天
-- 不要把复盘段的格式打散——简洁的"根因 → 修复 → 结果"结构在 `docs` 语域下是对的
-- 不要为了语域统一把博客开头也改成复盘腔
+- Don't change "Root Cause" in the postmortem to something else — this is technical postmortem register, not everyday chat
+- Don't scatter the postmortem format — the terse "Root Cause → Fix → Result" structure is right in `docs` register
+- Don't turn the blog opening into postmortem voice for register unity
 
-## 10. 技术语境里的“接住请求”
+## 10. "Anfragen auffangen" in a technical context
 
-### 原文
+### Original
 
-网关在压测里接住了峰值 2.4 万 QPS，请求超时率稳定在 0.3% 以下；超过阈值的流量会自动走降级，不再继续打满下游连接池。
+Das Gateway hat im Lasttest den Peak von 24.000 QPS aufgefangen, die Request-Timeout-Rate blieb stabil unter 0,3 %; Traffic über dem Schwellenwert geht automatisch in die Degradierung und macht den Downstream-Pool nicht weiter voll.
 
-### 推荐改法
+### Recommended edit
 
-网关在压测里接住了峰值 2.4 万 QPS，请求超时率稳定在 0.3% 以下；超过阈值的流量会自动走降级，不再继续打满下游连接池。
+Das Gateway hat im Lasttest den Peak von 24.000 QPS aufgefangen, die Request-Timeout-Rate blieb stabil unter 0,3 %; Traffic über dem Schwellenwert geht automatisch in die Degradierung und macht den Downstream-Pool nicht weiter voll.
 
-### 为什么这样改
+### Why this way
 
-- 不改。这里的 `接住` 对应的是技术承接能力，宾语是 `峰值 2.4 万 QPS`，还有具体指标、系统行为和降级边界
-- 这种写法和“稳稳地接住你 / 所有人”不是一回事，不能因为字面重合就一起打掉
+- No change. `auffangen` here means technical carrying capacity, its object is `Peak von 24.000 QPS`, with concrete metrics, system behavior, and a degradation boundary
+- This is not the same as `Ich fange dich / alle sicher auf`; don't kill it just for the surface-word overlap
 
-### 不该改的点
+### What not to change
 
-- 不要把 `接住了峰值 2.4 万 QPS` 机械改成空泛的“性能很好”
-- 不要删掉 `0.3%`、`降级`、`下游连接池` 这些承载判断依据的技术信息
+- Don't mechanically change `den Peak von 24.000 QPS aufgefangen` into a vague "Performance ist gut"
+- Don't delete `0,3 %`, `Degradierung`, `Downstream-Pool` — the technical basis for the judgment

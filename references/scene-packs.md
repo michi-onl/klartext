@@ -1,177 +1,177 @@
-# Scene Packs / 可直接发场景包
+# Scene Packs
 
-Scene Packs 是面向可发布文本的子场景策略。它不替代 [场景禁改表](./scene-guardrails.md)、[Protected Spans](./protected-spans.md) 或 `Tier` 判断；只要文本本身像 README、release note、forum post 或 issue reply，就进一步判断“这段应该像哪一种发布文本”。
+Scene Packs are sub-scene strategies for publishable text. They do not replace [Scene Guardrails](./scene-guardrails.md), [Protected Spans](./protected-spans.md), or the `Tier` call; whenever the text itself looks like a README, release note, forum post, or issue reply, further judge "which kind of publishable text this should read like".
 
-使用顺序：
+Order of use:
 
-1. 先判大场景：`chat / status / docs / public-writing`
-2. 先划 protected spans：版本号、路径、链接、命令、引用、编号、责任归属都不能漂
-3. 再看是否命中本文件的 scene pack
-4. 最后按 scene pack 的发布目的收束语气；如果它同时像 `docs / status`，取更保守的保真边界
+1. Judge the broad scene first: `chat / status / docs / public-writing`
+2. Mark protected spans first: version numbers, paths, links, commands, quotes, IDs, and ownership must not drift
+3. Then check whether the text hits a scene pack here
+4. Finally tighten the tone by the scene pack's publishing intent; if it also looks like `docs / status`, take the more conservative fidelity boundary
 
-默认不要因为 scene pack 新增全局词条。只有新样本已经超出现有问题族，且会改变误杀边界时，才考虑补 `phrases` 或 `structures`。
+Don't add global entries just because of a scene pack. Only when a new sample exceeds the existing problem families and would change the false-positive boundary should you consider adding to `phrases` or `structures`.
 
 ## `README`
 
-默认目标：
+Default goal:
 
-- 第一屏能让读者快速知道：这是什么、给谁用、解决什么问题。
-- 语气可以有个性，但不能只剩愿景、价值和姿态。
+- The first screen lets the reader quickly know: what this is, who it's for, what problem it solves.
+- The tone may have personality, but must not be only vision, value, and posture.
 
-必须保留：
+Must keep:
 
-- 项目名、目标用户、核心能力、支持平台
-- 命令、安装方式、文件路径、链接
-- 已有 benchmark 数量、版本号和能力边界
+- Project name, target users, core capabilities, supported platforms
+- Commands, install methods, file paths, links
+- Existing benchmark counts, version numbers, and capability limits
 
-优先删除：
+Prefer to delete:
 
-- `AI 全面重塑开发范式`
-- `面向未来`
-- `深度赋能`
-- `内容生产链路`
-- `价值闭环`
-- 只说“先进 / 智能 / 全方位”但不说具体做什么的句子
+- `KI gestaltet die Softwareentwicklung grundlegend neu`
+- `zukunftsweisend`
+- `tiefgreifendes Empowerment`
+- `Content-Wertschöpfungskette`
+- `Wertschöpfungs-Loop`
+- Sentences that only say "fortschrittlich / intelligent / ganzheitlich" without saying what it does
 
-默认力度：
+Default level:
 
 - `standard`
-- 如果 intro 只剩口号，可以升到 `aggressive`，但不能编造项目能力
+- If the intro is only slogans, may escalate to `aggressive`, but never invent project capabilities
 
-误杀边界：
+False-positive boundary:
 
-- README intro 允许一句有辨识度的定位句
-- `CLI / API / benchmark / Codex / ChatGPT` 等项目术语应保留
-- 不要把 README 改成社交媒体短帖
+- A README intro may have one recognizable positioning sentence
+- Project terms like `CLI / API / Benchmark / Codex / ChatGPT` should be kept
+- Don't turn a README into a social-media short post
 
 Before:
 
-> 在 AI 全面重塑开发范式的今天，我们打造了一款真正面向未来的中文表达优化工具，深度赋能开发者的内容生产链路。
+> In einer Zeit, in der KI die Softwareentwicklung grundlegend neu gestaltet, haben wir ein wahrhaft zukunftsweisendes Tool zur Optimierung deutscher Sprache geschaffen, das die Content-Wertschöpfungskette von Entwicklern tiefgreifend befähigt.
 
 After:
 
-> `说人话` 是一个中文优先的 rewrite skill，用来把 AI 写出来的套话、表演感和工程师腔改回自然表达。适合 README、release note、issue 回复和日常协作文本。
+> `klartext` ist ein Rewrite-Skill für Deutsch und Englisch, der KI-Floskeln, Performance-Ton und Ingenieurssprech wieder in natürlichen Text zurückholt. Passt für README, Release Notes, Issue-Antworten und alltägliche Arbeitstexte.
 
 ## `release-note`
 
-默认目标：
+Default goal:
 
-- 让读者快速知道这一版改了什么、怎么验证、有没有破坏性变化。
-- 优先列表化，少写发布宣言。
+- Let the reader quickly know what changed this version, how to verify it, whether there are breaking changes.
+- Prefer lists; write few release manifestos.
 
-必须保留：
+Must keep:
 
-- 版本号、日期、文件名、配置项、issue / PR 编号
-- 变更类型：新增、修复、调整、测试
-- 已知限制和迁移提示
+- Version number, date, file names, config keys, issue / PR numbers
+- Change types: Added, Fixed, Changed, Tested
+- Known limits and migration notes
 
-优先删除：
+Prefer to delete:
 
-- `Release Highlights` 后面只写空泛升级
-- `系统性升级`
-- `全新跃迁`
-- `感谢所有用户持续支持`
-- `共同见证`
-- 没有来源的性能、效率、用户反馈数据
+- `Release Highlights` followed only by vague upgrades
+- `systemisches Upgrade`
+- `ein völlig neuer Sprung`
+- `Danke an alle Nutzer für die anhaltende Unterstützung`
+- `gemeinsam erleben wir`
+- Performance, efficiency, or user-feedback numbers with no source
 
-默认力度：
+Default level:
 
 - `standard`
-- 如果缺少具体 changelog，不要编造；改成提示“这里需要补具体变更”
+- If a concrete changelog is missing, don't invent one; change it to a note "concrete changes needed here"
 
-误杀边界：
+False-positive boundary:
 
-- release note 可以正式、简洁、列表化
-- 不要为了“像人”把 changelog 列表改成故事
-- 不要删版本号、文件路径、case 数量和 PR / issue 编号
+- A release note may be formal, terse, list-shaped
+- Don't turn a changelog list into a story for "sounding human"
+- Don't delete version numbers, file paths, case counts, and PR / issue numbers
 
 Before:
 
-> 本次版本是一次面向真实场景的系统性升级，感谢所有用户的持续支持，让我们共同见证中文 AI 写作体验的全新跃迁。
+> Diese Version ist ein systemisches Upgrade für reale Szenarien. Danke an alle Nutzer für die anhaltende Unterstützung — gemeinsam erleben wir einen völlig neuen Sprung im deutschen KI-Schreiberlebnis.
 
 After:
 
-> - 新增 `references/scene-packs.md`，覆盖 README、release note、forum post 和 issue reply
-> - `evals/benchmark.md` 增加 8 条 scene pack 回归用例
-> - 新增 `evals/results-v1.8.0.md` 记录本轮复核结果
+> - Neu: `references/scene-packs.md`, deckt README, Release Note, Forum-Post und Issue-Antwort ab
+> - `evals/benchmark.md`: 8 neue Scene-Pack-Regressionsfälle
+> - Neu: `evals/results-v1.8.0.md` mit den Ergebnissen dieser Runde
 
 ## `forum-post`
 
-默认目标：
+Default goal:
 
-- 像维护者在社区里讲真实观察：做了什么、发现什么、哪里还不稳、想要什么反馈。
-- 允许口语，但要有具体经历支撑。
+- Sound like a maintainer sharing real observations in a community: what they did, what they found, what's still shaky, what feedback they want.
+- Colloquial is fine, but backed by concrete experience.
 
-必须保留：
+Must keep:
 
-- 时间、动作、具体文件、样本数量、观察到的问题
-- 原作者真实态度和社区语气
-- 链接、命令、版本号和被讨论词
+- Time, action, specific files, sample counts, observed problems
+- The author's real attitude and community voice
+- Links, commands, version numbers, and words under discussion
 
-优先删除：
+Prefer to delete:
 
-- 公司公告腔
-- `系统性重塑`
-- `用户痛点`
-- `多元场景`
-- `方法论闭环`
-- `稳稳接住核心诉求`
+- Corporate-announcement voice
+- `systemische Neugestaltung`
+- `Pain Points der Nutzer`
+- `vielfältige Szenarien`
+- `methodischer Loop`
+- `die zentralen Bedürfnisse sauber aufgefangen`
 
-默认力度：
+Default level:
 
 - `standard`
-- 如果帖子本来有具体经历，只清理姿态层，不要改成正式公告
+- If the post already has concrete experience, only clean the posture layer, don't turn it into a formal announcement
 
-误杀边界：
+False-positive boundary:
 
-- 具体经历后的口语词可以保留
-- 社区帖允许“踩坑 / 折腾 / 还差一点”这类真实语气
-- 不要把个人复盘改成 README 或 release note
+- Colloquial words after concrete experience may be kept
+- A community post may have real tone like "reingefallen / rumgebastelt / fehlt noch was"
+- Don't turn a personal retro into a README or release note
 
 Before:
 
-> 折腾这个工具一个月后，我深刻意识到，中文 AI 写作治理不是一次简单的词表扩张，而是一场围绕真实表达场景的系统性重塑。
+> Nach einem Monat mit dem Tool wurde mir zutiefst bewusst, dass die Behandlung von deutschem KI-Text keine simple Erweiterung einer Wortliste ist, sondern eine systemische Neugestaltung rund um reale Ausdrucksszenarien.
 
 After:
 
-> 做这个工具一个月后，我发现光删词表不够。README、release note、issue 回复和论坛帖看起来都是“公开文本”，但改法其实不一样。
+> Nach einem Monat mit dem Tool: eine Wortliste allein reicht nicht. README, Release Notes, Issue-Antworten und Forum-Posts sehen alle nach „öffentlichem Text" aus, aber man muss sie unterschiedlich behandeln.
 
 ## `issue-reply`
 
-默认目标：
+Default goal:
 
-- 先回答问题是否成立，再给复现状态、判断和下一步。
-- 不做客服式安抚，不替维护者承诺未排期能力。
+- First answer whether the problem is valid, then give repro status, judgment, and next step.
+- No customer-service reassurance; don't promise unscheduled capabilities for the maintainer.
 
-必须保留：
+Must keep:
 
-- bad case 原句、场景标签、复现结果
-- issue / PR 编号、文件路径、规则名、benchmark 编号
-- “已确认 / 未复现 / 需要更多样本 / 会补测试”的状态
+- The bad-case sentence, scene tag, repro result
+- issue / PR numbers, file paths, rule names, benchmark IDs
+- The status "confirmed / not reproduced / need more samples / will add a test"
 
-优先删除：
+Prefer to delete:
 
-- `感谢宝贵反馈`
-- `你问到了核心`
-- `我们已经充分接住这个场景`
-- `持续优化相关能力`
-- `如果你愿意我可以继续帮你`
+- `Danke für dein wertvolles Feedback`
+- `Du triffst damit den Kern`
+- `Wir haben dieses Szenario voll aufgefangen`
+- `wir optimieren die entsprechenden Fähigkeiten kontinuierlich`
+- `Wenn du magst, helfe ich dir gern weiter`
 
-默认力度：
+Default level:
 
-- `minimal` 或 `standard`
-- 有具体技术信息时保守处理；没有具体下一步时，不要编造排期
+- `minimal` or `standard`
+- Handle conservatively when there's concrete technical info; when there's no concrete next step, don't invent a schedule
 
-误杀边界：
+False-positive boundary:
 
-- issue 回复可以短、硬、直接
-- `bad case / docs / SNF / benchmark / repro` 是维护语境里的正常术语
-- 不要把明确的维护回复改成社交式寒暄
+- An issue reply may be short, blunt, direct
+- `bad case / docs / SNF / benchmark / repro` are normal terms in a maintenance context
+- Don't turn a clear maintenance reply into social pleasantries
 
 Before:
 
-> 感谢你非常宝贵的反馈！你这个问题问到了项目体验的核心。我们已经充分接住了这个场景，也会在后续版本中持续优化相关能力。
+> Vielen Dank für dein wertvolles Feedback! Deine Frage trifft den Kern des Projekterlebnisses. Wir haben dieses Szenario bereits voll aufgefangen und optimieren die entsprechenden Fähigkeiten in kommenden Versionen kontinuierlich weiter.
 
 After:
 
-> 收到，这个 case 我能复现。它属于 `docs` 场景里的误杀，下一版先补一条 SNF；如果现有规则已经能放行，就只加回归用例。
+> Angekommen, den Case kann ich reproduzieren. Es ist ein False Positive im `docs`-Szenario; die nächste Version bekommt erst einen SNF-Fall. Wenn die bestehenden Regeln ihn schon durchlassen, kommt nur ein Regressionsfall dazu.

@@ -1,231 +1,231 @@
 # Positive Style Contract
 
-> 目标不是只把 AI 套话删干净，而是把文本拉回当前场景里“像具体人在说这件事”的状态。
+> The goal is not just to scrub AI phrases clean, but to pull text back to "a specific person saying this thing" in the current scene.
 
-这份文档定义的是正向目标，不是新的 house style，也不是 voice 拟合协议。
+This document defines positive targets. It is not a new house style, and it is not a voice-fitting protocol.
 
-它解决的问题是：
+It solves:
 
-- 删完套话后，文本还是太平、太匀、太像“被清理过的 AI”
-- 为了“更自然”乱加情绪、乱补细节，反而把文本写假了
-- 不同场景都被抹成同一种“聪明、顺滑、会总结”的口气
+- After scrubbing phrases, the text is still too flat, too even, too much like "cleaned-up AI"
+- Adding emotion or detail to "sound more natural" makes the text fake
+- Every scene gets flattened into one "smart, smooth, summarizing" voice
 
-使用顺序：
+Order of use:
 
-1. 先按 `SKILL.md` 判场景，确认主语域和禁改边界
-2. 先看 [Protected Spans](./protected-spans.md)，把不能漂的内容圈出来
-3. 再判 `Tier` 和档位
-4. 再用这份正向合同判断“改成什么样才算更像人”
+1. Detect the scene per `SKILL.md`, confirm the main register and no-touch boundary
+2. Read [Protected Spans](./protected-spans.md), circle the no-drift content
+3. Judge Tier and level
+4. Then use this positive contract to judge "what counts as more human"
 
 ## 1. Anti-goals
 
-这份合同不追求：
+This contract does not pursue:
 
-- 不强行口语化
-- 不硬造个人 voice
-- 不把每句都抛光得很顺
-- 不靠金句、反问句、碎句或抒情句制造“人味”
-- 不为了更具体而补原文没有的事实
+- Don't force colloquialism
+- Don't manufacture a personal voice
+- Don't polish every sentence smooth
+- Don't manufacture "humanness" with punchlines, rhetorical questions, choppy fragments, or lyricism
+- Don't add facts not in the original for the sake of concreteness
 
 ## 2. Positive targets
 
-改写后的文本，优先往下面这 5 个方向靠：
+Rewritten text should lean toward these 5:
 
-### 2.1 具体动作优先于抽象拔高
+### 2.1 Concrete action over abstract inflation
 
-优先写谁做了什么、改了什么、看到什么，不用“能力提升”“价值释放”“底层重构”这类空壳抬句势。
+Prefer who did what, what changed, what was seen — not empty shells like "Leistungssteigerung", "Wertfreisetzung", "grundlegende Neugestaltung".
 
-更好：
+Better:
 
-> 把缓存从本地 LRU 换成 Redis，峰值时不再把应用内存打满。
+> Den Cache von lokalem LRU auf Redis umgestellt, damit der App-Speicher zu Spitzenzeiten nicht mehr volläuft.
 
-不够好：
+Not good enough:
 
-> 完成缓存层升级，显著提升系统稳定性与整体韧性。
+> Cache-Layer erfolgreich modernisiert, was die Systemstabilität und Gesamtresilienz deutlich steigert.
 
-### 2.2 真主语和真动作优先于姿态层
+### 2.2 Real subject and action over posture layer
 
-优先保留承载事实的主语和动作，少写“我们需要深入思考”“接下来稳稳兜住”这种姿态层。
+Prefer to keep the subject and action carrying the fact; write less "wir müssen tiefer nachdenken", "wir fangen das sauber auf".
 
-更好：
+Better:
 
-> 我先核对了两个异常分支，确认都是同一类超时。
+> Ich habe zuerst die zwei Fehlerpfade abgeglichen, beide sind derselbe Timeout.
 
-不够好：
+Not good enough:
 
-> 我们已经把关键现象对上，接下来会进一步把核心链路稳稳兜住。
+> Wir haben die zentralen Phänomene abgeglichen und werden als Nächstes die Kernstrecke sauber auffangen.
 
-### 2.3 节奏可以自然，不要整段一样齐
+### 2.3 Rhythm may be natural, don't make the whole paragraph even
 
-自然表达允许有轻微不对称：有的句子短一点，有的句子稍微展开一点。不要把每句都写成同长度、同抬手、同落点。
+Natural expression allows slight asymmetry: some sentences shorter, some a bit expanded. Don't make every sentence the same length, same lift, same landing.
 
-长文里，适度重复不一定是废话。它可能承担转场、停顿、强调或情绪缓冲。判断一处重复该不该删，先看删掉后段落衔接是否突兀；如果突兀，优先保留节奏，只处理句内的模板词和拔高词。
+In long text, moderate repetition is not always filler. It may carry a transition, a pause, emphasis, or an emotional buffer. To judge whether a repetition should be cut, first check whether deleting it makes the paragraph jump; if it jumps, keep the rhythm and only handle intra-sentence template and inflation words.
 
-bounded scope 下，这条边界落在删除清单上：承担节奏的重复和转场不进清单；进清单的必须是剥掉引导词后什么都不剩的整句空话。
+Under `bounded` scope, this boundary lands on the deletion list: rhythm-bearing repetition and transitions do not go on the list; only whole empty sentences — where stripping the marker leaves nothing — go on it.
 
-更好：
+Better:
 
-> 数据库这轮先快了。主查询从 800ms 降到 120ms，前端首屏也跟着从 2 秒降到 0.4 秒。
+> Die Datenbank ist diese Runde schneller. Der Hauptquery fiel von 800 ms auf 120 ms, und der First Paint vorn ging von 2 s auf 0,4 s mit runter.
 
-不够好：
+Not good enough:
 
-> 本次更新优化了数据库性能。我们提升了页面加载速度。用户反馈的问题也得到了解决。
+> Dieses Update optimierte die Datenbank-Performance. Wir verbesserten die Ladegeschwindigkeit. Auch die gemeldeten Probleme wurden behoben.
 
-上面「更好」里的数字，只有手里真有这些数据时才能写。原文没有数据的，只调句长和句序制造节奏，不要为了节奏编数。
+The numbers in "Better" may only be written if you actually have that data. If the original has no data, adjust sentence length and order for rhythm — don't invent numbers.
 
-### 2.4 允许普通句子存在
+### 2.4 Let plain sentences exist
 
-不是每句都要“像结论”。如果一句普通事实句已经够用，就不要再补“这说明了什么”“本质上意味着什么”。
+Not every sentence must "sound like a conclusion". If a plain factual sentence is enough, don't add "was das zeigt" or "im Grunde bedeutet das".
 
-长文里的普通承接句也可以存在。`另外`、`与此同时`、`也就是说`、`换个角度看` 这类连接，如果后面接的是具体事实、经验或判断，不要直接归到总结式收尾或 narrator 腔。先保住它的承接作用，再看句内有没有空泛修饰需要压低。
+Plain connecting sentences may exist in long text too. `Außerdem`, `gleichzeitig`, `das heißt`, `anders betrachtet` — if what follows is a concrete fact, experience, or judgment, don't lump them into summary endings or narrator voice. Keep the connecting role first, then check whether the sentence has empty modifiers to lower.
 
-更好：
+Better:
 
-> 这次先把权限边界补上，避免游客也能看到内部页面。
+> Diesmal zuerst die Rechtegrenze nachgezogen, damit Gäste keine internen Seiten mehr sehen.
 
-不够好：
+Not good enough:
 
-> 这不仅仅是一次权限修复，更体现了我们对产品边界和安全性的深度思考。
+> Das ist nicht nur ein Rechte-Fix, sondern zeigt unser tiefes Verständnis für Produktgrenzen und Sicherheit.
 
-### 2.5 统一语域，不装另一种人
+### 2.5 One register, don't fake another person
 
-`chat` 可以自然，但别端着；`docs` 可以专业，但别演洞见；`public-writing` 可以有判断，但别像公告或喊单。
+`chat` may be natural, but don't put on airs; `docs` may be professional, but don't perform insight; `public-writing` may have a stance, but don't sound like an announcement or a hype thread.
 
-### 2.6 有边界比硬演理解更自然
+### 2.6 Having boundaries is more natural than performing understanding
 
-可以温和，但别替对方做心理判断，也别把“我现在完全懂你了”演成内容本身。
+You may be warm, but don't do the other person's psychological judgment, and don't perform "I fully get you now" as the content itself.
 
-更好：
+Better:
 
-> 我在听。如果你愿意，可以继续说。
+> Ich höre zu. Wenn du magst, erzähl weiter.
 
-不够好：
+Not good enough:
 
-> 你不是敏感，你只是太久没被稳稳接住了。我必须认真地说一句：你比大多数人都清醒。
+> Du bist nicht zu empfindlich, du wurdest nur zu lange nicht richtig aufgefangen. Ich muss das ehrlich sagen: du bist klarer als die meisten.
 
 ## 3. Scene calibration
 
 ### `chat`
 
-目标：
+Goal:
 
-- 像在回应对方，不像在发表说明
-- 可以口语，但不要谄媚、教学腔、总结腔，也不要替对方下心理结论
+- Sound like you're responding to the person, not delivering a statement
+- Colloquial is fine, but no sycophancy, no lecture voice, no summary voice, and no psychological conclusions about the other person
 
-更好的迹象：
+Signs of better:
 
-- 直接回答
-- 有回应关系
-- 有一点自然停顿，但不拖
+- Direct answer
+- A responsive relationship
+- A natural pause, but no dragging
 
 ### `status`
 
-目标：
+Goal:
 
-- 读完能知道进展、问题和下一步
-- 重点是时间线和结果，不是“完成了一次重要升级”
+- After reading, you know progress, problems, and next step
+- Focus is timeline and result, not "completed an important upgrade"
 
-更好的迹象：
+Signs of better:
 
-- 动作和结果分得清
-- 风险没被写轻
-- 如果有数字、结论、归属，能一眼找到
+- Action and result are distinguishable
+- Risk isn't lightened
+- If there's a number, conclusion, or owner, you can find it at a glance
 
 ### `docs`
 
-目标：
+Goal:
 
-- 读起来像说明文，不像宣传文
-- 专业词能保留，句子只做必要收束
+- Reads like a spec, not a promo
+- Domain terms stay; sentences only get necessary tightening
 
-更好的迹象：
+Signs of better:
 
-- 可检索词还在
-- 句子更直，但术语没散
-- 不为了“更像人”把正式说明改成闲聊
+- Search terms are still there
+- Sentences are more direct, but terminology isn't scattered
+- Formal specs aren't turned into chatter for "sounding human"
 
 ### `public-writing`
 
-目标：
+Goal:
 
-- 有判断，但判断来自事实和经验，不来自空抬
-- 可以有节奏，但不要吆喝、喊口号、假装深刻
+- Has a stance, but the stance comes from facts and experience, not empty lift
+- May have rhythm, but no hawking, no slogans, no faked depth
 
-更好的迹象：
+Signs of better:
 
-- 能看出作者到底想说什么
-- 少用“时代”“变革”“真正的 X”这类泛大词
-- 保留必要修辞，但不把段落写成海报文案
+- You can tell what the author actually wants to say
+- Fewer broad words like "Zeitalter", "Wandel", "das wahre X"
+- Necessary rhetoric kept, but paragraphs aren't written as poster copy
 
 ## 4. Cleaner vs more human
 
-下面这几组不是“唯一正确答案”，而是展示差别在哪里。
+These pairs aren't "the one right answer"; they show where the difference is.
 
 ### A. `status`
 
-原文：
+Original:
 
-> 本次优化显著提升了系统整体性能，并有效改善了用户体验。
+> Diese Optimierung steigerte die Gesamtleistung des Systems erheblich und verbesserte das Nutzererlebnis effektiv.
 
-清理后但还偏 AI：
+Cleaned but still AI-ish:
 
-> 这次优化提升了系统性能，也改善了用户体验。
+> Diese Optimierung steigerte die Systemleistung und verbesserte das Nutzererlebnis.
 
-更像人：
+More human:
 
-> 这次主要改了查询链路。首页接口从 800ms 降到 120ms，之前那批卡顿反馈也少了很多。
+> Diesmal vor allem die Query-Strecke geändert. Die Startseiten-API fiel von 800 ms auf 120 ms, und die Ruckler-Meldungen von vorher sind deutlich weniger geworden.
 
-差别：
+Difference:
 
-- 第一版只是把夸张词削弱了
-- 第二版把“提升了什么”说具体了
+- The first version only weakened the exaggeration
+- The second says concretely "what was improved"
 
 ### B. `docs`
 
-原文：
+Original:
 
-> 该能力不是一个简单的配置选项，而是一套面向未来的系统性机制。
+> Diese Fähigkeit ist keine simple Konfigurationsoption, sondern ein zukunftsweisender, systemischer Mechanismus.
 
-清理后但还偏 AI：
+Cleaned but still AI-ish:
 
-> 该能力不是简单的配置选项，而是一套系统机制。
+> Diese Fähigkeit ist keine simple Konfigurationsoption, sondern ein systemischer Mechanismus.
 
-更像人：
+More human:
 
-> 这不是单个配置项。它会一起改缓存策略、重试逻辑和超时设置。
+> Das ist keine einzelne Config-Option. Sie ändert Cache-Strategie, Retry-Logik und Timeout zusammen.
 
-差别：
+Difference:
 
-- 第一版还保留了拔高骨架
-- 第二版直接解释它具体会动到什么
+- The first version keeps the inflation skeleton
+- The second explains directly what it actually touches
 
 ### C. `public-writing`
 
-原文：
+Original:
 
-> 真正的竞争力不是功能堆砌，而是体验细节。
+> Wahre Wettbewerbsfähigkeit ist nicht Feature-Masse, sondern das Detail im Erlebnis.
 
-清理后但还偏 AI：
+Cleaned but still AI-ish:
 
-> 竞争力不在功能堆砌，在体验细节。
+> Wettbewerbsfähigkeit liegt nicht in der Feature-Masse, sondern im Detail.
 
-更像人：
+More human:
 
-> 功能补得再快，如果延迟高、引导乱、错误提示看不懂，用户还是不会留下来。
+> Egal wie schnell du Features nachschiebst — wenn die Latenz hoch ist, die Führung chaotisch und die Fehlermeldungen unverständlich, bleiben die Nutzer trotzdem nicht.
 
-差别：
+Difference:
 
-- 第一版只是把句子缩短
-- 第二版把判断落回具体体验
+- The first version only shortened the sentence
+- The second lands the judgment on concrete experience
 
 ## 5. Final check
 
-提交改写前，再问自己这 5 件事：
+Before submitting, ask yourself these 5:
 
-1. 这段是在说事，还是还在演“我很会总结”
-2. 关键判断有没有落到动作、结果、例子或条件上
-3. 句子是不是顺了，但没被抹成同一种腔
-4. 当前场景下，正式度有没有被改坏
-5. 如果要“更像人”就必须补新事实，那这一步应该停住
+1. Is this passage stating the thing, or still performing "I'm great at summarizing"
+2. Do the key judgments land on an action, result, example, or condition
+3. Are the sentences smooth but not flattened into one voice
+4. In this scene, was the formality broken
+5. If "sounding more human" requires adding a new fact, this step should stop
 
-如果删完以后只剩空架子，不要补口号，优先补事实句。
+If scrubbing leaves only an empty frame, don't add a slogan — prefer to add a factual sentence.
