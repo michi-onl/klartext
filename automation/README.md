@@ -1,69 +1,69 @@
-# Community Sample Intake — 运行说明
+# Community Sample Intake — run guide
 
-> 维护者本地工具的运行入口。
-> 协议规范（什么是 intake、为什么做）见 `./intake.md`，prompt 本体见 `./intake-prompt.md`。
-> 这份 README 只解决"具体怎么跑一次"。
+> Entry point for the maintainer's local tool.
+> The protocol spec (what intake is, why) is in `./intake.md`; the prompt itself is in `./intake-prompt.md`.
+> This README only covers "how to run one round".
 
-## 什么时候跑
+## When to run
 
-- 公开讨论（X / Linux.do / V2EX / 知乎 / Reddit 等）出现一批新的 AI 姿态链
-- 怀疑现有词表可能没收住，但又不确定是变体还是新模式
-- 触发条件全集见 `CONTRIBUTING.md` 「维护者：Community Observation Intake」一节
+- Public discussion (heise, Reddit, Hacker News, ComputerBase, X, etc.) surfaces a batch of new AI posture chains
+- You suspect existing tables might not catch it, but aren't sure if it's a variant or a new pattern
+- The full trigger set is in `CONTRIBUTING.md`, section "Maintainer: Community Observation Intake"
 
-## 文件约定
+## File convention
 
-工具本体（committed）：
+Tool itself (committed):
 
-| 角色 | 路径 |
+| Role | Path |
 |------|------|
-| 协议规范 | `automation/intake.md` |
-| Prompt 本体 | `automation/intake-prompt.md` |
-| 运行说明 | `automation/README.md`（本文件） |
+| Protocol spec | `automation/intake.md` |
+| The prompt | `automation/intake-prompt.md` |
+| Run guide | `automation/README.md` (this file) |
 
-运行实例（local-only，`tasks/` 在 `.gitignore` 内）：
+Run instances (local-only, `tasks/` is in `.gitignore`):
 
-| 角色 | 路径 |
+| Role | Path |
 |------|------|
-| 输入（本轮样本批次） | `tasks/current/intake/inbox/<YYYY-MM-DD>.md` |
-| 输出（本轮 intake 报告） | `tasks/current/intake/reports/<YYYY-MM-DD>-intake.md` |
+| Input (this round's batch) | `tasks/current/intake/inbox/<YYYY-MM-DD>.md` |
+| Output (this round's report) | `tasks/current/intake/reports/<YYYY-MM-DD>-intake.md` |
 
-输入文件每条样本带"来源 / 原文 / 提交者备注"三栏，越接近原始观察越好。dryrun 参考样本和 expected baseline 见仓库内 commit 历史里 v1.8.2 的相关引用。
+Each input sample carries three columns "source / original text / submitter note"; the closer to the raw observation, the better.
 
-## 一条命令跑完
+## One command
 
-在仓库根目录执行（替换日期）：
+Run in the repo root (replace the date):
 
 ```bash
 codex exec -C . -s read-only --ephemeral \
   -o tasks/current/intake/reports/2026-05-01-intake.md \
-  '你正在执行说人话仓库的 intake automation。
+  'You are running the klartext repo intake automation.
 
-请完整读取 ./automation/intake-prompt.md，按其中 text 代码块里的 prompt 行事。该 prompt 已固定：要先读哪些 reference、如何按"已覆盖 / 变体归并 / 候选新模式"三档归类、强约束（默认不要建议加词条；不要把被讨论词、引用词、真人具体叙事误判成 AI 腔），以及最终输出格式。
+Read ./automation/intake-prompt.md in full and act on the prompt in its text code block. That prompt is fixed: which references to read first, how to classify into "covered / variant merge / candidate new pattern", the hard constraints (don''t suggest adding a word by default; don''t misjudge a discussed word, a quoted word, or a real person''s concrete narrative as AI-speak), and the final output format.
 
-本轮样本批次在 ./tasks/current/intake/inbox/2026-05-01.md。
+This round''s batch is in ./tasks/current/intake/inbox/2026-05-01.md.
 
-请直接输出最终的 intake 报告，按 prompt 推荐的格式（本轮样本数 / 已覆盖 / 变体归并 / 候选新模式 / 建议动作 / 一句总判断），不要附加任何过程叙述或 meta 评论。'
+Output the final intake report directly, in the prompt''s recommended format (sample count / covered / variant merge / candidate new pattern / suggested action / one-line verdict), with no process narration or meta commentary.'
 ```
 
-关键参数说明：
+Key flags:
 
-- `-C .` — 让 codex 把仓库根作为工作目录，prompt 里的相对路径才能解析
-- `-s read-only` — 沙箱锁死成只读，强约束"不自动改仓库"用沙箱兜一次底
-- `--ephemeral` — 不持久化 session，单次任务即跑即弃
-- `-o <报告路径>` — 直接把模型最终输出落到 reports 目录，不依赖 stdout 复制粘贴
+- `-C .` — makes codex use the repo root as the working directory so the relative paths resolve
+- `-s read-only` — locks the sandbox read-only, a second backstop for "don't auto-edit the repo"
+- `--ephemeral` — no persistent session, run-and-discard
+- `-o <report path>` — writes the model's final output straight to the reports dir, no stdout copy-paste
 
-> `tasks/current/intake/inbox/` 和 `reports/` 这两个目录在 `.gitignore` 内，第一次用前手动 `mkdir -p` 一次即可。
+> `tasks/current/intake/inbox/` and `reports/` are in `.gitignore`; `mkdir -p` them once before first use.
 
-## 跑完之后
+## After the run
 
-报告里只会出现四类建议动作：`无动作 / 补 benchmark / 补 operation-manual / 考虑新增词条或结构`。
+The report contains only four kinds of suggested action: `no action / add benchmark / add operation-manual / consider adding a word or structure`.
 
-- 默认假设：本轮**不需要**直接改仓库
-- 如果建议是 `补 benchmark`：人工评估后再去改 `evals/benchmark.md`
-- 如果建议是 `补 operation-manual`：人工评估后再去改 `references/operation-manual.md`
-- 如果建议是 `考虑新增词条或结构`：先观察 2-3 轮，确认是否反复出现，再考虑入库
-- 任何动作都**不应该**由 intake 自动完成；这一层是建议，不是落库
+- Default assumption: this round does **not** need a direct repo change
+- If the suggestion is `add benchmark`: assess manually, then edit `evals/benchmark.md`
+- If the suggestion is `add operation-manual`: assess manually, then edit `references/operation-manual.md`
+- If the suggestion is `consider adding a word or structure`: watch 2–3 rounds first, confirm it recurs, then consider adding it
+- No action should be done **automatically** by intake; this layer is a suggestion, not a landing
 
-## Prompt 调坏了怎么办
+## If the prompt breaks
 
-如果哪天改 `intake-prompt.md` 让报告偏离 spec 推荐格式（6 段都缺、问题族归类乱、被讨论词被误判成 AI 腔），就说明 prompt 调坏了——回滚或重新校准。校准时建议先准备一份覆盖三档结论 + 两类陷阱（被讨论词、技术语境放行）的合成样本批次作为 expected baseline，跑完比对。
+If a change to `intake-prompt.md` makes the report drift from the spec format (missing sections, messy family classification, a discussed word misjudged as AI-speak), the prompt is broken — roll back or recalibrate. For calibration, prepare a synthetic batch covering the three-tier conclusions + two trap types (discussed word, technical-context pass) as an expected baseline, then run and compare.

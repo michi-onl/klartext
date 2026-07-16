@@ -1,22 +1,25 @@
-# 仓库说明
+# Repository guide
 
-## 语言
+This is **klartext**, a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua). Same method (scenes, Tiers, scopes, reread contract); the target languages are German and English, and the phrase tables and examples are re-derived for German.
 
-- 本仓库中文优先。标题、摘要、建议、线程名、面向用户的解释默认用简体中文，除非源材料明显是英文语境。
-- 代码、文件路径、命令名、API 名和约定俗成的技术术语保持原文；翻译反而降低清晰度的不翻。
+## Language
 
-## 风格
+- The skill's instructional prose (`SKILL.md`, `references/`, `install/`) is **English-first**. This is the meta language; keep it consistent.
+- The **target** languages the skill cleans are German and English. Phrase tables, examples, and eval samples are German (+English).
+- Keep code, file paths, command names, API names, and settled technical terms in their original form; don't translate where translation reduces clarity.
 
-- 跟随仓库现有文风：直接、具体、低套路，不带翻译腔。
-- 中英混排内容以中文为框架，只保留必要的英文术语。
+## Style
 
-## 布局
+- Follow the repo's existing tone: direct, concrete, low-ceremony, no translationese.
+- German example text is German-framed; keep only the necessary English/technical terms.
 
-- `SKILL.md` 是 skill 入口；`evals/` 放评测用例；`automation/` 放评测与自动化脚本。
-- `tasks/` 是 gitignored 工作区（`current/` 进行中、`archive/` 已完成、`external-inputs/` 外部收集材料）。规划和过程文档只进这里，永不进提交历史。
+## Layout
 
-## 协作
+- `SKILL.md` is the skill entry point; `references/` holds the behavioral rules and phrase tables; `evals/` holds test cases; `automation/` holds eval and automation scripts.
+- `tasks/` is a gitignored workspace (`current/` in progress, `archive/` done, `external-inputs/` collected material). Planning and process docs go only there, never into commit history.
 
-- 提交一律以仓库所有者名义，不加 AI 署名行（不写 `Co-Authored-By`），这是既定约定。
-- 文档类工作直接做；功能类工作的常规流程是把自包含的规格写进 `tasks/current/`，交给更便宜的模型执行。
-- 已安装的 Claude Code skill `~/.claude/skills/shuorenhua` 是指向本仓库的软链：在这里改 `SKILL.md` 会立即改变线上 skill，升级走 `git pull`——永远不要往 skills 目录拷贝文件。
+## Collaboration
+
+- Commit under the repository owner's name, with no AI signature line (no `Co-Authored-By`). This is an established convention.
+- Do documentation work directly; for feature work, the usual flow is to write a self-contained spec into `tasks/current/` and hand it to a cheaper model to execute.
+- If the installed Claude Code skill is a symlink into this repo, editing `SKILL.md` here changes the live skill immediately; upgrades happen via `git pull` — never copy files into the skills directory.

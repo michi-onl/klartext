@@ -1,96 +1,90 @@
-# Codex 安装 / 使用
+# Codex install / usage
 
-## lite / full 怎么选
+## lite / full
 
-- `lite`：只加载 `SKILL.md`。适合单次临时改写、上下文紧张、只想先压掉明显模板感的场景。
-- `full`：加载 `SKILL.md` + `references/`。适合长期项目、README / release note / issue 回复、技术文档和需要误杀防护的场景。
+- `lite`: load only `SKILL.md`. Good for one-off rewrites, tight context, or just cutting the obvious template feel.
+- `full`: load `SKILL.md` + `references/`. Good for long-lived projects, README / release note / issue replies, technical docs, and cases that need false-positive protection.
 
-## 方式 1：项目内长期使用（推荐）
+## Option 1: long-term project use (recommended)
 
-把 skill 文件放进项目：
+Put the skill files into the project:
 
 ```bash
-mkdir -p shuorenhua
-cp SKILL.md shuorenhua/
-cp -r references shuorenhua/
+mkdir -p klartext
+cp SKILL.md klartext/
+cp -r references klartext/
 ```
 
-这是 full 用法，也是项目内长期使用的默认建议。
+This is the full usage and the default recommendation for long-term project use.
 
-在 `AGENTS.md` 里写清楚触发条件和适用边界：
+Write the trigger condition and boundary into `AGENTS.md`:
 
 ```markdown
-## 写作风格
-当任务涉及"去 AI 味""说人话""自然一点""别像模板"这类改写时，遵循 `shuorenhua/SKILL.md`。
-对外文本优先按它处理；代码、日志、配置和命令输出不套这个 skill。
+## Writing style
+When a task involves "de-AI", "auf Deutsch natürlicher", "sound human", "not like a template", follow `klartext/SKILL.md`.
+Apply it to external text first; don't apply it to code, logs, config, or command output.
 ```
 
-这样规则跟项目一起版本管理，团队成员也能复用。
+This way the rules are versioned with the project and reusable across the team.
 
-## 方式 2：单次改写
+## Option 2: one-off rewrite
 
-在仓库根目录运行，让 Codex 先读取 `SKILL.md` 再改写：
+Run in the repo root and have Codex read `SKILL.md` before rewriting:
 
 ```bash
-codex exec -C . "读取 ./SKILL.md，按其中规则改写以下文本：..."
+codex exec -C . "Read ./SKILL.md and rewrite the following text by its rules: ..."
 ```
 
-不需要修改项目文件，适合临时使用。这是 lite 用法；如果要处理公开文本、技术边界或 Scene Packs，建议同时让 Codex 读取 `references/` 下的相关文件。
+No project changes needed; good for occasional use. This is the lite usage; for public text, technical boundaries, or Scene Packs, also have Codex read the relevant files under `references/`.
 
-如果你想先判断“哪里像 AI”，不要直接改稿，可以这样用：
+To first judge "where it sounds AI" without rewriting:
 
 ```bash
-codex exec -C . "读取 ./SKILL.md，只按 annotation mode 标出下面这段文字里的问题：..."
+codex exec -C . "Read ./SKILL.md and, in annotation mode only, flag the problems in the following text: ..."
 ```
 
-适合这几类场景：
+## Option 3: global AGENTS
 
-- 你想先看这段话该不该改
-- 你要做审稿或 review，不想直接替作者重写
-- 你怀疑有无源引用、语域混搭或工程师腔，但还不想动正文
-
-## 方式 3：全局 AGENTS
-
-先把完整规则放到本地 skill 目录：
+First put the full rules into a local skill directory:
 
 ```bash
-mkdir -p ~/.codex/skills/shuorenhua
-cp SKILL.md ~/.codex/skills/shuorenhua/
-cp -r references ~/.codex/skills/shuorenhua/
+mkdir -p ~/.codex/skills/klartext
+cp SKILL.md ~/.codex/skills/klartext/
+cp -r references ~/.codex/skills/klartext/
 ```
 
-这是 full 用法。只复制 `SKILL.md` 也能用，但误杀防护和场景细分会弱一些。
+This is the full usage. Copying only `SKILL.md` also works, but false-positive protection and scene detail are weaker.
 
-再在全局 `AGENTS.md` 里写触发入口：
+Then write a trigger entry into the global `AGENTS.md`:
 
 ```bash
 mkdir -p ~/.codex
 cat >> ~/.codex/AGENTS.md <<'EOF'
-当任务涉及"去 AI 味""说人话""自然一点""别像模板"这类改写时，使用本地 skill `shuorenhua`。
-对外文本优先按它处理；代码、日志、配置和命令输出不套这个 skill。
+When a task involves "de-AI", "auf Deutsch natürlicher", "sound human", "not like a template", use the local skill `klartext`.
+Apply it to external text first; don't apply it to code, logs, config, or command output.
 EOF
 ```
 
-全局入口只建议写触发条件，不建议把整份 `SKILL.md` 直接拼进全局规则。完整规则仍应放在项目内或本地 skill 目录里，按需读取更稳。
+The global entry should carry only the trigger condition; don't paste the whole `SKILL.md` into global rules. Keep the full rules in the project or a local skill dir and read them on demand.
 
-## 注意
+## Note
 
-"装了 skill"不等于 Codex 会无条件自动套用全部规则。你需要给它一个清楚的触发入口（`AGENTS.md`、项目提示，或在单次任务里明确要求读取 `SKILL.md`），它才会按规则处理。
+"Installed a skill" does not mean Codex will unconditionally apply all rules. You need to give it a clear trigger entry (`AGENTS.md`, a project prompt, or an explicit "read `SKILL.md`" in a single task) before it handles text by the rules.
 
-## 长文改写的三档 scope
+## Three scopes for long-form rewrites
 
-长文（约 1000 字以上的 `public-writing`）改写时，可以指定三档 scope，和力度档位正交：
+For long text (roughly 1000+ words of `public-writing`), you can specify one of three scopes, orthogonal to the strength level:
 
-- `structural`：自由删句、并句、重排，去味最彻底，但长度不可控（实测同一篇可能 -18% 到 -39%）
-- `bounded`（长文默认）：实句只做句内清理；整句空话不直接删，列成「建议删除（待确认）」清单交你拍板
-- `in-place`：一句都不删，只做句内降调，适合“完全原样”的要求
+- `structural`: freely delete/merge/reorder, most thorough de-flavoring, but length is unpredictable (measured: the same piece may be -18% to -39%)
+- `bounded` (long-form default): real sentences get only intra-sentence cleanup; whole empty sentences aren't deleted directly but listed as "Suggested deletions (to confirm)" for you to decide
+- `in-place`: delete nothing, only lower tone intra-sentence, for "exactly as-is" requests
 
-在指令里直接说就行，例如：「用 bounded scope 改写，整句空话列出来给我确认、别直接删。」
+Just say it in the instruction, e.g. "Rewrite in bounded scope; list the whole empty sentences for me to confirm, don't delete them directly."
 
-## 验证
+## Verification
 
 ```text
-用说人话规则改写：在当今快速发展的人工智能时代，如何打造一个真正赋能开发者的工具，已经成为业界不容忽视的关键议题。
+Rewrite with klartext rules: In einer Zeit, in der KI die Softwareentwicklung grundlegend neu gestaltet, ist die Frage, wie man ein wahrhaft entwickler-befähigendes Tool schafft, zu einer nicht zu unterschätzenden Schlüsselfrage geworden.
 ```
 
-输出去掉了 `打造 / 赋能 / 不容忽视 / 关键议题`，但没把信息改空，说明接上了。
+If the output drops `grundlegend neu gestaltet / entwickler-befähigend / nicht zu unterschätzen / Schlüsselfrage` without emptying the information, it's wired up.
