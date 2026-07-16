@@ -1,125 +1,125 @@
-# 结构反模式（跨语言）
+# Structural Anti-patterns (cross-language)
 
-> 这些模式不是某个词的问题，而是句子和段落层面的 AI 痕迹。中英文通用。
+> These are not word-level problems but sentence- and paragraph-level AI traces. Common to German and English.
 
-## 1. 二元对比假戏剧
+## 1. Fake-dramatic binary contrast
 
-**模式**：先否定 X，再肯定 Y，制造虚假的顿悟感。
+**Pattern**: negate X, then affirm Y, to manufacture a false epiphany.
 
 ```
-❌ 这不是技术问题，而是管理问题。
+❌ Es ist kein technisches Problem, sondern ein Management-Problem.
 ❌ It's not about the code. It's about the culture.
 ```
 
 ```
-✅ 管理流程比代码本身更容易出问题。
+✅ Der Management-Prozess geht leichter kaputt als der Code selbst.
 ✅ The culture around code review matters more than the code itself.
 ```
 
-## 2. 否定式列举
+## 2. Negation-list buildup
 
-**模式**：先说不是什么，再说是什么。绕了一圈。
+**Pattern**: say what it isn't, then what it is. The long way around.
 
 ```
-❌ 它不是框架，不是库，也不是工具——它是一种思维方式。
+❌ Es ist kein Framework, keine Bibliothek, kein Werkzeug — es ist eine Denkweise.
 ❌ It's not a framework. It's not a library. It's a way of thinking.
 ```
 
 ```
-✅ 把它当作一种思维方式，不是一个具体工具。
+✅ Sieh es als Denkmodell, nicht als konkretes Werkzeug.
 ✅ Think of it as a mental model, not a tool.
 ```
 
-## 3. 戏剧化碎句
+## 3. Dramatic sentence fragments
 
-**模式**：用句子碎片制造假的力量感。
+**Pattern**: sentence fragments manufacturing false force.
 
 ```
-❌ 三年。两个人。一个想法。
+❌ Drei Jahre. Zwei Leute. Eine Idee.
 ❌ Three years. Two people. One idea.
 ```
 
 ```
-✅ 两个人花了三年把这个想法做成了产品。
+✅ Zwei Leute haben drei Jahre gebraucht, um aus der Idee ein Produkt zu machen.
 ✅ Two people spent three years turning the idea into a product.
 ```
 
-## 4. 反问式铺垫
+## 4. Rhetorical-question setup
 
-**模式**：用反问或"如果"开头吊胃口。
+**Pattern**: open with a rhetorical question or "what if" to bait.
 
 ```
-❌ 如果我告诉你，90% 的创业公司都在犯同一个错误呢？
+❌ Was, wenn ich dir sage, dass 90 % der Start-ups denselben Fehler machen?
 ❌ What if I told you 90% of startups make the same mistake?
 ```
 
 ```
-✅ 90% 的创业公司在定价上犯同一个错误：按成本定价而不是按价值定价。
+✅ 90 % der Start-ups bepreisen falsch: nach Kosten statt nach Wert.
 ✅ 90% of startups misprice their product, using cost-based pricing instead of value-based.
 ```
 
-## 5. 虚假主语（False Agency）
+## 5. False agency
 
-**模式**：给无生命的事物安上人类动作（"赋能""助力""驱动"）。当句子抽象空泛、没有具体信息时优先改写。技术文档中描述系统行为的非人主语（"网关返回 504""缓存过期"）是合理的，不需要改。
+**Pattern**: give lifeless things human actions ("befähigt", "treibt an", "ermöglicht"). Rewrite when the sentence is abstract and empty. A non-human subject describing system behavior in technical docs ("das Gateway gibt 504 zurück", "der Cache läuft ab") is fine and needs no change.
 
 ```
-❌ 该框架赋能了开发者社区。
+❌ Das Framework befähigt die Entwickler-Community.
 ❌ The framework empowers the developer community.
 ```
 
 ```
-✅ 开发者用这个框架能少写 30% 的样板代码。
+✅ Mit diesem Framework schreiben Entwickler 30 % weniger Boilerplate.
 ✅ Developers write 30% less boilerplate with this framework.
-✅ 网关在超时后返回 504。（技术描述，不改）
+✅ Das Gateway gibt nach dem Timeout 504 zurück. (technical description, unchanged)
 ```
 
-## 6. 被动语态堆砌
+## 6. Stacked passive voice
 
-**模式**：连续使用被动语态，隐藏动作执行者。研究论文、实验报告或正式学术摘要里的常规被动不一定要改。
+**Pattern**: consecutive passives hiding the actor. Normal passive in papers, lab reports, or formal academic abstracts need not change.
 
 ```
-❌ 系统被优化后，性能被显著提升，用户体验被大幅改善。
+❌ Nachdem das System optimiert wurde, wurde die Leistung deutlich gesteigert und das Nutzererlebnis erheblich verbessert.
 ❌ The system was optimized, performance was improved, and user experience was enhanced.
 ```
 
 ```
-✅ 我们优化了数据库查询，页面加载从 3 秒降到 0.8 秒。
+✅ Wir haben die Datenbank-Queries optimiert, die Ladezeit fiel von 3 s auf 0,8 s.
 ✅ We optimized database queries and cut page load time from 3s to 0.8s.
 ```
 
 ```
-✅ The experiment was conducted by researchers at MIT.（学术语体，可保留）
+✅ Das Experiment wurde von Forschenden am MIT durchgeführt. (academic register, keep)
 ```
 
-## 7. 三件套列举
+## 7. Rule-of-three lists
 
-**模式**：AI 偏爱三个一组。两个或一个往往更自然。
+**Pattern**: AI loves groups of three. Two or one is often more natural.
 
 ```
-❌ 创新、协作、卓越。
+❌ Innovation, Zusammenarbeit, Exzellenz.
 ❌ Innovation, collaboration, and excellence.
 ```
 
 ```
-✅ 把东西做出来，做好。
+✅ Bau die Sachen, und bau sie gut.
 ✅ Build things. Build them well.
 ```
 
-## 8. "首先…其次…最后…" 机械排列
+## 8. Mechanical "Erstens … zweitens … abschließend …"
 
-**模式**：中文特有的机械递进，制造假的逻辑感。
-
-```
-❌ 首先，我们需要明确目标；其次，制定计划；最后，执行落地。
-```
+**Pattern**: mechanical enumeration that manufactures false logic.
 
 ```
-✅ 先把目标定清楚，然后排优先级，边做边调。
+❌ Zunächst müssen wir das Ziel definieren; anschließend einen Plan erstellen; abschließend die Umsetzung angehen.
 ```
 
-## 9. Wh- 开头句（英文特有）
+```
+✅ Erst das Ziel klar machen, dann Prioritäten setzen, und beim Machen nachjustieren.
+```
 
-**模式**：用 What/When/Where/Which/Who/Why/How 开头的句子在 AI 文本中过度集中。
+## 9. Wh- opening sentences (English-specific)
+
+**Pattern**: sentences opening with What/When/Where/Which/Who/Why/How over-cluster in AI text.
 
 ```
 ❌ What makes this approach unique is its simplicity.
@@ -129,143 +129,157 @@
 ✅ This approach works because it's simple.
 ```
 
-## 10. 总结式收尾
+## 10. Summary endings
 
-**模式**：每段或全文末尾用"总之""综上"做总结，重复已说过的内容。
+**Pattern**: end each paragraph or the whole text with "zusammenfassend"/"alles in allem", repeating what was said.
 
 ```
-❌ 综上所述，该方案在性能、安全性和可维护性方面都表现优异。
+❌ Zusammenfassend lässt sich sagen, dass der Ansatz in Leistung, Sicherheit und Wartbarkeit überzeugt.
 ❌ In conclusion, this approach excels in performance, security, and maintainability.
 ```
 
 ```
-✅ 删掉。前面说清楚了就不用再说一遍。
+✅ Löschen. Wenn du es oben klar gesagt hast, sag es nicht nochmal.
 ✅ Delete it. If you said it clearly above, don't repeat it.
 ```
 
-## 11. 对称填充（Symmetry Padding）
+## 11. Symmetry padding
 
-**模式**：为了"平衡"而硬凑对仗，没有信息增量。
-
-```
-❌ 既要保证速度，又要保证质量；既要创新突破，又要稳定可靠。
-```
+**Pattern**: forced parallelism for "balance", with no information gain.
 
 ```
-✅ 速度和质量之间我们优先质量。
+❌ Wir wollen sowohl Geschwindigkeit als auch Qualität; sowohl Innovation als auch Zuverlässigkeit.
 ```
 
-## 12. 无源引用
+```
+✅ Zwischen Geschwindigkeit und Qualität priorisieren wir Qualität.
+```
 
-**模式**：用"研究表明""数据显示""专家指出"但不给具体来源，制造假的权威感。
+## 12. Unsourced citations
+
+**Pattern**: "Studien zeigen"/"Daten belegen"/"Experten sagen" without a concrete source, manufacturing false authority.
 
 ```
-❌ 研究表明，远程办公能提高 30% 的生产力。
+❌ Studien zeigen, dass Homeoffice die Produktivität um 30 % steigert.
 ❌ Studies show that remote work increases productivity by 30%.
 ```
 
 ```
-✅ Stanford 2023 年的一项实验发现，全远程员工的代码提交量比混合办公多 13%。
+✅ Ein Stanford-Experiment von 2023 fand, dass voll remote arbeitende Mitarbeitende 13 % mehr Code committen als Hybrid-Arbeitende.
 ✅ A 2023 Stanford experiment found fully remote employees committed 13% more code than hybrid workers.
 ```
 
-## 13. 加粗滥用
+## 13. Bold abuse
 
-**模式**：机械地给每个要点加粗，制造假的层次感。
-
-```
-❌ **用户体验：** 界面全面升级。**性能优化：** 算法显著提升。**安全加固：** 新增端到端加密。
-```
+**Pattern**: mechanically bold every bullet lead to fake hierarchy.
 
 ```
-✅ 界面重新设计了，算法快了 2 倍，加了端到端加密。
-```
-
-## 14. 分条列点强迫症
-
-**模式**：任何内容都要 1. 2. 3. 分条，连简单回复也列点，制造假的条理感。
-
-```
-❌ 关于这个问题，我的建议如下：
-   1. 先检查配置文件
-   2. 确认环境变量
-   3. 重启服务
+❌ **Nutzererlebnis:** Oberfläche rundum erneuert. **Performance:** Algorithmus deutlich verbessert. **Sicherheit:** Ende-zu-Ende-Verschlüsselung neu.
 ```
 
 ```
-✅ 配置文件里的 DB_HOST 可能写错了，先看一眼。不是的话重启一下服务试试。
+✅ Die Oberfläche wurde neu gestaltet, der Algorithmus ist 2x schneller, Ende-zu-Ende-Verschlüsselung ist dazugekommen.
 ```
 
-## 15. 正能量收尾强迫症
+## 14. Compulsive bullet-pointing
 
-**模式**：不管前面说了什么，最后一段必须上价值、给鸡汤、展望未来。
-
-```
-❌ ……总之，让我们拥抱变化，积极迎接 AI 时代的无限可能！未来可期！
-```
+**Pattern**: everything must be 1. 2. 3., even a simple reply, faking orderliness.
 
 ```
-✅ 删掉。前面说完了就结束。
-```
-
-## 16. 假口语化 / 硬凹网感
-
-**模式**：AI 试图"接地气"时硬塞网络流行语（绝绝子、谁懂啊、真的会谢），反而更假。真人用这些词是随机的，AI 是批量的。
-
-```
-❌ 姐妹们！这个工具真的绝绝子！谁懂啊，效率直接拉满！狠狠心动了！
+❌ Zu deiner Frage mein Vorschlag:
+   1. Zuerst die Konfigurationsdatei prüfen
+   2. Umgebungsvariablen bestätigen
+   3. Dienst neu starten
 ```
 
 ```
-✅ 这个工具确实好用，主要是批量处理的速度快，省了不少时间。
+✅ Vielleicht steht in der Config das DB_HOST falsch, schau da mal. Wenn nicht, starte den Dienst neu.
 ```
 
-## 17. 调试腔叙事
+## 15. Compulsive uplifting ending
 
-**模式**：AI 在编程场景中用 postmortem / SRE 口吻讲日常事务——"兜住""落盘""根因""收口"。把 debug 术语泛化到一切对话中。
-
-```
-❌ 我已经把差异收窄了，根因基本坐实，接下来做一个更硬的排除法把问题打掉。
-```
+**Pattern**: whatever came before, the last paragraph must add value, sprinkle inspiration, look to the future.
 
 ```
-✅ 原因找到了：是缓存过期导致的。我把可能性排查了一遍，现在就剩这一个。
-```
-
-## 18. 句长均匀（统计信号）
-
-**模式**：AI 文本每句话长度几乎一样（句长标准差约 1.2，人类约 4.7+）。表现为"读起来很平，没有呼吸感"。
-
-**检测**：不是看单个词，而是看整段的节奏是否单调。长短句应该交替出现。
-
-## 19. 价值拔高骨架
-
-**模式**：先给一个事实，再用 `不仅仅是……更是……`、`真正的 X 不是……而是……`、`最后比拼的是……` 把句子抬高成“洞见”。
-
-```
-❌ 这不仅仅是一个产品，更是一种信念的传承。
-❌ 真正的竞争力不是功能堆砌，而是体验细节。最后比拼的是执行效率。
+❌ … Kurzum, lasst uns den Wandel annehmen und die grenzenlosen Möglichkeiten des KI-Zeitalters aktiv gestalten! Die Zukunft ist vielversprechend!
 ```
 
 ```
-✅ 这就是一个产品判断：体验细节决定它能不能长期被用下去。
-✅ 产品做得再多，最后还是看体验细节和执行效率。
+✅ Löschen. Wenn oben alles gesagt ist, hör auf.
 ```
 
-## 20. 标点腔（破折号过密）
+## 16. Fake colloquialism / forced influencer voice
 
-**模式**：把英文 em-dash 的使用习惯带进中文——首句就用破折号起手，一段里连续多个 `——`，插入、转折、补充全靠破折号承接；常伴随分号连用、顿号乱炖和中英混排下的标点崩坏。跨模型现象，提示词往往压不住。
-
-**检测**：看密度和位置，不看单次出现。命中信号：首句破折号起手、单段两处以上 `——`、连续多段都靠破折号承接。单个破折号不是问题，不要见一个杀一个。
+**Pattern**: when AI tries to be "relatable", it stuffs in influencer/clickbait phrasing ("absoluter Gamechanger", "ihr werdet es nicht glauben", "Zeit für Klartext"), which reads faker. Real people use these randomly; AI does it in bulk.
 
 ```
-❌ 这个工具最打动我的是速度——打开就是结果。搜索、启动、剪贴板——所有操作都在一个输入框里——你甚至不用记快捷键。
+❌ Leute, dieses Tool ist ein absoluter Gamechanger! Ihr werdet es nicht glauben, die Produktivität geht durch die Decke! Unbedingt speichern!
 ```
 
 ```
-✅ 这个工具最打动我的是速度：打开就是结果。搜索、启动、剪贴板，所有操作都在一个输入框里，你甚至不用记快捷键。
+✅ Das Tool ist wirklich brauchbar, vor allem weil die Stapelverarbeitung schnell ist — spart mir einiges an Zeit.
 ```
 
-**默认动作**：多余的破折号按语义改回冒号、逗号、括号或直接断句；一段最多保留一处真正承担插入或递进的。
+## 17. Debug-speak narrative
 
-**保留条件**：标题和命名里的连接符（`todo — 终端待办`）；引用原文；破折号本身是讨论对象；全段仅一处且确实承担插入语气。
+**Pattern**: AI narrates everyday matters in postmortem/SRE voice — "eingegrenzt", "dichtgemacht", "Root Cause", "abgeräumt" — generalizing debug jargon to all conversation.
+
+```
+❌ Ich habe die Differenz eingegrenzt, die Root Cause steht im Grunde fest, als Nächstes räume ich das mit einem härteren Ausschlussverfahren ab.
+```
+
+```
+✅ Die Ursache ist gefunden: ein abgelaufener Cache. Ich hab die Möglichkeiten durchgegangen, jetzt bleibt nur die eine.
+```
+
+## 18. Uniform sentence length (statistical signal)
+
+**Pattern**: AI text has nearly identical sentence lengths (length stdev ~1.2 vs ~4.7+ for humans). It reads "flat, no breathing room".
+
+**Detection**: don't look at a single word — look at whether the whole paragraph's rhythm is monotone. Long and short sentences should alternate.
+
+## 19. Value-inflation skeleton
+
+**Pattern**: give a fact, then lift it into "insight" with `nicht nur … sondern auch …`, `wahre X ist nicht … sondern …`, `am Ende zählt …`.
+
+```
+❌ Das ist nicht nur ein Produkt, sondern die Weitergabe einer Überzeugung.
+❌ Wahre Wettbewerbsfähigkeit ist nicht Feature-Masse, sondern das Detail im Erlebnis. Am Ende zählt die Umsetzung.
+```
+
+```
+✅ Das ist eine Produktentscheidung: das Detail im Erlebnis entscheidet, ob es langfristig benutzt wird.
+✅ Egal wie viele Features — am Ende zählen Erlebnisdetails und Umsetzung.
+```
+
+## 20. Punctuation tic (em-dash overload)
+
+**Pattern**: overusing the Gedankenstrich (—) — opening with one, several `—` per paragraph, insertions, turns, and additions all carried by dashes; often paired with semicolon runs. A cross-model phenomenon that prompts often can't suppress.
+
+**Detection**: look at density and position, not a single occurrence. Signals: dash at the very start, 2+ `—` in one paragraph, several consecutive paragraphs leaning on dashes. A single dash is not a problem — don't kill on sight.
+
+```
+❌ Was mich am Tool am meisten überzeugt, ist die Geschwindigkeit — es öffnet direkt mit Ergebnis. Suche, Start, Zwischenablage — alles in einem Eingabefeld — du musst dir nicht mal Shortcuts merken.
+```
+
+```
+✅ Was mich am Tool am meisten überzeugt, ist die Geschwindigkeit: es öffnet direkt mit Ergebnis. Suche, Start, Zwischenablage, alles in einem Eingabefeld, du musst dir nicht mal Shortcuts merken.
+```
+
+**Default action**: turn excess dashes back into colons, commas, parentheses, or full stops by meaning; keep at most one real insertion/build-up dash per paragraph.
+
+**Keep when**: connectors in titles and names (`todo — Terminal-Aufgaben`); quoted text; the dash itself is the topic; the only dash in a paragraph that genuinely carries an insertion.
+
+## 21. Nominalstil overload (German-specific)
+
+**Pattern**: German AI text piles on nominalizations and Streckverben ("eine Optimierung vornehmen", "zur Anwendung bringen", "unter Berücksichtigung von"), turning verbs into noun+light-verb constructions. It reads bureaucratic and agent-less.
+
+```
+❌ Im Rahmen der Prozessoptimierung wurde eine Verbesserung der Durchlaufzeiten unter Berücksichtigung der Ressourcenverfügbarkeit erzielt.
+```
+
+```
+✅ Wir haben den Prozess umgestellt, dadurch laufen die Aufträge schneller durch — soweit die Leute frei sind.
+```
+
+**Default action**: resolve Streckverben back to a full verb, give the sentence a real subject, and cut `im Rahmen von / vor dem Hintergrund / unter Berücksichtigung` where they only pad.

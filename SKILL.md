@@ -1,405 +1,409 @@
 ---
-name: shuorenhua
-description: 检查和清理中英文文本里的 AI 套路，适用于“去 AI 味”“说人话”“自然一点”“别像模板”“先标问题”这类改写和审稿需求；按场景控制力度，同时保留事实、术语、语域和责任主体。
+name: klartext
+description: Checks and cleans AI slop out of German and English text. Use for "de-AI", "sound human", "not like a template", "not so much like ChatGPT", "auf Deutsch natürlicher", "keine Textbausteine", "kein KI-Deutsch" style rewrites and reviews. Controls edit strength by scene while preserving facts, terminology, register, and attribution.
 ---
 
-# 说人话
+# Klartext
 
-把文本从”像模型在表演写作”拉回”像具体人在当前场景下表达”。
+Pull text back from "a model performing writing" to "a specific person expressing this in the current situation".
 
-这份 skill 不是敏感词替换器，也不是反技术、反抽象、反专业。它的目标是减少模板感、表演感和语域漂移，同时保住事实、术语和责任主体。
+This skill is not a banned-word replacer, and it is not anti-technical, anti-abstract, or anti-professional. Its goal is to reduce template feel, performance, and register drift while keeping facts, terminology, and the responsible subject intact.
+
+> Origin: this is a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua), which does the same job for Chinese and English. The method, tiers, scopes, and reread contract are shared; the phrase tables and examples are re-derived for German (English side is carried over unchanged).
 
 ## When to use
 
-在下面这些需求里使用：
+Use it for:
 
-- 用户明确说”去 AI 味””说人话””自然一点””别像模板””别太像 ChatGPT”
-- 需要改写中文或英文 `chat`、`status`、`docs`、`public-writing`
-- 需要先判断文本该轻改、中改还是重改
+- The user explicitly says "de-AI this", "sound human", "auf Deutsch natürlicher", "nicht wie ein Textbaustein", "not so much like ChatGPT"
+- Rewriting German or English `chat`, `status`, `docs`, `public-writing`
+- Deciding first whether a text needs a light, medium, or heavy edit
 
-在下面这些需求里不要硬套：
+Do not force it onto:
 
-- 用户要逐字翻译、保留原文风格、仿官方模板或仿特定品牌 voice
-- 文本主要是代码、日志、命令、配置、接口名、报错
-- 用户要的是事实校对，不是风格改写
+- Literal translation, preserving original style, imitating an official template or a specific brand voice
+- Text that is mostly code, logs, commands, config, API names, or error messages
+- Fact-checking requests, where the user wants correctness review, not a style rewrite
 
 ## Core stance
 
-- 去 AI 味，主要处理的是模板感、收束腔、虚假主语、语域混搭和表演性技术腔。
-- 保留技术性。专业词、系统主语、事故复盘用语、PRD/发布说明中的术语默认可保留。
-- 优先保信息，再谈风格。任何改写都不能新增事实、删核心事实或改变责任主体。
-- 不用机械同义词替换表。默认可以删句、并句、降调、换主语、去总结式收尾；如果进入 `in-place` scope，就只做句内改写。
-- 短语表默认只列代表项，不追求穷举所有变体。遇到新口癖，先按现有模式归类，再决定要不要补词。
+- De-AI-ing mainly targets template feel, wrap-up cadence, false agency, register mixing, and performative engineer-speak.
+- Keep it technical. Domain terms, system subjects, postmortem language, and PRD/release-note terminology may be kept by default.
+- Information first, style second. No rewrite may add facts, drop core facts, or change the responsible subject.
+- No mechanical synonym-swap table. By default you may delete sentences, merge sentences, lower the register, change the subject, and cut summary endings; only in `in-place` scope do you restrict yourself to intra-sentence edits.
+- Phrase tables list representative items only; they do not chase every variant. For a new tic, first classify it under an existing pattern, then decide whether a new entry is warranted.
+- German-specific: never silently flip register (Sie ↔ du) or grammatical gender/attribution. Register is treated like any other protected span.
 
 ## Execution order
 
-按固定顺序做，不要跳步：
+Do this in fixed order, no skipping:
 
-1. 判场景：`chat / status / docs / public-writing`
-2. 查禁改项：先划 `protected spans`，看有没有必须保留的术语、系统主语、引用原文、命令或正式语体
-3. 判 Tier：`Tier 1 / Tier 2 / Tier 3`，按问题命中强度判断，不要把 Tier 当作改写力度
-4. 再判档位：`minimal / standard / aggressive`
-5. 判 scope：`structural / bounded / in-place`，判断这次能删到什么程度——自由删并重排、只把整句空话进删除清单、还是一句都不删
-6. 先执行本文件里的最小规则；只要环境里能读 `references/`，默认继续按问题类型补看 [Protected Spans](./references/protected-spans.md)、[Positive Style Contract](./references/positive-style.md)、[微操作手册](./references/operation-manual.md)、[结构反模式](./references/structures.md) 和相关短语表；如果目标是“改完能直接发”，或文本明显属于 README、release note、论坛帖、issue 回复，再补看 [Scene Packs](./references/scene-packs.md)、[场景样本评测](./evals/real-samples.md) 和 [改写示例](./references/examples.md)
-7. 回读拆成两步：先做保真回读，再按需做残留味回读
-8. 输出：默认只给单一推荐版本；用户明确要求“先标问题，不改写”时切到 `annotation mode`
+1. Detect scene: `chat / status / docs / public-writing`
+2. Mark no-touch spans: draw the `protected spans` first — terms, system subjects, quoted text, commands, or formal register that must survive
+3. Judge Tier: `Tier 1 / Tier 2 / Tier 3`, by how strongly the problem is hit — Tier is not the same axis as edit strength
+4. Then set level: `minimal / standard / aggressive`
+5. Then set scope: `structural / bounded / in-place` — how far you may delete: free deletion and reordering, only whole empty sentences into a deletion list, or nothing deleted at all
+6. Run the minimal rules in this file first; whenever `references/` is readable, keep reading by problem type: [Protected Spans](./references/protected-spans.md), [Positive Style Contract](./references/positive-style.md), [Operation Manual](./references/operation-manual.md), [Structural Anti-patterns](./references/structures.md), and the relevant phrase tables. If the goal is "ready to ship", or the text is clearly a README, release note, forum post, or issue reply, also read [Scene Packs](./references/scene-packs.md), [Scenario Samples](./evals/real-samples.md), and [Rewrite Examples](./references/examples.md)
+7. Reread in two passes: fidelity reread first, then a residual-flavor reread if needed
+8. Output: a single recommended version by default; switch to `annotation mode` only when the user explicitly asks to "flag problems, don't rewrite"
 
-执行第 6 步时，先按“模式”处理，再按“词条”兜底：
+When running step 6, handle by "pattern" first, then fall back to "entry":
 
-- 同一类调试腔、暴力动作腔、主动出击腔、总结提示腔，默认按同一模式处理，不要求逐词命中
-- 只有当新说法改变了误杀边界，或明显不属于现有模式时，才把它当作新增词条处理
+- The same class of debug-speak, violence-speak, proactive-pushiness, or summary-cue speak is handled by one pattern; you do not need a per-word hit
+- Only when a new phrasing changes the false-positive boundary, or clearly does not belong to an existing pattern, treat it as a new entry
 
 ## 1. Scene detection
 
-先判主场景，再处理局部问题。混合文本只保留一个主语域，其他语域只在必要信息层面留下。
+Judge the main scene first, then handle local problems. Mixed text keeps one main register; other registers survive only at the information level.
 
 ### `chat`
 
-信号：
+Signals:
 
-- 短回复、日常对话、协作沟通、评论、即时反馈
-- 允许口语，但不该端着说话
+- Short replies, everyday conversation, collaboration, comments, quick feedback
+- Colloquial is fine, but do not put on airs
 
-默认档位：`minimal`
+Default level: `minimal`
 
 ### `status`
 
-信号：
+Signals:
 
-- 站会更新、进度同步、复盘摘要、汇报式状态说明
-- 重点是时间线、动作、结果、风险
+- Standup updates, progress sync, retro summaries, report-style status
+- Focus is timeline, action, result, risk
 
-默认档位：`minimal` 或 `standard`
+Default level: `minimal` or `standard`
 
 ### `docs`
 
-信号：
+Signals:
 
-- 操作文档、技术说明、接口说明、FAQ、事故复盘
-- 重点是可检索、可复现、术语稳定
+- How-tos, technical notes, API docs, FAQ, incident postmortems
+- Focus is searchability, reproducibility, stable terminology
 
-默认档位：`minimal`
+Default level: `minimal`
 
 ### `public-writing`
 
-信号：
+Signals:
 
-- 公众号、小红书、公开帖、对外文章、观点写作
-- 重点是语域一致，不要装“有洞见”
+- Newsletters, LinkedIn/blog posts, public threads, opinion pieces
+- Focus is register consistency; don't fake "having insight"
 
-默认档位：`standard`
+Default level: `standard`
 
-更细的下限限制见 [场景禁改表](./references/scene-guardrails.md)。
+See [Scene Guardrails](./references/scene-guardrails.md) for tighter per-scene floors.
 
 ### Scene Packs
 
-如果文本本身命中下面任一子场景，不依赖用户是否明说，也不受主场景初判限制，都要补看 Scene Packs：
+If the text itself hits any sub-scene below — regardless of whether the user says so, and regardless of the main-scene call — also read Scene Packs:
 
-- `README`：出现项目介绍、快速开始、安装方式、功能列表、README intro 等信号时，第一屏要说清“这是什么、给谁用、解决什么问题”
-- `release-note`：出现版本标题、`Release Highlights`、`Added / Changed / Fixed / Tested`、changelog 列表等信号时，列清本版变更、验证和限制，不写发布宣言
-- `forum-post`：出现 Linux.do / V2EX / 社区帖 / 发帖复盘等信号时，保留维护者的真实观察和社区语气，不改成公告
-- `issue-reply`：出现 issue / PR 回复、bad case、复现、下一版补 benchmark 等信号时，先确认问题和下一步，不做客服式安抚
+- `README`: on project intro, quick start, install, feature list, README intro signals, the first screen must say "what this is, who it's for, what problem it solves"
+- `release-note`: on version headers, `Release Highlights`, `Added / Changed / Fixed / Tested`, changelog lists, list the changes, verification, and limits — no release manifesto
+- `forum-post`: on heise/Reddit/Hacker News/community-thread/retro signals, keep the maintainer's real observations and community voice — don't turn it into an announcement
+- `issue-reply`: on issue/PR reply, bad case, repro, "benchmark in next version" signals, confirm the problem and the next step first — no customer-service reassurance
 
-子场景只负责发布目的和语气收束，不覆盖 protected spans、Tier、档位和回读规则。完整策略见 [Scene Packs](./references/scene-packs.md)。
+Sub-scenes only govern publishing intent and register tightening; they do not override protected spans, Tier, level, or reread rules. Full strategy in [Scene Packs](./references/scene-packs.md).
 
 ## 2. Single-file fallback rules
 
-只加载 `SKILL.md` 时，也必须能完成基础改写。下面这些规则默认直接生效：
+Even with only `SKILL.md` loaded, basic rewriting must work. These rules apply directly by default:
 
-- 删开场套话、谄媚和元评论：例如 `值得注意的是`、`让我来为你解释`、`希望这对你有帮助`、`Great question!`
-- 删空总结和收尾腔：例如 `综上所述`、`归根结底`、`本质上`、`At the end of the day`
-- 处理二元对比骨架：`不是 X，而是 Y`、`与其 X，不如 Y` 多数删前半句，直接说 `Y`
-- 处理无源引用：`研究表明`、`数据显示`、`studies show`、`experts say` 默认按场景选择 `rewrite-safe` 或 `audit-only`；只有用户明确要保留原论证骨架时才用 `rewrite-with-placeholder`；不要补虚构来源
-- 把商业黑话和表演性技术腔改回普通动作：例如 `赋能`、`抓手`、`闭环`、`收窄`、`兜住`、`落盘`、`leverage`
-- 遇到过度接住、替用户做心理判断或身份认证式夸奖：例如 `你不是敏感`、`你只是太久没被稳稳接住了`、`你问到了问题的核心`、`顶刊作者的素养`，默认删姿态层，改回低承诺回应或具体判断；不要硬演“我懂了”
-- 发现翻译腔时，优先缩短主语和动作，少用长定语链、被动堆砌、`基于……`、`通过……来……`
-- 误杀防护优先：引用原文、命令、接口名、字段名、日志、报错、系统主语、技术报告术语默认保留
-- 中英混排句中的英文词按当前句子的实际语义判断，不机械套英文词表
+- Delete throat-clearing openers, sycophancy, and meta-commentary: e.g. `Es ist wichtig zu beachten, dass`, `Lass mich dir das erklären`, `Ich hoffe, das hilft dir weiter`, `Großartige Frage!`
+- Delete empty summaries and wrap-up cadence: e.g. `Zusammenfassend lässt sich sagen`, `Letztendlich`, `Im Grunde genommen`, `Am Ende des Tages`
+- Handle binary-contrast skeletons: `nicht X, sondern Y`, `statt X lieber Y` — usually drop the first half and just say `Y`
+- Handle unsourced citations: `Studien zeigen`, `Untersuchungen belegen`, `Experten sagen`, `studies show`, `experts say` — pick `rewrite-safe` or `audit-only` by scene; use `rewrite-with-placeholder` only when the user explicitly wants the argument skeleton kept; never invent sources
+- Turn business jargon and performative engineer-speak back into plain actions: e.g. `leveragen`, `Synergien heben`, `aufs nächste Level heben`, `Deep Dive`, `abholen`, `zielführend`, `leverage`
+- On over-catching, doing the reader's emotional labor, or identity-certification praise: e.g. `Du bist nicht zu empfindlich`, `Du wurdest nur zu lange nicht richtig aufgefangen`, `Du triffst damit den Kern`, `das Niveau eines Spitzenforschers` — delete the posture layer and return to a low-commitment reply or a concrete judgment; don't perform "I get you"
+- On translationese, prefer to shorten the subject and action; avoid long attributive chains, stacked passives, `im Rahmen von …`, `vor dem Hintergrund …`
+- False-positive protection first: quoted text, commands, API names, field names, logs, error messages, system subjects, and technical-report terminology are kept by default
+- For English words inside German sentences (Denglisch), judge each word by its actual meaning in the sentence — don't mechanically apply the English word table
 
-单文件模式只是兜底，不是完整模式。只要环境里能读 `references/`，默认就继续补看对应文件；只有在 system prompt 真的只给了 `SKILL.md` 时，才退化为只按本文件做基础清理。
+Single-file mode is only a fallback, not the full mode. Whenever `references/` is readable, keep reading the matching files; only when the system prompt truly ships `SKILL.md` alone do you degrade to this file's basic cleanup.
 
 ### Unsourced citation modes
 
-处理无源引用时，固定只在这 3 种模式里选一种：
+When handling unsourced citations, always pick exactly one of these 3 modes:
 
 - `rewrite-safe`
-  - 直接删掉 `研究表明 / studies show / 业内人士认为` 这类权威铺垫
-  - 只保留原文里本来就成立、且不依赖虚构来源才能成立的判断
-  - 默认用于 `chat` 和 `public-writing`
+  - Delete authority framing like `Studien zeigen / studies show / Fachleute meinen`
+  - Keep only judgments that already hold without the invented source
+  - Default for `chat` and `public-writing`
 - `audit-only`
-  - 不替作者补写来源，也不把无证据判断改写成像是已有证据
-  - 明确指出“这里缺来源/缺归属”，必要时保留原句不重写
-  - 默认用于 `docs` 和 `status`
+  - Don't write a source for the author, and don't turn an unsupported claim into something that reads as proven
+  - Point out "missing source / missing attribution" explicitly; keep the sentence unrewritten if needed
+  - Default for `docs` and `status`
 - `rewrite-with-placeholder`
-  - 只在用户明确要求保留原结构、原语气或编辑稿框架时使用
-  - 可以写成“有研究认为……，但这里没有给出处”这类占位提醒
-  - 不能补具体机构、数据、年份、研究名称
+  - Only when the user explicitly wants the original structure, tone, or editorial frame kept
+  - You may write a placeholder like "some research suggests …, but no source is given here"
+  - Never fill in an institution, data, year, or study name
 
-如果用户没指定模式，就按场景默认值走；如果文本跨场景，优先取更保守的 `audit-only`。
+If the user picks no mode, use the scene default; for cross-scene text, prefer the more conservative `audit-only`.
 
 ## 3. Rewrite level
 
 ### `minimal`
 
-适用于：文本本身基本自然，只需去掉局部模板感、收尾腔和多余修辞。
+For: text that is basically natural and only needs local template feel, wrap-up cadence, and excess rhetoric removed.
 
-默认动作：
+Default actions:
 
-- 删掉空总结
-- 把过度抬高的语气压回常规
-- 把"像在解释自己会写作"的句子压回事实句
+- Delete empty summaries
+- Push over-inflated tone back to normal
+- Push "sentences that sound like they're explaining that they can write" back to plain statements
 
 ### `standard`
 
-适用于：有明显 AI 腔或语域混搭，但信息骨架是好的。
+For: clear AI flavor or register mixing, but the information skeleton is good.
 
-默认动作：
+Default actions:
 
-- 统一语域
-- 改掉工程师表演腔、商业黑话、narrator 腔
-- 必要时并句或换主语
+- Unify register
+- Fix engineer-performance-speak, business jargon, narrator voice
+- Merge sentences or change the subject where needed
 
 ### `aggressive`
 
-适用于：`Tier 1` 命中密集，或 `Tier 1 + Tier 2` 叠加后整段呈现强模板感或强表演感。
+For: dense `Tier 1` hits, or `Tier 1 + Tier 2` stacking into strong template or performance feel across a passage.
 
-限制：
+Limits:
 
-- 只有在 `Tier 1` 明显密集，或多类结构问题叠加时才允许
-- 先保护事实和术语，再做重写
-- `docs` 默认不要升到 `aggressive`
+- Allowed only when `Tier 1` is clearly dense, or several structural problems stack
+- Protect facts and terms first, then rewrite
+- `docs` does not escalate to `aggressive` by default
 
 ## 3.5 Edit scope
 
-Scope 表示这次能不能改动句子和段落结构，和 `minimal / standard / aggressive` 是两条轴。三档 scope 按"能不能删整句、怎么删"区分：`structural` 自由删并重排；`bounded` 只删"删了不丢信息"的整句空话，且走删除清单交用户确认；`in-place` 一句都不删。
+Scope is whether you may change sentence and paragraph structure this time; it is a separate axis from `minimal / standard / aggressive`. The three scopes differ by "can you delete whole sentences, and how": `structural` deletes/merges/reorders freely; `bounded` deletes only whole empty sentences that lose no information, and routes them through a deletion list for the user to confirm; `in-place` deletes nothing.
 
 ### `structural`
 
-默认 scope。适用于短文本、明确要求重写的文本、AI 味密度很高且不需要保留原节奏的文本。
+Default scope. For short text, text explicitly asked to be rewritten, and text with very high AI-flavor density where original cadence need not be kept.
 
-允许动作：
+Allowed actions:
 
-- 删整句空总结
-- 合并相邻事实句
-- 轻量调整句序或段落落点
-- 按场景重写局部结构
+- Delete whole empty summary sentences
+- Merge adjacent factual sentences
+- Lightly adjust sentence order or paragraph landing
+- Rewrite local structure by scene
 
 ### `bounded`
 
-中文 `public-writing` 长文（约 1000 字以上）的默认 scope。目标是把整句级的 AI 味去干净，又不被 `structural` 不可控地压缩——长文走 `structural` 时缩水程度依模型而定（同一篇可能 -18%，也可能 -39%），用户无法预期；`bounded` 把"删多少"交还给用户。
+Default scope for long German `public-writing` (roughly 1000+ words). The goal is to clean whole-sentence AI flavor thoroughly without `structural` compressing it unpredictably — long text under `structural` shrinks by an amount that depends on the model (the same piece might be -18% or -39%), which the user cannot predict. `bounded` hands "how much to cut" back to the user.
 
-和另两档的关系：
+Relationship to the other two:
 
-- 比 `structural` 克制：不合并相邻句、不重排段落、不删承担节奏的实句或有意重复
-- 比 `in-place` 能去味：允许删"整句都是空话"的句子，但不直接删，而是进删除清单交用户拍板
+- More restrained than `structural`: no merging adjacent sentences, no reordering paragraphs, no deleting real sentences or intentional rhythm repetition
+- More de-flavoring than `in-place`: may delete sentences that are "entirely empty", but not directly — they go into a deletion list for the user to decide
 
-一句能进删除清单，必须同时满足三条：
+A sentence may enter the deletion list only if all three hold:
 
-1. 删掉后该段信息点不变（不带任何独有的事实、数字、判断、动作或指令）
-2. 不是相邻两实句之间的唯一过渡
-3. 命中纯空句型：空总结 / 价值拔高收尾 / 无源权威铺垫 / 谄媚开场 / 整句旁白
+1. Deleting it leaves the paragraph's information unchanged (it carries no unique fact, number, judgment, action, or instruction)
+2. It is not the only transition between two adjacent real sentences
+3. It hits a pure empty pattern: empty summary / value-inflation ending / unsourced authority framing / sycophantic opener / whole-sentence narration
 
-两类动作分开走（实测依据：长文里句首引导词模型能句内清掉，但整句空话在 `in-place` 下删不掉，只会被软化成另一种说法）：
+Two kinds of action run separately (evidence-based: in long text, a leading discourse marker at the start of a sentence can be cleaned intra-sentence, but a whole empty sentence cannot be deleted under `in-place` — it only gets softened into another phrasing):
 
-- 句首可剥离的引导词（`值得一提的是 / 归根到底 / 这说明`）后面还跟着实质内容 → 直接句内洗，删引导词留骨架，不进清单
-- 整句都是空的，剥掉引导词就什么都不剩（无源论断、`不仅仅是……更是……` 的价值拔高）→ 进删除清单，不擅自软化成另一种说法
+- A strippable leading marker at the sentence start (`Erwähnenswert ist / Letztlich / Das zeigt`) still followed by real content → clean it intra-sentence, drop the marker, keep the skeleton, no list
+- A whole sentence that is empty, where stripping the marker leaves nothing (unsourced claim, `nicht nur … sondern auch …` value inflation) → goes into the deletion list; do not softening it into another phrasing on your own
 
-输出：正文给句内洗后的稿，末尾附「建议删除（待确认）」清单，每条写 `原文 + 为什么删了不丢信息`。用户点头才删，长度由用户拍板。
+Output: the body is the intra-sentence-cleaned draft, followed by a "Suggested deletions (to confirm)" list, each item `original + why deleting loses no information`. Delete only on the user's nod; the user decides the length.
 
 ### `in-place`
 
-适用于用户明确要求"完全原样 / 一句都别删 / 严格保句数"的情况，比 `bounded` 更严：整句空话也不删，只做句内降调。
+For when the user explicitly asks "exactly as-is / delete nothing / strictly keep the sentence count". Stricter than `bounded`: even whole empty sentences are not deleted, only lowered intra-sentence.
 
-默认触发条件：
+Default triggers:
 
-- 用户 prompt 明确要求保留句数、完全原样、一句不删，或反馈 `bounded` 仍删多了
+- The user prompt explicitly asks to keep the sentence count, exact as-is, delete nothing, or reports that `bounded` still cut too much
 
-禁止动作：
+Forbidden actions:
 
-- 不删整句（即使整句是空话）
-- 不合并相邻句
-- 不重排段落
-- 不把多段压成一段
+- Don't delete whole sentences (even if the whole sentence is empty)
+- Don't merge adjacent sentences
+- Don't reorder paragraphs
+- Don't compress multiple paragraphs into one
 
-允许动作：
+Allowed actions:
 
-- 句内替换词或短语
-- 删除句内提示层、空泛修饰和语气垫片
-- 把句内拔高语气降回普通判断
-- 在单句内部拆短过满结构，但不改变段落顺序
+- Intra-sentence word or phrase replacement
+- Delete intra-sentence cue layers, empty modifiers, and tone padding
+- Push intra-sentence inflated tone back to a plain judgment
+- Break an overloaded structure inside a single sentence, without changing paragraph order
 
-删短语前先做语义独立性检查：删掉短语后，剩余部分必须仍是完整、可读、没有悬空指代的陈述句。否则改用句内替换，不要硬删。遇到整句空话，保留原句并标注 `[空句，建议人工确认是否删除]`，不擅自软化成新说法。
+Before deleting a phrase, run a semantic-independence check: after deletion, the remainder must still be a complete, readable statement with no dangling reference. Otherwise use intra-sentence replacement, don't force the deletion. For a whole empty sentence, keep the original and mark `[empty sentence, suggest human review whether to delete]`; don't soften it into a new phrasing.
 
-`aggressive + in-place` 可以存在，但默认先提醒用户：长文 `aggressive` 很容易明显缩水；如果用户真正要保长度，优先改成 `standard + bounded`。用户明确坚持时，再执行 `aggressive + in-place`，但仍遵守不删整句、不并句、不重排的边界。
+`aggressive + in-place` can coexist, but warn the user first: long text under `aggressive` shrinks visibly; if the user really wants to keep length, prefer `standard + bounded`. Only when the user insists, run `aggressive + in-place`, still honoring the no-delete, no-merge, no-reorder boundaries.
 
 ## 4. Tier severity
 
-Tier 表示问题命中强度，与 [严重度分级](./references/severity.md) 保持一致，不表示改写力度。
+Tier is how strongly a problem is hit, consistent with [Severity](./references/severity.md); it does not indicate edit strength.
 
 ### Tier 1
 
-默认替换。命中这类词或句式时，通常直接删掉或换成更具体的表达。常见类型：
+Replace by default. On hitting these words or patterns, usually delete or swap for something concrete. Common types:
 
-- 开场套话、总结式收尾、谄媚句
-- 明显商业黑话、自媒体流水线用语、表演性工程师腔
-- 过度接住式共情、替用户做心理判断、郑重预告和身份认证式夸奖
-- 英文里的 sycophantic openers、significance inflation、business jargon
+- Throat-clearing openers, summary endings, sycophantic sentences
+- Obvious business jargon, content-mill phrasing, performative engineer-speak
+- Over-catching empathy, doing the reader's emotional labor, solemn previews and identity-certification praise
+- In English: sycophantic openers, significance inflation, business jargon
 
-默认处理：局部命中用 `minimal` 或 `standard`，密集命中时可升到 `aggressive`
+Default handling: local hits use `minimal` or `standard`; dense hits may escalate to `aggressive`
 
 ### Tier 2
 
-单独出现可以放行，但同段聚集时是 AI 味信号。常见类型：
+Fine alone, but an AI-flavor signal when clustered in one paragraph. Common types:
 
-- 高频连接词扎堆
-- 渲染性修饰词扎堆
-- 某一类姿态词在同段重复出现
+- Stacked high-frequency connectives
+- Stacked decorative modifiers
+- One class of posture word repeated in one paragraph
 
-长度参考：短段落（< 100 字/词）同段 2+ 个即标记；长段落（≥ 100 字/词）同段 3+ 个再标记。
+Length reference: short paragraph (< 100 words) flags at 2+ in one paragraph; long paragraph (≥ 100 words) flags at 3+.
 
-默认处理：保留最贴切的一个，其余改写；通常用 `minimal` 或 `standard`
+Default handling: keep the single best-fitting one, rewrite the rest; usually `minimal` or `standard`
 
 ### Tier 3
 
-常见词本身不构成问题，只在全文密度明显过高时才处理。常见类型：
+Common words that are not a problem by themselves, handled only when whole-text density is clearly too high. Common types:
 
-- `重要 / 关键 / 核心 / 提升`
+- `wichtig / entscheidend / zentral / verbessern`
 - `significant / innovative / effective`
 
-默认处理：只替换一部分重复命中，通常用 `minimal`，必要时不改
+Default handling: replace only some of the repeated hits, usually `minimal`, sometimes leave unchanged
 
 ## 5. No-touch and keep rules
 
-以下内容默认优先保留，除非用户明确要求改风格且改动不损害信息：
+The following are kept by default unless the user explicitly wants the style changed and the change does not harm information:
 
-- 引用原文、命令、接口名、参数名、字段名、配置项、日志、报错
-- 技术文档里的系统行为主语
-- postmortem / incident / PRD / release note 中的专业术语
-- 承载关键事实的抽象句，即使它“有点像 AI”
+- Quoted text, commands, API names, parameter names, field names, config keys, logs, error messages
+- System-behavior subjects in technical docs
+- Domain terminology in postmortem / incident / PRD / release note
+- Abstract sentences carrying key facts, even if they "sound a bit AI"
+- German register and address form (Sie/du) — do not flip it silently
 
-不要为了“像人”把文本改得更假。专业文本可以专业，关键是别模板化、别表演化。
+Don't make text faker in the name of "sounding human". Professional text may be professional; the point is to avoid template feel and performance, not formality.
 
-完整的保护清单见 [Protected Spans](./references/protected-spans.md)。
+Full protection list in [Protected Spans](./references/protected-spans.md).
 
 ## 6. Positive style targets
 
-改写后的文本应尽量满足：
+Rewritten text should aim to satisfy:
 
-- 有具体信息，不靠空洞总括撑气势
-- 有主语和动作，不靠虚假主体兜底
-- 有统一语域，不在技术腔、商业腔、自媒体腔之间跳
-- 以“可直接发”为终点，不为了更像人继续抛光到失真
-- 有节奏，但节奏来自删冗余和保留重点，不来自硬造金句
-- 有立场，但立场来自判断或事实，不来自“故作洞见”
-- 有边界，没把握就直说，不替对方做心理判断，也不硬演“我懂了”
+- Concrete information, not empty summaries propping up momentum
+- A real subject and action, not a false agent as backstop
+- One consistent register, not jumping between engineer-speak, business-speak, and influencer-speak
+- "Ready to ship" as the endpoint, not polishing further into distortion to seem human
+- Rhythm, but rhythm from cutting redundancy and keeping the point, not from forced punchlines
+- A stance, but a stance from judgment or fact, not from "faking insight"
+- Boundaries: if unsure, say so; don't do the other person's psychological judgment, and don't perform "I understand"
 
-更完整的正向目标、分场景校准和“cleaner vs more human”对照见 [Positive Style Contract](./references/positive-style.md)。
+Fuller positive targets, per-scene calibration, and "cleaner vs more human" comparisons in [Positive Style Contract](./references/positive-style.md).
 
 ## 7. Output contract
 
-默认输出一个推荐版本，不默认输出审稿过程、多版本比稿或逐条点评。
+Output one recommended version by default; do not default to showing the review process, multiple versions, or item-by-item commentary.
 
 ### Annotation mode
 
-只有在用户明确要求下面这类事情时才启用：
+Enable only when the user explicitly asks for something like:
 
-- `先别改，先标问题`
-- `这段哪里像 AI`
-- `只做诊断 / 审稿 / 标注`
-- `先告诉我该不该改`
+- `Don't rewrite yet, just flag the problems`
+- `Where does this sound AI?`
+- `Only diagnose / review / annotate`
+- `Tell me first whether it needs changing`
 
-`annotation mode` 不直接给整段改写稿，默认只输出最重要的 1-5 个问题点。每个问题点固定包含这 4 个字段：
+`annotation mode` does not hand over a full rewrite; it outputs only the 1–5 most important problem points by default. Each point always contains these 4 fields:
 
-- `问题族`：例如 `开场套话 / 无源引用 / 工程师腔 / 语域混搭`
-- `触发点`：点明命中的词、结构或局部句子
-- `建议动作`：删掉、换成具体表达、补来源、保持不动
-- `是否建议改写`：`是 / 否`
+- `Problem family`: e.g. `throat-clearing opener / unsourced citation / engineer-speak / register mixing`
+- `Trigger`: name the hit word, structure, or local sentence
+- `Suggested action`: delete, swap for something concrete, add a source, leave unchanged
+- `Rewrite recommended`: `yes / no`
 
-额外约束：
+Extra constraints:
 
-- 如果文本主要问题是“缺来源”，可以只建议补来源，不强行给改写稿
-- 如果文本落在误杀防护边界内，直接写 `是否建议改写：否`
-- 不要一边说“只标问题”，一边偷偷输出完整重写版
-- 用户没要求 `annotation mode` 时，仍然按默认改写合同输出单一推荐版本
+- If the main problem is "missing source", you may only suggest adding a source without forcing a rewrite
+- If the text falls inside the false-positive boundary, write `Rewrite recommended: no`
+- Don't say "only flag problems" while sneaking in a full rewrite
+- When the user did not ask for `annotation mode`, still output a single recommended version per the default contract
 
-遇到无源引用时，输出必须符合所选模式：
+For unsourced citations, output must match the chosen mode:
 
-- 在 `annotation mode` 下，只输出对应的处理建议，不直接给整段改写稿
-- 在默认改写模式下，再按所选模式实际给出改写结果
-- `rewrite-safe`：建议删掉无证据权威铺垫；如果不是 `annotation mode`，再给改写结果，不补虚构来源
-- `audit-only`：优先点明缺来源、缺归属，而不是假装已经证实
-- `rewrite-with-placeholder`：允许保留论证位置，但要显式暴露“此处待补来源”；如果不是 `annotation mode`，可以给带占位提示的改写结果
+- Under `annotation mode`, output only the handling suggestion, not a full rewrite
+- Under the default rewrite mode, deliver the rewrite per the chosen mode
+- `rewrite-safe`: suggest deleting the unsupported authority framing; if not `annotation mode`, deliver the rewrite without inventing sources
+- `audit-only`: point out the missing source/attribution rather than pretending it's confirmed
+- `rewrite-with-placeholder`: keep the argument slot but expose "source to be added here"; if not `annotation mode`, deliver a rewrite with the placeholder cue
 
-只有在高风险误杀时，才额外补一行极短说明，例如：
+Only for high-risk false positives, add one very short note, e.g.:
 
-- `保留了系统主语和术语，避免失真。`
-- `这里只做轻改，避免把正式公告写成口语贴。`
+- `Kept the system subject and terms to avoid distortion.`
+- `Only a light edit here, to avoid turning a formal notice into a chat post.`
 
 ## 8. Required reread checks
 
-提交改写前，把回读固定拆成两步，不要混着做：
+Before submitting a rewrite, always split the reread into two passes, don't mix them:
 
-### Pass 1 | 保真回读
+### Pass 1 | Fidelity reread
 
-先检查这 5 项：
+Check these 5 first:
 
-1. protected spans 是否漂了
-2. 信息是否丢失
-3. 语域是否统一
-4. 术语是否失真
-5. 删改后是否出现生硬断裂
+1. Whether protected spans drifted
+2. Whether information was lost
+3. Whether register is consistent
+4. Whether terminology got distorted
+5. Whether the edits produced an abrupt break
 
-如果删掉一句后段落突然没了落点，就用原文已有的信息重组一条事实句，不要补口号句；原文里找不到可用信息就不补，宁可让段落短一点。
+If deleting a sentence leaves a paragraph with no landing, rebuild one factual sentence from information already in the original; don't add a slogan sentence. If the original has no usable information, add nothing — better a shorter paragraph.
 
-`bounded / in-place` scope 下额外检查：
+Extra checks under `bounded / in-place` scope:
 
-- 信息留存优先：原文每个信息点（事实、数字、判断、动作）在输出里都要可追溯，这是硬指标
-- `in-place`：输出字数低于原文 85% 时，回退检查是否误删整句、并句或压段落（in-place 不该删任何整句）
-- `bounded`：字数会因删整句空话而下降，不设硬下限；但要确认删除清单里每条都是"删了不丢信息"的纯空句，没混进实句或承担节奏的重复
-- 句数变化超过约 10% 时，回退检查是否偷偷做了未经确认的 structural 改写
-- 关键事实句、转场句和承担节奏的重复句，不能因为“看起来像模板”就默认删除
+- Information retention first: every information point in the original (fact, number, judgment, action) must be traceable in the output — this is a hard metric
+- `in-place`: if output word count drops below 85% of the original, roll back and check for accidentally deleted, merged, or compressed sentences (in-place should delete no whole sentence)
+- `bounded`: word count drops because whole empty sentences are removed, no hard floor; but confirm each deletion-list item is a pure empty sentence that "loses no information", with no real sentence or rhythm-bearing repetition mixed in
+- If sentence count changes by more than ~10%, roll back and check for sneaked-in unconfirmed structural edits
+- Key factual sentences, transition sentences, and rhythm-bearing repetition must not be deleted just for "looking like a template"
 
 ### Pass 2 | Residual Audit
 
-只有在第一遍已经保住事实、但读起来还有轻微 AI 味时，才做第二遍。第二遍固定只查这 5 件事：
+Only when pass 1 already preserved the facts but it still reads slightly AI. Pass 2 always checks only these 5 things:
 
-1. 开场残留：还在用 `结论先说 / 直接说结论 / 值得注意的是` 这类提示层
-2. 总结残留：还在用 `总的来说 / 归根结底 / 最终来看` 这类空收尾
-3. narrator 残留：还在解释“这说明了什么”，而不是直接说事实或判断
-4. 空泛判断残留：还在写 `方向是对的 / 意义重大 / 真正理解了用户`
-5. 句长过匀：每句都差不多长、差不多整齐，像被统一抛光过
+1. Opener residue: still using cue layers like `Vorweg / Kurz gesagt / Es ist wichtig zu beachten`
+2. Summary residue: still using empty endings like `Alles in allem / Letztendlich / Zusammenfassend`
+3. Narrator residue: still explaining "what this shows" instead of stating the fact or judgment directly
+4. Empty-judgment residue: still writing `die Richtung stimmt / von großer Bedeutung / hat den Nutzer wirklich verstanden`
+5. Uniform sentence length: every sentence about the same length, evenly polished
 
-第二遍只允许做轻量修正：
+Pass 2 allows only light fixes:
 
-- 删一个残留开场或收尾
-- 合并两句过匀的事实句，或拆一处过满的句子
-- 把一句 narrator / 空泛判断压回直接表达
+- Delete one residual opener or ending
+- Merge two over-uniform factual sentences, or break one overloaded sentence
+- Push one narrator / empty-judgment sentence back to direct expression
 
-第二遍不要做的事：
+Don't do these in pass 2:
 
-- 不重写全文
-- 不补原文没有的事实
-- 不为了“更像人”改掉术语、参数、命令、报错或责任归属
+- Don't rewrite the whole thing
+- Don't add facts not in the original
+- Don't change terms, params, commands, errors, or attribution for "sounding more human"
 
-场景保守策略：
+Conservative scene strategy:
 
-- `public-writing` 和 AI 味偏重的 `chat`，第二遍更常需要
-- `docs / status / code-context` 默认更保守；如果第二遍会让语气变口语、变广告、或影响保真，就停在第一遍
+- `public-writing` and AI-heavy `chat` more often need pass 2
+- `docs / status / code-context` are more conservative by default; if pass 2 would make the tone colloquial, advertise-y, or hurt fidelity, stop at pass 1
 
 ## Reference navigation
 
-- 本文件可以单独兜底；完整模式默认是 `SKILL.md` + `references/` 一起工作
-- 想先看“改成什么样才算更像人”：看 [Positive Style Contract](./references/positive-style.md)
-- 想先看哪些数字、引用、命令、参数不能漂：看 [Protected Spans](./references/protected-spans.md)
-- 想看中文高频短语：看 [中文禁用短语表](./references/phrases-zh.md)
-- 想看英文高频短语：看 [English Banned Phrases](./references/phrases-en.md)
-- 想看句子和段落层面的结构问题：看 [结构反模式](./references/structures.md)
-- 想按 `Tier 1 / 2 / 3` 校准命中规则：看 [严重度分级](./references/severity.md)
-- 遇到具体病灶怎么动手：看 [微操作手册](./references/operation-manual.md)
-- 想确认某个场景什么不能乱动：看 [场景禁改表](./references/scene-guardrails.md)
-- 想校准误杀边界或做静态回归：看 [边界案例集](./references/boundary-cases.md)
-- 想看场景样本评测（高拟真合成，验收线是改完能不能直接发）：看 [场景样本评测](./evals/real-samples.md)
-- 想看默认改写和 `annotation mode` 的对照：看 [改写示例](./references/examples.md)
-- 想处理没收录进词表的同类变体：先看 [微操作手册](./references/operation-manual.md) 里的“变体归并”规则，再决定要不要补词
+- This file can stand alone as a fallback; the full mode is `SKILL.md` + `references/` working together
+- To see "what counts as more human": read [Positive Style Contract](./references/positive-style.md)
+- To see which numbers, quotes, commands, params must not drift: read [Protected Spans](./references/protected-spans.md)
+- For high-frequency German phrases: read [German Banned Phrases](./references/phrases-de.md)
+- For high-frequency English phrases: read [English Banned Phrases](./references/phrases-en.md)
+- For sentence- and paragraph-level structural problems: read [Structural Anti-patterns](./references/structures.md)
+- To calibrate hit rules by `Tier 1 / 2 / 3`: read [Severity](./references/severity.md)
+- For how to act on a specific symptom: read [Operation Manual](./references/operation-manual.md)
+- To confirm what must not be touched in a scene: read [Scene Guardrails](./references/scene-guardrails.md)
+- To calibrate the false-positive boundary or run a static regression: read [Boundary Cases](./references/boundary-cases.md)
+- For scenario samples (high-fidelity synthetic, acceptance is "can it ship as-is"): read [Scenario Samples](./evals/real-samples.md)
+- For default rewrite vs `annotation mode` side by side: read [Rewrite Examples](./references/examples.md)
+- For a variant not in the phrase tables: read the "variant merging" rule in [Operation Manual](./references/operation-manual.md) first, then decide whether to add an entry
 
-默认做法是：先用本文件完成“场景、Tier、档位、输出合同”的主判断，再按问题类型补读 `references/`；只有在单文件安装场景里，才停留在本文件的兜底规则。
+Default practice: use this file for the main calls (scene, Tier, level, output contract), then read `references/` by problem type; only in single-file installs do you stay on this file's fallback rules.

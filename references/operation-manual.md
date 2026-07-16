@@ -1,408 +1,407 @@
-# 微操作手册
+# Operation Manual
 
-每类问题都按同一个协议处理：
+Every problem class is handled by the same protocol:
 
-- `识别信号`
-- `默认动作`
-- `保留条件`
-- `回读检查`
+- `Identify signal`
+- `Default action`
+- `Keep when`
+- `Reread check`
 
-目标不是机械替换词，而是把句子拉回当前场景该有的表达。
+The goal is not mechanical word-swapping but pulling the sentence back to the expression the current scene should have.
 
-## Scope 与删除清单
+## Scope and the deletion list
 
-下面各类问题的 `默认动作` 是 `structural` scope 下的动作（可删整句、可并句）。换 scope 时按这里统一调整，不必在每类问题里重复：
+Each class's `Default action` below is the action under `structural` scope (may delete whole sentences, may merge). Adjust uniformly here when the scope changes, instead of repeating it per class:
 
-- `structural`：按各节 `默认动作` 执行
-- `bounded`：不并句、不重排、不删实句和承担节奏的重复；遇到"整句都是空话"的句子（总结式收尾、价值拔高骨架、无源引用、整句旁白），不直接删，改为进「建议删除（待确认）」清单交用户拍板；句首可剥离的引导词仍按各节的 `in-place 替代动作` 句内清理
-- `in-place`：整句一律不删（空话也不删），只做各节的 `in-place 替代动作`；遇到整句空话，保留原句并标注，不擅自软化成新说法
+- `structural`: run each section's `Default action`
+- `bounded`: no merging, no reordering, no deleting real sentences or rhythm-bearing repetition; for a sentence that is "entirely empty" (summary ending, value-inflation skeleton, unsourced citation, whole-sentence narration), don't delete it directly — route it into the "Suggested deletions (to confirm)" list for the user; a strippable leading marker at the sentence start still gets the section's `in-place alternative action` intra-sentence
+- `in-place`: never delete a whole sentence (not even empty ones), only do the section's `in-place alternative action`; for a whole empty sentence, keep the original and mark it, don't soften it into a new phrasing
 
-判断"整句空话 vs 句首引导词"：删掉句首提示词后，剩余部分若仍是带信息的可读句 → 句内洗；若什么都不剩、或只剩另一句空话 → 进删除清单（`bounded`）或保留标注（`in-place`）。各节凡写了"保留原句并标注 `[建议人工确认是否删除]`"的，就是 `bounded` 删除清单的来源。
+Judging "whole empty sentence vs leading marker": after removing the leading cue, if the remainder is still a readable sentence with information → clean intra-sentence; if nothing is left, or only another empty sentence → deletion list (`bounded`) or keep-and-mark (`in-place`). Every section that says "keep the original and mark `[suggest human review whether to delete]`" is a source for the `bounded` deletion list.
 
-## 0. 变体归并
+## 0. Variant merging
 
-### 识别信号
+### Identify signal
 
-- 遇到的新词不在短语表里，但语气、动作和姿态明显属于已有问题族
-- 句子的问题不在某个字面词，而在整串话都在“表演会做事”或“表演会总结”
-- 同一段里多个近义变体扎堆，比如 `扒开 / 拽出来 / 揪出来`、`补一刀 / 砍一刀`、`一句话总结 / 说人话就是`
+- A new word not in the phrase table, but its tone, action, and posture clearly belong to an existing problem family
+- The problem is not a literal word but that the whole run is "performing competence" or "performing summarizing"
+- Several near-synonym variants cluster in one paragraph, e.g. `freilegen / rausziehen / rauskitzeln`, `draufhauen / durchziehen`, `kurz gesagt / auf Deutsch heißt das`
 
-### 默认动作
+### Default action
 
-- 先判它属于哪一类，再决定怎么改，不要先急着往词表加新词
-- 现阶段默认归到这 7 类：
-  - `调试腔 / 工程师腔`：`收窄 / 坐实 / 对上了 / 锁住 / 收口 / 更硬`
-  - `庸医问诊腔`：`抠出来 / 揪出来 / 扒开 / 拽出来 / 捞出来`
-  - `暴力动作腔`：`砍一刀 / 补一刀 / 钉死 / 狠狠干 / 拍脑门`
-  - `主动出击腔`：`要不要我 / 我立马开始 / 只要你回复我 / 顺手 / 趁热 / 我先……`
-  - `总结提示腔`：`一句话总结 / 结论先说 / 简单的说 / 说人话就是`
-  - `过度接住 / 心理判断腔`：`你只是太久没被稳稳接住了 / 不用向我解释 / 你不是敏感`
-  - `郑重预告 / 身份认证式夸奖`：`我必须很认真地说一句 / 你问到了问题的核心 / 顶刊作者的素养`
-- 同类变体默认按代表项同样处理：删姿态层，保留真正的动作、事实和结论
+- Classify it first, then decide the edit; don't rush to add a new word
+- For now, default to these 7 families:
+  - `debug-speak / engineer-speak`: `eingegrenzt / festgezurrt / abgeglichen / dichtgemacht / härter`
+  - `quack-doctor probing`: `rausholen / rauskitzeln / aufbohren / freilegen / rausziehen`
+  - `violence-speak`: `draufhauen / plattmachen / festnageln / durchziehen / mit der Brechstange`
+  - `proactive pushiness`: `Soll ich dir auch / Ich fange sofort an / Sag einfach Bescheid / gleich noch / direkt mit`
+  - `summary-cue speak`: `Kurz gesagt / Fazit vorweg / Auf den Punkt gebracht / auf Deutsch heißt das`
+  - `over-catching / psych-judgment speak`: `Du wurdest nur zu lange nicht aufgefangen / Du musst dich mir nicht erklären / Du bist nicht zu empfindlich`
+  - `solemn preview / identity-certification praise`: `Ich muss das ganz ehrlich sagen / Du triffst damit den Kern / das Niveau eines Spitzenforschers`
+- Handle same-family variants like the representative item: delete the posture layer, keep the real action, fact, and conclusion
 
-### 保留条件
+### Keep when
 
-- 该说法本身是讨论对象、引用对象或梗图样本
-- 它处在真人具体叙事里，而且承担了明确事实，不只是姿态词
-- 新变体明显改变了误杀边界，不能直接并入已有类别
+- The phrasing itself is the object of discussion, a quote, or a meme sample
+- It sits in a real personal narrative and carries a clear fact, not just posture
+- The new variant clearly changes the false-positive boundary and can't be merged into an existing family
 
-### 回读检查
+### Reread check
 
-- 改完后，句子是不是更像在说事，而不是在演执行力
-- 是否把“未收录变体”和“真正新模式”混为一谈了
-- 如果只是同类变体，是否避免了继续往词表里机械堆词
+- After editing, does the sentence sound more like stating the thing than performing execution
+- Did you conflate an "unlisted variant" with a "genuinely new pattern"
+- If it's only a same-family variant, did you avoid mechanically piling more words into the table
 
-## 1. 二元对比句
+## 1. Binary-contrast sentence
 
-### 识别信号
+### Identify signal
 
-- `不是 X，而是 Y`
-- `与其 X，不如 Y`
-- `不是在……，而是在……`
-- 用对比来制造“洞见感”，但 Y 本身就是作者真正要说的内容
+- `nicht X, sondern Y`
+- `statt X lieber Y`
+- `es geht nicht um …, sondern um …`
+- Contrast used to manufacture "insight", but Y is what the author actually wants to say
 
-### 默认动作
+### Default action
 
-- 直接删前半句，只保留 Y
-- 如果删完太硬，把 Y 改成事实句或判断句
+- Delete the first half, keep only Y
+- If the result is too blunt, turn Y into a factual or judgment sentence
 
-### `in-place` 替代动作
+### `in-place` alternative action
 
-- 不删整句，也不直接砍掉前半句
-- 先把 `不是 X，而是 Y`、`与其 X，不如 Y` 这类骨架压成句内连接，例如 `X 不够，Y 更重要`、`相比 X，Y 更能说明问题`
-- 如果前半句只是提示层，删除提示短语后必须确认剩余句子还能独立成立；否则改用中性连接词替换
-- 不把相邻两句并成一句来制造“更利落”的效果
+- Don't delete the whole sentence, and don't just chop the first half
+- Compress skeletons like `nicht X, sondern Y`, `statt X lieber Y` into an intra-sentence connection, e.g. `X reicht nicht, Y ist wichtiger`, `Y sagt mehr aus als X`
+- If the first half is only a cue layer, confirm the remaining sentence still stands after removing the cue phrase; otherwise replace with a neutral connector
+- Don't merge two adjacent sentences into one for a "cleaner" effect
 
-### 保留条件
+### Keep when
 
-- 前半句承载了必要的边界、风险或反例
-- 对比本身是论证骨架，不是装饰句式
+- The first half carries a necessary boundary, risk, or counterexample
+- The contrast is the argument skeleton, not a decorative pattern
 
-### 回读检查
+### Reread check
 
-- 删掉前半句后，语义是否更直接
-- 是否少了必须说明的限定条件
+- After deleting the first half, is the meaning more direct
+- Did a necessary constraint go missing
 
-## 2. 总结式收尾
+## 2. Summary ending
 
-### 识别信号
+### Identify signal
 
-- `归根到底`
-- `本质上`
-- `说到底`
-- `最终还是要回到`
-- 用一句抽象收尾重复上文，不增加新信息
+- `Letztlich`
+- `Im Grunde`
+- `Am Ende`
+- `Es läuft alles darauf hinaus`
+- One abstract closer repeating the above, adding no new information
 
-### 默认动作
+### Default action
 
-- 默认整句删除
-- 如果确实需要收束，改成一条更具体的事实或判断
+- Delete the whole sentence by default
+- If a close is genuinely needed, change it to a more concrete fact or judgment
 
-### `in-place` 替代动作
+### `in-place` alternative action
 
-- 不默认删整句，先删句内提示词：`归根到底 / 本质上 / 说到底 / 最终还是要回到`
-- 提示词删掉后，如果剩余部分是可读判断，就保留这句话
-- 如果整句只剩空总结，不要为了凑字数硬补新内容；可以保留原句并标注 `[空总结，建议人工确认是否删除]`
-- 不把前后句合并成一个更短总结
+- Don't delete the whole sentence by default; first delete the intra-sentence cue: `Letztlich / Im Grunde / Am Ende / Es läuft darauf hinaus`
+- After removing the cue, if the remainder is a readable judgment, keep the sentence
+- If the whole sentence is only an empty summary, don't pad new content for word count; keep the original and mark `[empty summary, suggest human review whether to delete]`
+- Don't merge the surrounding sentences into a shorter summary
 
-### 保留条件
+### Keep when
 
-- 收尾句补充了上文没有明确说出的判断
-- 该句承担段落转场，而不是空总结
+- The closing sentence adds a judgment not stated above
+- The sentence carries a paragraph transition, not an empty summary
 
-### 回读检查
+### Reread check
 
-- 删除后段落是否更利落
-- 是否因为少了转场而出现跳跃
+- Is the paragraph cleaner after deletion
+- Did a jump appear from the lost transition
 
-## 3. 工程师腔
+## 3. Engineer-speak
 
-### 识别信号
+### Identify signal
 
-- `收口`、`落盘`、`兜住`、`收窄`、`对上了`
-- 同类变体如 `锁住`、`坐实`、`更硬`，即使没逐条收录，也按同一姿态处理
-- `落 X / 把 X 落下去 / 落到`：当宾语是抽象动作、空泛承诺或泛化使用时（社区原话："什么动词都可以套到'落'上"），按调试腔处理；宾语是 `代码 / 部署 / 配置 / 文档 / 设计方案` 等具体技术对象，且能复述"写到哪里、做了什么"时不动
-- 句子像在模仿某种技术同事口吻，而不是在说明问题
-- 技术词被拿来表演姿态，而不是传递信息
+- `dichtmachen`, `festzurren`, `auffangen`, `eingrenzen`, `steht fest`
+- Same-family variants like `abriegeln`, `abgeklopft`, `härter` — handle by the same posture even if not listed individually
+- Sentences that imitate a certain technical-colleague voice instead of explaining the problem
+- Technical words used to perform posture rather than convey information
 
-### 默认动作
+### Default action
 
-- 先把姿态词换成普通动作词：`确认 / 解决 / 核对 / 缩小范围 / 形成结论`
-- 再重读一遍，判断是否还能更直接
+- First swap posture words for plain action words: `bestätigen / lösen / abgleichen / eingrenzen / zu einem Ergebnis kommen`
+- Reread and judge whether it can be more direct
 
-### 保留条件
+### Keep when
 
-- 该词是团队内稳定术语，去掉反而失真
-- 文本本来就是内部口头协作语境，轻度保留更自然
+- The word is stable in-team terminology, and removing it distorts
+- The text is genuinely an internal spoken-collaboration context, where light keeping is more natural
 
-### 回读检查
+### Reread check
 
-- 改完后是否少了表演感
-- 是否把正常技术判断也一起抹平了
+- Is there less performance after editing
+- Did you flatten a normal technical judgment along with it
 
-## 4. 商业黑话
+## 4. Business jargon
 
-### 识别信号
+### Identify signal
 
-- `赋能`、`抓手`、`闭环`、`沉淀方法论`
-- 把简单动作包装成大词
-- 句子看起来很完整，但很难提取具体动作
+- `leveragen`, `Synergien heben`, `Mehrwert generieren`, `Methodik sedimentieren`
+- Simple actions wrapped in big words
+- The sentence looks complete but you can't extract a concrete action
 
-### 默认动作
+### Default action
 
-- 把大词拆回动作、对象、结果
-- 能用动词就不用抽象名词
+- Unpack the big word back into action, object, result
+- Use a verb where you can, not an abstract noun
 
-### 保留条件
+### Keep when
 
-- 用户明确要写商业文案或行业表达
-- 该词是对外材料中的固定说法，替换会影响一致性
+- The user explicitly wants business copy or industry phrasing
+- The word is a fixed formulation in external material, and replacing it hurts consistency
 
-### 回读检查
+### Reread check
 
-- 改完后是否更容易回答“谁做了什么”
-- 是否误删了对外场景需要的正式语体
+- Is it easier to answer "who did what" after editing
+- Did you accidentally delete formality the external scene needs
 
-## 5. narrator 腔
+## 5. Narrator voice
 
-### 识别信号
+### Identify signal
 
-- 句子像在为文本配旁白
-- 喜欢抽离到“这件事说明了什么”“真正值得注意的是”
-- 作者不断解释自己在理解世界，而不是直接给信息
+- The sentence sounds like voice-over for the text
+- Fond of stepping back to "what this shows" / "what's truly noteworthy"
+- The author keeps explaining that they understand the world, instead of giving information directly
 
-### 默认动作
+### Default action
 
-- 优先删旁白层
-- 把句子压回事实、动作或明确判断
+- Delete the narration layer first
+- Push the sentence back to fact, action, or a clear judgment
 
-### `in-place` 替代动作
+### `in-place` alternative action
 
-- 不删整句，只删句内旁白短语，例如 `这说明 / 更重要的是 / 真正值得注意的是`
-- 如果旁白后面跟着原文已有事实，就保留事实骨架
-- 如果旁白句承担段落转场，保留转场功能，只把姿态词换成普通连接
-- 不把整段观点改写成新的论证顺序
+- Don't delete the whole sentence, only the intra-sentence narration phrases, e.g. `das zeigt / noch wichtiger / wirklich bemerkenswert ist`
+- If real facts from the original follow the narration, keep the factual skeleton
+- If the narration sentence carries a paragraph transition, keep the transition function, only swap posture words for a plain connector
+- Don't rewrite the whole opinion into a new argument order
 
-### 保留条件
+### Keep when
 
-- 用户要写的是评论、专栏或公开表达，确实需要少量解释层
-- 旁白层承担真实过渡，不只是造姿态
+- The user is writing a review, column, or public opinion piece that genuinely needs a little explanation layer
+- The narration layer carries a real transition, not just posture
 
-### 回读检查
+### Reread check
 
-- 删掉后是否更像人在说话，而不是在“讲解自己的表达”
-- 是否损伤了必要的观点承接
+- After deletion, does it sound more like a person talking than "explaining their own expression"
+- Did you hurt a necessary opinion transition
 
-## 5.1 总结提示腔
+## 5.1 Summary-cue speak
 
-### 识别信号
+### Identify signal
 
-- `一句话总结`
-- `结论先说`
-- `简单的说`
-- `说人话就是`
-- 模型先宣布“我要开始总结/翻译成人话”，再说内容本身
+- `Kurz gesagt`
+- `Fazit vorweg`
+- `Auf den Punkt gebracht`
+- `Auf Deutsch heißt das`
+- The model announces "I'll now summarize / translate into plain words" before saying the content itself
 
-### 默认动作
+### Default action
 
-- 删掉提示层，直接给结论
-- 如果删完后句子没落点，就补一条事实句，不要补“提醒你我要开始提醒”这种元话术
+- Delete the cue layer, give the conclusion directly
+- If the sentence has no landing after deletion, add a factual sentence — not a meta-line like "reminding you I'm about to remind you"
 
-### 保留条件
+### Keep when
 
-- 用户明确要求多版本输出、摘要格式或教学式分层解释
-- 该句是文内标题，不是正文语气
+- The user explicitly asks for multi-version output, a summary format, or layered teaching-style explanation
+- The line is an in-text heading, not body tone
 
-### 回读检查
+### Reread check
 
-- 改完后是否更直接
-- 是否误删了真正有结构作用的小标题
+- Is it more direct after editing
+- Did you accidentally delete a subheading that had a real structural role
 
-## 5.2 过度接住 / 心理判断腔
+## 5.2 Over-catching / psych-judgment speak
 
-### 识别信号
+### Identify signal
 
-- `我就在这里`
-- `不躲 / 不藏 / 不绕 / 不逃`
-- `你只是太久没被稳稳接住了`
-- `稳稳地接住你 / 所有人 / 这份脆弱`
-- `不用向我解释`
-- `你不是敏感 / 不是想太多 / 不是矫情`
-- `你现在的 X 很正常 / 你这种感觉很正常`：用"很正常"替对方把情绪盖章为常态，本质还是心理判断
-- 同类抚慰动作（`抱住 / 紧紧抱住 / 拥抱 / 实实在在的抱住你这种想法`）默认按"接住"同一族处理，不为新动词逐一补词
-- 在没有足够上下文时，模型替对方做心理解释、关系诊断或情绪定性
-- 语气像咨询式安抚，但句子本身没有具体依据
-- 同一个“接住”字，宾语如果是人、情绪、关系或抽象需求，多半是姿态层；如果是请求、流量、峰值、异常，先回到技术语境判断
+- `Ich bin hier`
+- `Ich weiche nicht aus / verstecke nichts / drücke mich nicht`
+- `Du wurdest nur zu lange nicht richtig aufgefangen`
+- `Ich fange dich / alle / diese Verletzlichkeit sicher auf`
+- `Du musst dich mir nicht erklären`
+- `Du bist nicht zu empfindlich / denkst nicht zu viel / bist nicht zimperlich`
+- `Dein X ist völlig normal / dieses Gefühl ist ganz normal`: using "ganz normal" to stamp the other's emotion as normalcy is still psych-judgment
+- Same-family comforting actions (`umarmen / fest umarmen / in den Arm nehmen`) handled by the same "auffangen" family, without adding a word per new verb
+- With insufficient context, the model does the other person's psychological explanation, relationship diagnosis, or emotional labeling
+- The tone sounds like counseling reassurance, but the sentence has no concrete basis
+- The same "auffangen": if the object is a person, emotion, relationship, or abstract need, it's usually posture; if the object is a request, traffic, peak, or exception, return to the technical reading first
 
-### 默认动作
+### Default action
 
-- 删掉替对方下结论的部分，只保留可证实的回应
-- 如果需要保留安慰感，改成低承诺表达：`我在听 / 如果你愿意，可以继续说`
-- 如果这套话术跑到标题、海报、社区宣言里，默认也按这一类处理；不要因为它是标题就放过 `稳稳地接住所有人`
+- Delete the part that concludes for the other person, keep only the verifiable response
+- If comfort should be kept, change it to a low-commitment form: `Ich höre zu / Wenn du magst, erzähl weiter`
+- If this phrasing runs into a title, poster, or community manifesto, handle it the same way; don't let `Ich fange alle sicher auf` pass just because it's a title
 
-### 保留条件
+### Keep when
 
-- 对话上下文已经给足信息，这句不是凭空诊断
-- 用户明确要写安慰、陪伴、咨询式回复
-- 宾语是 `请求 / 流量 / 峰值 / 异常` 这类技术对象，且句子里有系统主语、参数、结果或边界说明
+- The context already gives enough info; this sentence isn't a diagnosis out of thin air
+- The user explicitly wants a comforting, companionable, counseling-style reply
+- The object is a technical thing like `Anfrage / Traffic / Peak / Exception`, and the sentence has a system subject, params, result, or boundary
 
-### 回读检查
+### Reread check
 
-- 是否把“安慰”写成了“替对方定义感受”
-- 改完后是否还保留了基本温度，而不是直接变成冷处理
-- 是否把技术语境里正常的“接住请求 / 接住流量”一起误杀了
+- Did you turn "comfort" into "defining the other person's feelings"
+- Is there still basic warmth after editing, not just cold handling
+- Did you accidentally kill a normal technical "Anfragen auffangen / Traffic auffangen"
 
-## 5.3 郑重预告 / 身份认证式夸奖
+## 5.3 Solemn preview / identity-certification praise
 
-### 识别信号
+### Identify signal
 
-- `我必须很认真地说一句`
-- `我要讲一个更深一点的东西`
-- `这次我懂了，我真的懂了`
-- `你问到了问题的核心`、`你的观察力太敏锐了`
-- 用 `顶刊作者 / 顶级研究者 / 真正高手` 这类身份标签给对方“发证书”
-- `我必须诚实地说 / 说句实话 / 坦白讲`：诚实宣言变体，预告“我要讲真话”来换可信度，和郑重预告同一姿态
-- `说个真实变化 / 缺点也说一句（免得你们说我恰饭）`：装坦诚变体，用主动自曝换可信度，常见于公开推荐场景
+- `Ich muss das ganz ehrlich sagen`
+- `Ich sage jetzt etwas Tiefergehendes`
+- `Diesmal hab ich's verstanden, wirklich verstanden`
+- `Du triffst damit den Kern`, `Deine Beobachtungsgabe ist beeindruckend`
+- Handing out a "certificate" with labels like `Spitzenforscher / echter Profi / wirklicher Könner`
+- `Ich muss ehrlich sein / mal ganz ehrlich / offen gesagt`: honesty-declaration variant, previewing "I'll tell the truth now" to buy credibility, same posture as the solemn preview
+- `Eine echte Schwäche sage ich auch dazu (damit ihr nicht sagt, ich sei gekauft)`: fake-candor variant, using volunteered self-disclosure to buy credibility, common in public recommendations
 
-### 默认动作
+### Default action
 
-- 删掉郑重预告和认证式夸奖，直接说具体判断
-- 真的要夸时，只夸内容本身可见的优点，不把对方抬成某种身份
-- 诚实宣言和装坦诚只删姿态层；自曝出来的缺点如果是真信息（闪退频率、适用边界），内容必须保留
+- Delete the solemn preview and certification praise, give the concrete judgment directly
+- If you must praise, praise only the visible merit of the content, don't elevate the other person into some identity
+- Honesty declarations and fake candor: delete only the posture layer; if the disclosed flaw is real information (crash frequency, scope limits), the content must be kept
 
-### 保留条件
+### Keep when
 
-- 该句本身是讨论对象、梗图样本或反讽对象
-- 用户明确要保留夸张修辞、戏剧化语气或表演式风格
+- The sentence itself is the object of discussion, a meme sample, or an ironic target
+- The user explicitly wants exaggerated rhetoric, dramatic tone, or a performative style kept
 
-### 回读检查
+### Reread check
 
-- 是否还在“预告我要说大实话”，而没有先说内容
-- 是否把具体判断改成了空夸
+- Are you still "previewing that I'll tell a big truth" without saying the content first
+- Did you turn a concrete judgment into empty praise
 
-## 6. 语域混搭
+## 6. Register mixing
 
-### 识别信号
+### Identify signal
 
-- 技术文里突然出现小红书腔、鸡汤腔、商业黑话
-- 公开文章里突然插入过重的工程内部黑话
-- 同一段里正式通知腔和聊天腔来回切换
-- 说明文、评测文里强行套游戏或职业框架比喻：把两个日用品写成“负责冲锋陷阵的刺客”和“负责加血的奶妈”
+- Influencer voice, inspirational voice, or business jargon suddenly appears in technical text
+- Heavy internal engineering jargon suddenly inserted into a public article
+- Formal-notice voice and chat voice switching back and forth in one paragraph
+- A spec or review forced into a game/role metaphor: describing two household items as "der Assassine, der vorprescht" and "die Heilerin, die aufheilt"
 
-### 默认动作
+### Default action
 
-- 先判主语域
-- 再删异类语域词，必要时统一主语和句长
+- Judge the main register first
+- Then delete the foreign-register words, unifying subject and sentence length where needed
 
-### 保留条件
+### Keep when
 
-- 用户明确要做反差风格
-- 异类语域承担引用、梗或明确修辞目的
-- 中英混排里的技术词按技术语义判断（`context 不崩`、`p99 突刺`），不因夹英文就当语域混搭
+- The user explicitly wants a contrast style
+- The foreign register carries a quote, meme, or clear rhetorical purpose
+- Technical words in Denglisch are judged by technical meaning (`der Context reißt nicht ab`, `p99-Spitze`), not treated as register mixing just for the embedded English
 
-### 回读检查
+### Reread check
 
-- 改完后整段是否像同一个人在同一个场景里写出来的
-- 是否因为过度统一而丢了必要的人味
+- After editing, does the whole passage read like one person in one scene
+- Did over-unifying lose necessary human texture
 
-## 7. 价值拔高骨架
+## 7. Value-inflation skeleton
 
-### 识别信号
+### Identify signal
 
-- `这不仅仅是……更是……`
-- `真正的 X 不是……而是……`
-- `最后比拼的是……`
-- `你看完会彻底开悟 / 看完就懂了 / 看完会震惊 / 看完不再 X`：承诺读者读完获得顿悟、转变或顿悟感，是另一种价值拔高 + 自媒体式承诺收尾
-- 句子先给一个普通判断，再硬抬成"更高层的洞见"
+- `Das ist nicht nur … sondern auch …`
+- `Wahre X ist nicht … sondern …`
+- `Am Ende zählt …`
+- `Nach dem Lesen wirst du erleuchtet sein / verstehst du es / bist du schockiert / nie wieder X`: promising the reader an epiphany or transformation, another value inflation + content-mill promise ending
+- A sentence gives a plain judgment, then forcibly lifts it into a "higher-level insight"
 
-### 默认动作
+### Default action
 
-- 先删掉拔高层和骨架，只保留真正要说的判断
-- 如果剩下的话还是抽象，就改成更直接的事实句或评价句
+- Delete the inflation layer and skeleton first, keep only the real judgment
+- If what's left is still abstract, change it to a more direct factual or evaluative sentence
 
-### `in-place` 替代动作
+### `in-place` alternative action
 
-- 不删整句，先拆掉句内拔高骨架：`这不仅仅是 X，更是 Y` 可以改成 `这是 Y`，前提是 `Y` 本身有信息量
-- `真正的 X 不是 A，而是 B` 可以改成 `X 更看 B` 或 `B 更能影响 X`，不要靠二元对比制造洞见感
-- `看完会彻底开悟 / 看完就懂了` 这类承诺式收尾，改成低承诺描述，例如 `下面只说我观察到的几个问题`
-- 如果整句没有可保留的信息，保留原句并标注风险，不在 `in-place` 模式下自行删掉
+- Don't delete the whole sentence; first dismantle the intra-sentence inflation skeleton: `Das ist nicht nur X, sondern Y` may become `Das ist Y`, provided `Y` has information
+- `Wahre X ist nicht A, sondern B` may become `Für X zählt eher B` or `B beeinflusst X stärker`, without manufacturing insight through binary contrast
+- Promise endings like `Nach dem Lesen wirst du erleuchtet` become low-commitment description, e.g. `Unten nur die paar Probleme, die mir aufgefallen sind`
+- If the whole sentence has no keepable information, keep the original and mark the risk; don't delete it yourself in `in-place` mode
 
-### 保留条件
+### Keep when
 
-- 对比两边都承载了新信息，不是纯姿态
-- 作者就是在写评论型公开表达，而且这一句确实在推进论证
+- Both sides of the contrast carry new information, not pure posture
+- The author is writing a review-style public piece, and this sentence genuinely advances the argument
 
-### 回读检查
+### Reread check
 
-- 去掉骨架后，判断是否更直接
-- 是否把作者真正想强调的判断也一起删掉了
+- With the skeleton gone, is the judgment more direct
+- Did you delete the judgment the author actually wanted to stress
 
-## 8. 无源引用
+## 8. Unsourced citations
 
-### 识别信号
+### Identify signal
 
-- `研究表明`
-- `数据显示`
-- `业内人士认为`
+- `Studien zeigen`
+- `Daten belegen`
+- `Fachleute meinen`
 - `studies show`
 - `experts say`
-- 句子借权威开场，但没有给研究名、机构、时间、链接或可核对来源
+- The sentence borrows authority to open but gives no study name, institution, date, link, or verifiable source
 
-### 默认动作
+### Default action
 
-- 先选模式，不要一上来就改句子：
-  - `rewrite-safe`：删掉权威铺垫，只保留原文里能独立成立的判断
-  - `audit-only`：明确提示“缺来源 / 缺归属”，默认不替作者改成像已证实的说法
-  - `rewrite-with-placeholder`：只在用户明确要求保留原结构时，用“此处待补来源”这类占位提醒保住结构
-- `docs / status` 默认优先 `audit-only`
-- `chat / public-writing` 默认优先 `rewrite-safe`
-- 不要编造研究机构、年份、样本量、行业共识或专家身份
+- Pick a mode first, don't rewrite the sentence right away:
+  - `rewrite-safe`: delete the authority framing, keep only what stands alone in the original
+  - `audit-only`: point out "missing source / missing attribution" explicitly, don't turn it into something proven for the author
+  - `rewrite-with-placeholder`: only when the user explicitly wants the original structure kept, use a placeholder cue like "source to be added here"
+- `docs / status` prefer `audit-only` by default
+- `chat / public-writing` prefer `rewrite-safe` by default
+- Never invent an institution, year, sample size, industry consensus, or expert identity
 
-### 保留条件
+### Keep when
 
-- 原文已经附了可核对来源，只是当前位置没重复写
-- 这句话本身是在讨论“无源引用”这种写法，而不是在借它立论
-- 用户明确要做的是编辑批注，而不是直接改写正文
+- The original already attached a verifiable source, just not repeated at this spot
+- The sentence itself is discussing "unsourced citation" as a writing style, not using it to argue
+- The user explicitly wants an editorial annotation, not a rewrite of the body
 
-### 回读检查
+### Reread check
 
-- 改完后，是否还在暗示“已有可靠研究支持”而其实没有
-- 是否为了保住句子气势，偷偷补进了原文没有的事实
-- 当前场景下，是否应该更保守地退回 `audit-only`
+- After editing, are you still implying "reliable research supports this" when there is none
+- Did you sneak in a fact not in the original to keep the sentence's momentum
+- In this scene, should you roll back more conservatively to `audit-only`
 
-## 9. Residual Audit / 二次审稿
+## 9. Residual Audit / second review
 
-### 识别信号
+### Identify signal
 
-- 第一遍已经把明显套话清掉了，但还残留一点“像被 AI 清理过”的味道
-- 常见残留固定只看 5 类：
-  - 开场残留：`结论先说 / 直接说结论 / 值得注意的是`
-  - 总结残留：`总的来说 / 最终来看 / 归根结底`
-  - narrator 残留：`这也说明了 / 更重要的是 / 这意味着`
-  - 空泛判断残留：`方向是对的 / 意义重大 / 真正理解了用户`
-  - 句长过匀：连续几句长度、抬手和落点都太整齐
-- 这一步更像轻量抛光，不是再来一轮重写
+- Pass 1 already cleaned the obvious phrases, but a "cleaned-by-AI" residue remains
+- Common residue is always just these 5 classes:
+  - Opener residue: `Fazit vorweg / Direkt zum Punkt / Es ist wichtig zu beachten`
+  - Summary residue: `Alles in allem / Am Ende betrachtet / Letztendlich`
+  - Narrator residue: `Das zeigt auch / Noch wichtiger / Das bedeutet`
+  - Empty-judgment residue: `Die Richtung stimmt / von großer Bedeutung / hat den Nutzer wirklich verstanden`
+  - Uniform sentence length: several consecutive sentences too even in length, lift, and landing
+- This step is light polish, not another round of rewriting
 
-### 默认动作
+### Default action
 
-- 先完成第一遍保真回读，再决定要不要开第二遍；顺序不要反
-- 第二遍只做轻量修正：
-  - 删掉一个残留开场或空总结
-  - 把一句 narrator / 空泛判断压回直接句
-  - 合并两句过匀的事实句，或拆开一处过满的句子
-- `docs / status / code-context` 默认更保守：只有残留真的明显，而且不影响事实、术语和正式语体时才动
-- 如果第二遍需要大改结构才能“更像人”，那通常说明该停在第一遍，而不是继续抛
+- Finish the pass-1 fidelity reread first, then decide whether to open pass 2; don't reverse the order
+- Pass 2 does only light fixes:
+  - Delete one residual opener or empty summary
+  - Push one narrator / empty-judgment sentence back to a direct sentence
+  - Merge two over-uniform factual sentences, or break one overloaded sentence
+- `docs / status / code-context` are more conservative by default: touch only when the residue is genuinely obvious and doesn't affect facts, terms, or formal register
+- If pass 2 needs a big structural change to "sound more human", that usually means stop at pass 1 rather than keep polishing
 
-### 保留条件
+### Keep when
 
-- 提示层本身承担标题、转场或教学结构，不只是姿态
-- narrator 句承载了必要的论证，而不是空解释
-- 句长整齐来自列表、步骤说明、状态同步，不是 AI 抛光痕迹
-- 第二遍一动就会让 `docs / status / code-context` 变得更口语、失真或像宣传稿
+- The cue layer itself carries a heading, transition, or teaching structure, not just posture
+- The narrator sentence carries a necessary argument, not empty explanation
+- Uniform sentence length comes from a list, step instructions, or status sync, not AI polish
+- Any pass-2 touch would make `docs / status / code-context` more colloquial, distorted, or promo-like
 
-### 回读检查
+### Reread check
 
-- 第二遍后，文本是否更自然，而不是更“会写”
-- 是否只做了小修，不是把整段重写了一遍
-- 是否在不知不觉里补了原文没有的事实或态度
-- `docs / status / code-context` 是否仍然保留原来的正式度和信息密度
+- After pass 2, is the text more natural rather than "better at writing"
+- Did you do only small fixes, not rewrite the whole passage
+- Did you unknowingly add a fact or attitude not in the original
+- Do `docs / status / code-context` still keep their original formality and information density

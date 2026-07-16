@@ -1,111 +1,111 @@
-# 改写示例
+# Rewrite Examples
 
-> 每个示例展示同一段内容的 AI 版和人话版。
+> Each example shows the AI version and the human version of the same content.
 
-## 中文示例
+## German examples
 
-### 示例 1：项目介绍
+### Example 1: Project intro
 
-**AI 版：**
-> 该项目是一个创新性的解决方案，旨在通过深度整合多种前沿技术，为用户提供全方位、一站式的智能化体验。它不仅能够显著提升工作效率，还能有效降低运营成本，实现真正的降本增效。
+**AI version:**
+> Dieses Projekt ist eine innovative Lösung, die durch die tiefe Integration verschiedenster Spitzentechnologien ein ganzheitliches, nahtloses und intelligentes Nutzererlebnis bietet. Es steigert nicht nur die Effizienz erheblich, sondern senkt zugleich effektiv die Betriebskosten und realisiert echte Kosteneinsparung bei gleichzeitiger Wertsteigerung.
 
-**人话版：**
-> 这个项目把语音识别和自动翻译接到一起，用户说中文就能直接出英文字幕。上线两周日活 1200，翻译准确率 94%。
+**Human version:**
+> Das Projekt verbindet Spracherkennung mit automatischer Übersetzung: Man spricht Deutsch, raus kommen englische Untertitel. Zwei Wochen nach Launch 1200 tägliche Nutzer, Übersetzungsgenauigkeit 94 %.
 
-**改了什么：**
-- 删掉"创新性""前沿技术""全方位""一站式""智能化"——全是空词
-- 删掉"不仅…还能…"的二元结构
-- 加了具体功能描述和数据
-
----
-
-### 示例 2：技术总结
-
-**AI 版：**
-> 综上所述，通过对系统架构的全面优化和持续迭代，我们在性能、安全性和可维护性等方面均取得了显著提升。这一成果充分体现了团队在技术创新方面的不懈追求和卓越实力。
-
-**人话版：**
-> 这轮改完之后：API 响应时间从 800ms 降到 120ms，修了 3 个 SQL 注入漏洞，把 6000 行的 God Class 拆成了 12 个模块。
-
-**改了什么：**
-- 删掉"综上所述"和整个总结式开头
-- "显著提升"换成具体数据
-- 删掉"充分体现""不懈追求""卓越实力"——自吹自擂
-- 用具体改动代替抽象描述
+**What changed:**
+- Deleted "innovativ", "Spitzentechnologien", "ganzheitlich", "nahtlos", "intelligent" — all empty words
+- Deleted the "nicht nur … sondern auch …" binary structure
+- Added concrete functionality and data
 
 ---
 
-### 示例 3：消息回复
+### Example 2: Technical summary
 
-**AI 版：**
-> 好问题！这确实是一个值得深入探讨的话题。让我来为你详细解释一下。首先，我们需要了解的是，这个问题的本质在于……
+**AI version:**
+> Zusammenfassend haben wir durch die umfassende Optimierung und kontinuierliche Weiterentwicklung der Systemarchitektur in Performance, Sicherheit und Wartbarkeit deutliche Fortschritte erzielt. Dieses Ergebnis zeugt eindrucksvoll vom unermüdlichen Streben und der herausragenden Kompetenz des Teams im Bereich technischer Innovation.
 
-**人话版：**
-> 核心原因是缓存没失效。用户改了头像但 CDN 还在用旧的，TTL 设了 7 天太长了。改成 1 小时就行。
+**Human version:**
+> Nach dieser Runde: API-Antwortzeit von 800 ms auf 120 ms, 3 SQL-Injection-Lücken gefixt, die God-Class mit 6000 Zeilen in 12 Module zerlegt.
 
-**改了什么：**
-- 删掉全部谄媚和铺垫
-- 直接给原因和解决方案
-
----
-
-### 示例 4：新闻摘要
-
-**AI 版：**
-> 在当今快速发展的人工智能领域，OpenAI 近日发布了其最新的大语言模型，引发了业界的广泛关注和热烈讨论。该模型在多个关键指标上实现了显著突破，标志着人工智能技术迈入了一个全新的发展阶段。
-
-**人话版：**
-> OpenAI 发了 GPT-5。MMLU 跑分 92.3%，比上一代高 7 个点。上下文窗口翻倍到 256K。API 价格没涨。
-
-**改了什么：**
-- 删掉"在当今""快速发展""广泛关注""热烈讨论"——全是废话
-- "显著突破"换成具体跑分
-- "全新的发展阶段"删掉——读者自己会判断
+**What changed:**
+- Deleted "Zusammenfassend" and the whole summary opener
+- "deutliche Fortschritte" → concrete data
+- Deleted "zeugt eindrucksvoll", "unermüdliches Streben", "herausragende Kompetenz" — self-praise
+- Replaced abstract description with concrete changes
 
 ---
 
-### 示例 5：工程师腔 / 调试腔
+### Example 3: Message reply
 
-**AI 版：**
-> 我先拆开看了一下，发现根因偏硬，不太好直接打掉。目前已经把差异收窄了，和刚抓到的现象也对上了。接下来稳稳兜住，落盘之后就能收口。
+**AI version:**
+> Großartige Frage! Das ist in der Tat ein Thema, das eine tiefere Betrachtung verdient. Lass mich dir das im Detail erklären. Zunächst müssen wir verstehen, dass der Kern dieses Problems darin liegt …
 
-**人话版：**
-> 查了一下，原因是配置写死了，不能直接改。我把排查范围缩小到两个可能的地方，和之前的报错信息对得上。先把结论记下来，回头改一版就行。
+**Human version:**
+> Der Kern ist, dass der Cache nicht invalidiert wird. Der Nutzer ändert das Avatar, aber das CDN liefert das alte — die TTL steht auf 7 Tage, das ist zu lang. Auf 1 Stunde stellen, dann passt es.
 
-**改了什么：**
-- "拆开看"→"查了一下"，"根因偏硬"→"原因是配置写死了"
-- "打掉"→"改"，"收窄"→"缩小"，"抓到的现象"→"报错信息"
-- "兜住"→删掉，"落盘"→"记下来"，"收口"→"就行"
-- 整段从 postmortem 腔调改成正常同事对话
+**What changed:**
+- Deleted all sycophancy and buildup
+- Gave the cause and the fix directly
 
 ---
 
-### 示例 6：小红书 AI 腔
+### Example 4: News summary
 
-**AI 版：**
-> 姐妹们！今天给大家拆解一个保姆级避坑攻略！这个工具真的绝绝子，狠狠提升了效率！建议收藏！划重点：免费！
+**AI version:**
+> Im heutigen, sich rasant entwickelnden Bereich der künstlichen Intelligenz hat OpenAI kürzlich sein neuestes großes Sprachmodell veröffentlicht, was in der Branche breite Aufmerksamkeit und rege Diskussionen auslöste. Das Modell erzielte bei mehreren Schlüsselmetriken einen deutlichen Durchbruch und markiert den Eintritt der KI-Technologie in eine völlig neue Entwicklungsphase.
 
-**人话版：**
-> 推荐一个工具：Raycast。免费版就够用，主要是启动快、插件多。我之前用 Alfred，切过来之后每天大概能省十几分钟，主要省在切窗口和查文档上。
+**Human version:**
+> OpenAI hat GPT-5 veröffentlicht. MMLU-Score 92,3 %, 7 Punkte über der Vorgängerversion. Das Kontextfenster verdoppelt sich auf 256K. Der API-Preis bleibt gleich.
 
-**改了什么：**
-- 删掉全部硬凹人设的网络语
-- "拆解""保姆级""避坑""绝绝子""狠狠""建议收藏""划重点"全删
-- 换成具体工具名、具体用法、具体省了多少时间
+**What changed:**
+- Deleted "Im heutigen", "rasant entwickelnd", "breite Aufmerksamkeit", "rege Diskussionen" — all filler
+- "deutlicher Durchbruch" → concrete score
+- Deleted "völlig neue Entwicklungsphase" — the reader can judge that
 
 ---
 
-### 示例 7：语域混搭
+### Example 5: Engineer-speak / debug-speak
 
-**AI 版：**
-> 诚然，这个 bug 的修复确实存在一定的技术复杂度。不过说白了就是绝绝子的体验！我们需要进一步深入探讨其底层逻辑，稳稳把核心链路兜住。综上所述，未来可期。
+**AI version:**
+> Ich hab es erst mal aufgebohrt, die Root Cause sitzt tief, lässt sich nicht direkt plattmachen. Aktuell die Differenz eingegrenzt, deckt sich mit dem grad gesehenen Phänomen. Als Nächstes sauber auffangen, nach dem Festzurren kann ich es dichtmachen.
 
-**人话版：**
-> 这个 bug 不好修，涉及到三个服务之间的调用顺序。我先把支付服务的超时时间从 3 秒调到 10 秒，观察一周再说。
+**Human version:**
+> Geschaut: die Ursache ist ein hartcodierter Wert, den man nicht direkt ändern kann. Ich hab die Suche auf zwei mögliche Stellen eingegrenzt, das passt zur früheren Fehlermeldung. Ich schreib das Ergebnis auf, in einer Runde bau ich es um.
 
-**改了什么：**
-- 原文混搭了 5 种语域（学术/网络/商业/工程/鸡汤），统一成技术口语
-- 把空泛描述换成具体方案
+**What changed:**
+- "aufgebohrt" → "geschaut", "Root Cause sitzt tief" → "die Ursache ist ein hartcodierter Wert"
+- "plattmachen" → "ändern", "eingegrenzt" kept once as plain, "grad gesehenes Phänomen" → "Fehlermeldung"
+- "auffangen" → deleted, "Festzurren" → "aufschreiben", "dichtmachen" → "umbauen"
+- The whole passage moved from postmortem voice to normal colleague talk
+
+---
+
+### Example 6: Influencer / clickbait AI voice
+
+**AI version:**
+> Leute!! Heute ein absoluter Geheimtipp für euch! Dieses Tool ist ein echter Gamechanger, die Produktivität geht komplett durch die Decke! Unbedingt speichern! Wichtig: kostenlos!!
+
+**Human version:**
+> Empfehlung: Raycast. Die Gratis-Version reicht, vor allem schneller Start und viele Plugins. Ich hatte vorher Alfred; nach dem Wechsel spare ich täglich vielleicht zehn, fünfzehn Minuten, hauptsächlich beim Fensterwechsel und beim Nachschlagen.
+
+**What changed:**
+- Deleted all forced-persona influencer language
+- "Geheimtipp", "Gamechanger", "durch die Decke", "unbedingt speichern" all cut
+- Replaced with the concrete tool name, concrete usage, concrete time saved
+
+---
+
+### Example 7: Register mixing
+
+**AI version:**
+> Zugegeben, der Fix dieses Bugs hat durchaus eine gewisse technische Komplexität. Aber ganz ehrlich, das Erlebnis ist einfach ein Gamechanger! Wir müssen die zugrundeliegende Logik tiefer beleuchten und die Kernstrecke sauber auffangen. Zusammenfassend: Die Zukunft ist vielversprechend.
+
+**Human version:**
+> Der Bug ist schwer zu fixen, es geht um die Aufrufreihenfolge zwischen drei Diensten. Ich setze erst mal das Timeout des Bezahldienstes von 3 auf 10 Sekunden und beobachte eine Woche.
+
+**What changed:**
+- The original mixed 4 registers (academic / influencer / business / engineer / inspirational), unified to technical colloquial
+- Replaced vague description with a concrete plan
 
 ---
 
@@ -166,103 +166,103 @@
 
 ## Two-pass examples | Residual Audit
 
-### 示例 A：公开写作里的一遍 vs 两遍
+### Example A: one pass vs two passes in public writing
 
-**原文：**
-> 这次把 onboarding 流程改了一遍，新用户从注册到完成首次导入少走了两步。更重要的是，这也说明我们开始真正理解用户在第一天最容易卡住的地方。
+**Original:**
+> Wir haben den Onboarding-Flow überarbeitet, neue Nutzer sparen von der Registrierung bis zum ersten Import zwei Schritte. Noch wichtiger: das zeigt, dass wir langsam wirklich verstehen, wo Nutzer am ersten Tag am ehesten hängen bleiben.
 
-**第一遍：**
-> 这次把 onboarding 流程改了一遍，新用户从注册到完成首次导入少走了两步。我们也更清楚用户第一天最容易卡在哪里。
+**First pass:**
+> Wir haben den Onboarding-Flow überarbeitet, neue Nutzer sparen von der Registrierung bis zum ersten Import zwei Schritte. Wir wissen jetzt auch besser, wo Nutzer am ersten Tag am ehesten hängen bleiben.
 
-**第二遍：**
-> 这次把 onboarding 流程改了一遍，新用户从注册到完成首次导入少走了两步。用户第一天最容易卡的地方，就是首次导入。
+**Second pass:**
+> Wir haben den Onboarding-Flow überarbeitet, neue Nutzer sparen von der Registrierung bis zum ersten Import zwei Schritte. Wo Nutzer am ersten Tag am ehesten hängen bleiben, ist genau der erste Import.
 
-**第二遍改了什么：**
-- 去掉了 `更重要的是 / 这也说明我们开始真正理解` 这层 narrator 话术
-- 保留原文已有判断，只把它压回更直接的句子
-- 没有补新事实，也没有重写整段
+**What the second pass changed:**
+- Removed the narrator layer `Noch wichtiger / das zeigt, dass wir wirklich verstehen`
+- Kept the original judgment, only pushed it into a more direct sentence
+- Added no new facts, and did not rewrite the whole paragraph
 
-### 示例 B：status 场景里的克制 second pass
+### Example B: a restrained second pass in a status scene
 
-**原文：**
-> 4 月 13 日把重试次数从 2 次调到 5 次。支付超时从 1.9% 降到 0.7%。这次调整也进一步验证了我们的优化方向是正确的。明天继续看晚高峰数据。
+**Original:**
+> Am 13. April die Retries von 2 auf 5 gesetzt. Payment-Timeouts von 1,9 % auf 0,7 %. Diese Änderung bestätigt zudem, dass unsere Optimierungsrichtung stimmt. Morgen weiter die Abend-Peak-Daten anschauen.
 
-**第一遍：**
-> 4 月 13 日把重试次数从 2 次调到 5 次后，支付超时从 1.9% 降到 0.7%。这次调整说明方向是对的。明天继续看晚高峰数据。
+**First pass:**
+> Am 13. April die Retries von 2 auf 5 gesetzt, danach Payment-Timeouts von 1,9 % auf 0,7 %. Die Änderung zeigt, dass die Richtung stimmt. Morgen weiter die Abend-Peak-Daten anschauen.
 
-**第二遍：**
-> 4 月 13 日把重试次数从 2 次调到 5 次后，支付超时从 1.9% 降到 0.7%。明天继续看晚高峰数据。
+**Second pass:**
+> Am 13. April die Retries von 2 auf 5 gesetzt, danach Payment-Timeouts von 1,9 % auf 0,7 %. Morgen weiter die Abend-Peak-Daten anschauen.
 
-**第二遍改了什么：**
-- 只删掉 `方向是对的` 这种空判断
-- 保留日期、数字和下一步，不往更口语的方向抛光
-- `status` 场景如果第一遍已经够直接，第二遍就到这里停
-
----
-
-## Bounded 双合同示例 | Bounded Scope Example
-
-> bounded 的输出分两部分：句内洗过的正文，和一份交用户确认的删除清单。示例（合成文本）：
-
-**原文**
-
-> 在数字化浪潮席卷各行各业的今天，提效工具层出不穷。我们团队过去三个月把周报流程从手填 Excel 改成了机器人自动汇总，每周大约省出两小时。研究表明，重复性事务的自动化能显著提升组织效能。具体做法是：机器人每周五拉取任务系统的状态变更，生成草稿，负责人只补一句风险说明。这不仅仅是一次流程优化，更是一种工作方式的革新。下个月我们准备把例会纪要也接进来。
-
-**正文（句内洗后）**
-
-> 提效工具很多。我们团队过去三个月把周报流程从手填 Excel 改成了机器人自动汇总，每周大约省出两小时。具体做法是：机器人每周五拉取任务系统的状态变更，生成草稿，负责人只补一句风险说明。下个月我们准备把例会纪要也接进来。
-
-**建议删除（待确认）**
-
-1. 「研究表明，重复性事务的自动化能显著提升组织效能。」——无源权威铺垫；删掉后该段信息点不变（前后句已经给出做法和收益），也不承担过渡。不建议改写成「听说 / 据说」，那只是把无源说法换个壳。
-2. 「这不仅仅是一次流程优化，更是一种工作方式的革新。」——价值拔高收尾；剥掉句式后没有剩余信息，前句（具体做法）和后句（下月计划）直接相接不断裂。
-
-第一句「在数字化浪潮……层出不穷」没有进清单：剥掉铺垫后还剩「提效工具很多」这个实质判断，所以走句内洗，不删整句。
+**What the second pass changed:**
+- Only deleted the empty judgment `die Richtung stimmt`
+- Kept date, numbers, and next step; didn't polish toward colloquial
+- In a `status` scene, if pass 1 is already direct enough, pass 2 stops here
 
 ---
 
-## 标注模式示例 | Annotation Mode Examples
+## Bounded dual-contract example
 
-> 下面这几组展示同一段文本在 `annotation mode` 和默认改写模式下的区别。
+> A bounded output has two parts: the intra-sentence-cleaned body, and a deletion list for the user to confirm. Example (synthetic text):
 
-### 示例 A：公开文案里的无源引用
+**Original**
 
-**原文：**
-> 研究表明，采用 AI 协作开发的团队交付效率显著提升。业内人士认为，这一趋势将在未来十年持续加速。
+> In einer Zeit, in der die Digitalisierung alle Branchen erfasst, gibt es unzählige Effizienz-Tools. Unser Team hat in den letzten drei Monaten den Wochenbericht von manuellem Excel auf einen Bot umgestellt, der automatisch zusammenfasst — das spart wöchentlich etwa zwei Stunden. Studien zeigen, dass die Automatisierung repetitiver Aufgaben die Organisationseffizienz deutlich steigert. Konkret: Der Bot zieht freitags die Statusänderungen aus dem Task-System, erzeugt einen Entwurf, und die Verantwortlichen ergänzen nur einen Satz zum Risiko. Das ist nicht nur eine Prozessoptimierung, sondern eine Erneuerung der Arbeitsweise. Nächsten Monat wollen wir auch die Meeting-Protokolle anbinden.
 
-**Annotation mode：**
-- `问题族`：无源引用
-- `触发点`：`研究表明`、`业内人士认为`
-- `建议动作`：补具体来源；如果没有来源，删掉权威铺垫
-- `是否建议改写`：是
+**Body (intra-sentence cleaned)**
 
-**默认改写：**
-> 用 AI 协作开发的团队，交付速度可能会更快，但这段话没有给出具体来源。要么补研究出处，要么直接把结论改写得更克制。
+> Es gibt viele Effizienz-Tools. Unser Team hat in den letzten drei Monaten den Wochenbericht von manuellem Excel auf einen Bot umgestellt, der automatisch zusammenfasst — das spart wöchentlich etwa zwei Stunden. Konkret: Der Bot zieht freitags die Statusänderungen aus dem Task-System, erzeugt einen Entwurf, und die Verantwortlichen ergänzen nur einen Satz zum Risiko. Nächsten Monat wollen wir auch die Meeting-Protokolle anbinden.
 
-### 示例 B：status 场景里的保守处理
+**Suggested deletions (to confirm)**
 
-**原文：**
-> 数据显示，这次改版显著提升了留存率。业内人士认为，这个方向已经验证可行。
+1. „Studien zeigen, dass die Automatisierung repetitiver Aufgaben die Organisationseffizienz deutlich steigert." — unsourced authority framing; deleting it leaves the paragraph's information unchanged (the surrounding sentences already give the method and the benefit), and it carries no transition. Don't rewrite it into "angeblich / man hört", which only reshells the unsourced claim.
+2. „Das ist nicht nur eine Prozessoptimierung, sondern eine Erneuerung der Arbeitsweise." — value-inflation ending; stripping the pattern leaves no information, and the previous sentence (concrete method) connects directly to the next (next month's plan) without a break.
 
-**Annotation mode：**
-- `问题族`：无源引用
-- `触发点`：`数据显示`、`业内人士认为`
-- `建议动作`：在 `status` 场景优先补数据来源和归属，不要改写成像已证实的事实
-- `是否建议改写`：是
+The first sentence "In einer Zeit … unzählige Tools" did not go on the list: stripping the buildup still leaves the real judgment "es gibt viele Effizienz-Tools", so it's cleaned intra-sentence, not deleted whole.
 
-**默认改写：**
-> 这段缺数据来源和观点归属。作为 status，同步时应补具体报表、时间范围或负责人；在补齐之前，不建议把它写成已经证实的结论。
+---
 
-### 示例 C：技术文档里的不改案例
+## Annotation mode examples
 
-**原文：**
-> 网关在请求超时后返回 504。缓存服务每 5 分钟刷新一次热点 key。负载均衡器将流量按权重分配到三个后端节点。
+> These pairs show the same text under `annotation mode` vs the default rewrite mode.
 
-**Annotation mode：**
-- `问题族`：无明显问题
-- `触发点`：系统主语和技术术语都属于正常文档写法
-- `建议动作`：保持不动
-- `是否建议改写`：否
+### Example A: unsourced citation in public copy
 
-**默认改写：**
-> 网关在请求超时后返回 504。缓存服务每 5 分钟刷新一次热点 key。负载均衡器将流量按权重分配到三个后端节点。
+**Original:**
+> Studien zeigen, dass Teams mit KI-gestützter Entwicklung ihre Liefergeschwindigkeit deutlich steigern. Fachleute meinen, dieser Trend werde sich im kommenden Jahrzehnt weiter beschleunigen.
+
+**Annotation mode:**
+- `Problem family`: unsourced citation
+- `Trigger`: `Studien zeigen`, `Fachleute meinen`
+- `Suggested action`: add a concrete source; if none, delete the authority framing
+- `Rewrite recommended`: yes
+
+**Default rewrite:**
+> Teams mit KI-gestützter Entwicklung liefern womöglich schneller, aber der Satz gibt keine konkrete Quelle. Entweder eine Studienquelle ergänzen, oder die Aussage direkt zurückhaltender formulieren.
+
+### Example B: conservative handling in a status scene
+
+**Original:**
+> Die Daten zeigen, dass dieses Redesign die Retention deutlich gesteigert hat. Fachleute meinen, diese Richtung sei bereits als tragfähig bestätigt.
+
+**Annotation mode:**
+- `Problem family`: unsourced citation
+- `Trigger`: `Die Daten zeigen`, `Fachleute meinen`
+- `Suggested action`: in a `status` scene, prefer adding the data source and attribution; don't rewrite it as an established fact
+- `Rewrite recommended`: yes
+
+**Default rewrite:**
+> Diesem Absatz fehlen Datenquelle und Zuordnung. Als Status sollte der Sync konkrete Reports, Zeitraum oder Verantwortliche ergänzen; bis dahin nicht als bestätigtes Ergebnis schreiben.
+
+### Example C: no-change case in technical docs
+
+**Original:**
+> Das Gateway gibt nach einem Request-Timeout 504 zurück. Der Cache-Dienst aktualisiert die Hot Keys alle 5 Minuten. Der Load Balancer verteilt den Traffic gewichtet auf drei Backend-Knoten.
+
+**Annotation mode:**
+- `Problem family`: no obvious problem
+- `Trigger`: system subjects and technical terms are normal doc writing
+- `Suggested action`: leave unchanged
+- `Rewrite recommended`: no
+
+**Default rewrite:**
+> Das Gateway gibt nach einem Request-Timeout 504 zurück. Der Cache-Dienst aktualisiert die Hot Keys alle 5 Minuten. Der Load Balancer verteilt den Traffic gewichtet auf drei Backend-Knoten.
