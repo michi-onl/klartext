@@ -2,6 +2,8 @@
 
 > These are not word-level problems but sentence- and paragraph-level AI traces. Common to German and English.
 
+> Sources: klartext-derived, plus Wikipedia "Anzeichen für KI-generierte Inhalte" / "Signs of AI writing" (CC-BY-SA, patterns paraphrased, no text copied) and avoid-ai-writing (MIT).
+
 ## 1. Fake-dramatic binary contrast
 
 **Pattern**: negate X, then affirm Y, to manufacture a false epiphany.
@@ -270,6 +272,15 @@
 
 **Keep when**: connectors in titles and names (`todo — Terminal-Aufgaben`); quoted text; the dash itself is the topic; the only dash in a paragraph that genuinely carries an insertion.
 
+**German typography (character + spacing)**: separate from overload — models emit the English unspaced em-dash `—` mid-sentence (`schnell—ohne Anmeldung`), but native German uses a spaced en-dash `–` (Halbgeviertstrich) as the Gedankenstrich (`schnell – ohne Anmeldung`). The wrong character/spacing alone is a German AI tell.
+
+```
+❌ Es funktioniert schnell—ohne Anmeldung.
+✅ Es funktioniert schnell – ohne Anmeldung.
+```
+
+Keep the `—` inside English passages, quotes, and code/regex parameters; only normalize it in German prose.
+
 ## 21. Nominalstil overload (German-specific)
 
 **Pattern**: German AI text piles on nominalizations and Streckverben ("eine Optimierung vornehmen", "zur Anwendung bringen", "unter Berücksichtigung von"), turning verbs into noun+light-verb constructions. It reads bureaucratic and agent-less.
@@ -283,3 +294,97 @@
 ```
 
 **Default action**: resolve Streckverben back to a full verb, give the sentence a real subject, and cut `im Rahmen von / vor dem Hintergrund / unter Berücksichtigung` where they only pad.
+
+## 22. Narrator-from-a-distance
+
+**Pattern**: float above the scene and lecture about "how the world works" instead of naming a subject or putting the reader in it — `Niemand …`, `Menschen neigen dazu …`, `So etwas passiert einfach`, `This happens because …`, `People tend to …`. The fix is to name the concrete actor, or — only when the text is already in direct address — move the reader into the seat.
+
+```
+❌ Niemand entscheidet sich eines Morgens bewusst, ein schlechtes Produkt zu bauen. So etwas passiert einfach.
+❌ Nobody sits down one day and decides to build a bad product. It just happens.
+```
+
+```
+✅ Ein schlechtes Produkt entscheidest du nie bewusst — es rutscht dir über hundert kleine Kompromisse weg. (only if the text already addresses the reader as du)
+✅ You don't decide one day to build a bad product. It slips away over a hundred small compromises.
+```
+
+```
+❌ Menschen neigen dazu, den Aufwand zu unterschätzen.
+✅ Das Team hat den Aufwand um den Faktor drei unterschätzt. (name the actor)
+```
+
+**Default action**: name the concrete actor; or, in already-direct-address text, put the reader in the scene. Mostly a `public-writing` / AI-heavy `chat` problem.
+
+**Keep when**: `docs` / `status` where a system or process is the legitimate subject (`der Job läuft nachts`, `the cache expires`); register that forbids `du` / direct address — then name the actor, don't invent a `you`. Never flip Sie ↔ du to manufacture nearness — the address form is a protected span, not flavor.
+
+## 23. False universals (lazy extremes)
+
+**Pattern**: a sweeping quantifier — `immer / nie / jede(r) / alle / niemand / keiner`, `always / never / every / everyone / nobody` — props up a vague claim with no scope, number, or actor, manufacturing authority instead of a concrete statement. Density- and context-flagged, not a ban: a single grounded universal passes.
+
+```
+❌ Gute Entwickler schreiben immer Tests. Niemand liest die Doku. Jedes Startup macht denselben Fehler.
+❌ Good engineers always write tests. Nobody reads the docs. Every startup makes the same mistake.
+```
+
+```
+✅ Die meisten Bugs hier kamen aus ungetestetem Code. In den letzten drei Reviews hat niemand die Doku aufgeschlagen.
+✅ Most of our bugs came from untested code. In the last three reviews nobody opened the docs.
+```
+
+**Default action**: replace the sweep with the real scope — a number, a timeframe, a named group. Handle as `Tier 2` when several cluster in a paragraph, `Tier 3` at whole-text density; do not kill on a single occurrence.
+
+**Keep when**: a genuine invariant in a spec, rule, contract, or API guarantee (`das Feld ist immer gesetzt`, `the request is never retried`); quoted text. These are protected spans, not vague extremes.
+
+## 24. Meta-joiners and self-referential asides
+
+**Pattern**: the text narrates its own structure or previews itself instead of moving — `Im Folgenden zeige ich dir …`, `Lass mich dich durch … führen`, `In diesem Abschnitt …`, `Wie wir gleich sehen werden …`, `Let me walk you through …`, `In this section, we'll …`, `The rest of this essay …`, `As we'll see …`. Also drop-in aside markers: `Kleiner Hinweis:`, `Plot twist:`, `Spoiler:`.
+
+```
+❌ Lass mich dich durch die drei Schritte führen. Im Folgenden zeige ich dir, wie das Deployment abläuft.
+❌ Let me walk you through the three steps. In this section, we'll see how the deployment works.
+```
+
+```
+✅ Das Deployment läuft in drei Schritten:
+✅ The deployment runs in three steps:
+```
+
+**Default action**: delete the joiner, start with the content — the heading or the next sentence already announces what follows. `Tier 1`, replace/delete by default.
+
+**Keep when**: a real cross-reference the reader needs to navigate (`siehe Abschnitt 4`, `details in the appendix`) — that is navigation, not throat-clearing.
+
+## 25. Redundant "Fazit" / conclusion split
+
+**Pattern**: a short doc, note, or release entry gets a dedicated `## Fazit` / `## Zusammenfassung` / `## In conclusion` heading whose body only restates what was already said. A separate conclusion is legitimate in a long paper or formal report; in a README, changelog, issue reply, or short note it is padding.
+
+```
+❌ ## Fazit
+❌ Zusammenfassend lässt sich sagen, dass der Ansatz überzeugt.
+```
+
+```
+✅ (drop the heading; fold the one real point into the last paragraph, or delete it if it adds nothing)
+```
+
+**Default action**: merge or delete; `Tier 2`, flags in `README` / `release-note` / `docs` / `public-writing`.
+
+**Keep when**: an academic paper, thesis, or formal report where a standalone `Fazit` / `Conclusion` section is a required structural element.
+
+## 26. LLM output artifacts and tool-call leakage
+
+**Pattern**: raw model or tool output that leaked into the copy — never intended content. Unlike a style tic, there is no scene/Tier calibration: these are errors, always strip.
+
+- Chatbot sign-offs / self-reference: `Certainly!`, `I hope this helps`, `Als KI-Sprachmodell …`, `Ich hoffe, das hilft weiter!`
+- Knowledge-cutoff disclaimers: `Stand: [Datum]`, `Bis zu meinem letzten Trainingsstand`, `as of my last update`
+- Unresolved tool/search placeholders: `Gehe zu Suche Nr. 1`, `[search]`, `(siehe Suchergebnis)`
+- Citation-markup bleed: `oaicite`, `contentReference`, stray inline citation tokens
+
+```
+❌ Der Fehler wurde behoben. (Als KI-Sprachmodell hoffe ich, das hilft!)
+✅ Der Fehler wurde behoben.
+```
+
+**Default action**: delete the artifact outright. `Tier 1`, all scenes.
+
+**Keep when**: inside a literal code block, or when the artifact itself is the subject (docs explaining LLM output formats). Distinct from #24 meta-joiners: those are stylistic, these are broken rendering.

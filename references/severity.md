@@ -12,7 +12,11 @@
 
 **Typical German words**: von entscheidender Bedeutung, es ist wichtig zu beachten, zusammenfassend lässt sich sagen, bahnbrechend, wegweisend, leveragen, aufs nächste Level heben, ganzheitlich, Mehrwert generieren, zielführend, Deep Dive, Gamechanger, eine Optimierung vornehmen, stellt … dar, ebnet den Weg für
 
+**Typical German meta-joiners** (self-referential asides, see `structures.md` #24): im Folgenden zeige ich dir, lass mich dich durch … führen, in diesem Abschnitt, wie wir gleich sehen werden, kleiner Hinweis
+
 **Typical English words**: delve, landscape, tapestry, leverage, pivotal, testament, showcases, underscores, nestled, vibrant, groundbreaking, game-changer, serves as
+
+**Typical English meta-joiners** (see `structures.md` #24): let me walk you through, in this section we'll, the rest of this essay, as we'll see, plot twist, spoiler
 
 ---
 
@@ -29,6 +33,8 @@
 **Typical German words**: zudem, darüber hinaus, des Weiteren, gleichzeitig, folglich, maßgeblich, essenziell, facettenreich, nahtlos, dynamisch, transformativ, Eckpfeiler
 
 **Typical English words**: harness, navigate, foster, elevate, unleash, nuanced, crucial, multifaceted, transformative, cornerstone, paramount
+
+**False universals** (lazy extremes, see `structures.md` #23): `immer, nie, jede(r), alle, niemand, keiner` / `always, never, every, everyone, nobody` — flag as Tier 2 when several cluster in a paragraph propping up vague claims, Tier 3 at whole-text density. A single grounded universal, or a genuine invariant (protection #13), passes.
 
 ---
 
@@ -80,3 +86,4 @@ Even on a table hit, do not change in these cases:
 10. **Real debug dialogue with concrete evidence**: if the dialogue has concrete parameters, actions, durations, and observed results, technical colloquialisms like `Root Cause`, `dichtgemacht` may be kept
 11. **English words inside German sentences (Denglisch)**: judge by the word's actual meaning in the current sentence, don't mechanically apply the `phrases-en` table. `Der Leverage-Punkt liegt im Cache` — `Leverage` is business jargon, handle it; `mit 10x Leverage shorten` — `Leverage` is a finance term, keep it
 12. **German register / address form**: do not flip Sie ↔ du to "sound more human"; the address form is part of fidelity, not flavor
+13. **Genuine invariants**: a universal that states a real rule, spec, contract, or API guarantee (`das Feld ist immer gesetzt`, `the request is never retried`) is a fact, not a lazy extreme — keep it

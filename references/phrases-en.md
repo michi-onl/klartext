@@ -1,6 +1,6 @@
 # English Banned Phrases
 
-> Sources: humanizer, stop-slop, avoid-ai-writing, beautiful_prose.
+> Sources: humanizer, stop-slop, avoid-ai-writing, beautiful_prose, Kobak et al. 2024 (excess-vocabulary method, arXiv 2406.07016, CC-BY-SA — method only, no text reused), Liang et al. 2023 (ESL false-positive baseline, arXiv 2304.02819).
 
 ## Tier 1: Replace by default
 

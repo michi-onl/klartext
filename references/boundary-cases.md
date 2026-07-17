@@ -2,6 +2,8 @@
 
 These examples don't show "how to edit harder"; they show "when to edit lightly and when not to false-positive".
 
+**Why the floor matters**: Liang et al. (2023, arXiv 2304.02819) found AI detectors falsely flagged ~61% of non-native (L2) English essays as machine-written, because low lexical variety and uniform sentence length also describe careful human and second-language writing. The lesson for a rewrite tool is the mirror image: never edit on a single surface signal, and don't sand every irregularity smooth — over-correction pushes real human text toward the AI statistical profile. klartext calibrates by scene, Tier, density, and protected spans precisely to avoid this misfire.
+
 ## 1. Technical status update
 
 ### Original
@@ -221,3 +223,23 @@ Das Gateway hat im Lasttest den Peak von 24.000 QPS aufgefangen, die Request-Tim
 
 - Don't mechanically change `den Peak von 24.000 QPS aufgefangen` into a vague "Performance ist gut"
 - Don't delete `0,3 %`, `Degradierung`, `Downstream-Pool` — the technical basis for the judgment
+
+## 11. Denglisch developer verbs (over-correction trap)
+
+### Original
+
+Wir haben den Fix gestern deployt und auf main gepusht, den Branch danach gemerged.
+
+### Recommended edit
+
+Wir haben den Fix gestern deployt und auf main gepusht, den Branch danach gemergt.
+
+### Why this way
+
+- No real change. Conjugated English dev verbs (`deployt`, `gepusht`, `gemergt`, `gecommittet`) are the authentic developer register; only the spelling `gemerged → gemergt` is normalized
+- "Correcting" them into Standard German (`deployt → in Betrieb genommen`, `gecommittet → zur Versionskontrolle übergeben`) reads stiffer, loses precision, and is exactly the over-formalization that flattens human text toward the AI mean (see the L2 false-positive note above)
+
+### What not to change
+
+- Don't formalize `deployt / gepusht / gemergt / gecommittet` into Standard-German paraphrases
+- Don't treat this Denglisch as register mixing — in a dev context it is the register

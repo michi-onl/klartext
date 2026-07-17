@@ -1,6 +1,6 @@
 # Deutsche Floskel-Liste / German Banned Phrases
 
-> Quellen: Beobachtung alltäglicher KI-Ausgaben auf Deutsch, Nominalstil-/Behördendeutsch-Kritik, LinkedIn-/Ratgeber-KI-Deutsch, Community-Feedback (heise, r/de, ComputerBase).
+> Quellen: Beobachtung alltäglicher KI-Ausgaben auf Deutsch, Nominalstil-/Behördendeutsch-Kritik, LinkedIn-/Ratgeber-KI-Deutsch, Community-Feedback (heise, r/de, ComputerBase), Übersetzungs-/Post-Editese-Forschung, Wikipedia:Anzeichen für KI-generierte Inhalte (CC-BY-SA, nur paraphrasiert, kein Textübernahme).
 
 This table lists representative items only; it does not chase every synonym. For a new phrasing not listed, first check whether it is a variant of an existing pattern; only add a new entry when no pattern fits, or the false-positive boundary changes.
 
@@ -133,6 +133,20 @@ Keep literal technical uses. `Der Dienst skaliert horizontal auf drei Knoten.` b
 - In diesem Beitrag werden wir untersuchen …
 - Wie wir sehen werden …
 - Hier ist ein/eine …
+
+### Übersetzungs-Kalken / Calqued English idioms
+
+English idioms translated word-for-word — grammatically fine, but idiomatic anomalies a native speaker rarely produces. A tell of translationese / post-editese (German drafted from an English prompt).
+
+- außerhalb der Box denken → quer denken, neu denken
+- am Ende des Tages → löschen, direkt den Punkt sagen
+- das Beste aus beiden Welten → beide Vorteile zusammen
+- den Ball ins Rollen bringen → anstoßen, starten
+- die Extrameile gehen → sich besonders reinhängen
+- der Elefant im Raum → das offensichtliche Problem
+- auf derselben Seite sein → einig sein, abgestimmt sein
+
+Guard: real German speakers do drop one of these now and then. Flag when they cluster, or sit in otherwise formal AI-German; keep a single one in genuinely casual speech, and keep any inside a direct quote.
 
 ## Tier 2: Flag when 2+ appear in one paragraph
 
