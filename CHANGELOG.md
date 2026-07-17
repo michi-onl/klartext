@@ -7,7 +7,7 @@ This repository is **klartext**, a German-English fork of [shuorenhua (说人话
 
 ## [0.1.0] - 2026-07-17 — German-English fork
 
-Forked from shuorenhua v2.0.0. The method is inherited; the language core is not.
+Forked from shuorenhua at `bbcb006` — v2.0.0 plus two post-release docs commits (ChatGPT GPT link update, README eval-section touch-up). The method is inherited; the language core is not.
 
 ### Added
 - `references/phrases-de.md`: German AI stock phrases, re-derived from German sources rather than translated from the Chinese table.
