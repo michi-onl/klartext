@@ -1,27 +1,27 @@
 # Benchmark Rewrite Prompt
 
-把下面这段 prompt 直接用于模型实跑。它只负责让被测模型按规则处理指定盲测区间，不负责判分。
+Use the prompt below directly in a model run. It only makes the model under test process a given blind range by the rules; it does not score.
 
-> 2026-07-11 起改盲测口径：被测模型只读 `evals/benchmark-blind.md`（匿名编号、乱序、无预期），不再读取 `benchmark.md` 和 `run-eval.md`——它们含预期与判分标准，被测模型读了本轮结果作废。
+> Blind standard: the model under test reads only `evals/benchmark-blind.md` (anonymized IDs, shuffled, no expectations), not `benchmark.md` or `run-eval.md` — those carry expectations and scoring criteria, and reading them voids the run.
 
 ```text
-你正在执行「说人话」benchmark 盲测改写实跑。你的任务是作为被测模型，按当前仓库规则处理指定区间的盲测用例，并输出稳定、可被 judge 对照的结果。
+You are running the klartext benchmark blind rewrite. As the model under test, process the given range of blind cases by the current repo rules, and output a stable, judge-comparable result. You work on German and English text.
 
-路径边界：
-- 只使用当前工作目录里的 `./SKILL.md`、`./references/`、`./evals/benchmark-blind.md` 和 `./automation/eval/rewrite-prompt.md`。
-- 禁止读取 `./evals/` 下除 `benchmark-blind.md` 外的任何文件：其余文件含预期与判分口径，读了本轮实跑作废。
-- SKILL.md 第 6 步引用的「场景样本评测」在本轮实跑中跳过，不要读取。
-- 不要读取或引用全局安装副本，例如 `~/.codex/skills/shuorenhua`、`~/.claude/skills/shuorenhua` 或其他仓库外路径。
-- 如果某个全局 skill 被自动触发，也只能把它当作运行环境噪音；本轮实跑口径以当前工作目录文件为准。
+Path boundary:
+- Use only `./SKILL.md`, `./references/`, `./evals/benchmark-blind.md`, and `./automation/eval/rewrite-prompt.md` in the current working directory.
+- Do not read any file under `./evals/` other than `benchmark-blind.md`: the rest carry expectations and scoring standards, and reading them voids this run.
+- The "Scenario Sample Eval Pack" referenced by SKILL.md step 6 is skipped in this run; do not read it.
+- Do not read or reference a globally installed copy such as `~/.codex/skills/klartext`, `~/.claude/skills/klartext`, or any path outside the repo.
+- If a global skill is auto-triggered, treat it as environment noise; this run's standard is the current working-directory files.
 
-开始前先读取：
+Read first:
 - ./SKILL.md
 - ./evals/benchmark-blind.md
 
-再按需读取：
+Then read as needed:
 - ./references/positive-style.md
 - ./references/protected-spans.md
-- ./references/phrases-zh.md
+- ./references/phrases-de.md
 - ./references/phrases-en.md
 - ./references/structures.md
 - ./references/severity.md
@@ -31,50 +31,48 @@
 - ./references/scene-packs.md
 - ./references/boundary-cases.md
 
-输入会指定一个盲测区间，例如：
-- B-01 到 B-16
-- B-17 到 B-32
-- B-33 到 B-48
-- B-49 到 B-64
-- B-65 到 B-80
+The input specifies a blind range, e.g.:
+- B-01 to B-15
+- B-16 to B-30
+- B-31 to B-44
 
-每条用例的字段以 ./evals/benchmark-blind.md 为准：
-- 标题行：盲测编号 / 场景
-- 测试文本：标题后的引用块或代码块
+Each case's fields come from ./evals/benchmark-blind.md:
+- Title line: blind ID / scene
+- Test text: the quote or code block after the title
 
-处理要求：
+Requirements:
 
-1. 逐条处理指定区间内的所有用例，不要跳过、合并或增删编号。
-2. 每条先输出判定链，再输出处理结果。
-3. 判定链固定包含四项，各用一个短语：
-   - 场景：chat / status / docs / public-writing / code-context，必要时带 README / release-note / forum-post / issue-reply / long
-   - Tier：Tier 1 / Tier 2 / Tier 3 / protected / not-fix
-   - 力度：minimal / standard / aggressive / audit-only / no-op
-   - scope：structural / bounded / in-place / not-applicable
-4. 该改就改：默认输出改写结果；如果按规则属于 audit-only（例如 status/docs 场景的无源引用），输出风险说明，不要伪装成已证实事实。
-5. 按规则不该改的保持原文，并说明按哪条规则放行；如果只做最小无害调整，必须说明为什么没有误杀 protected spans、术语、引用或合理语境。
-6. code-context 只处理注释、docstring 或 commit message，不改代码。
-7. Scene Packs 先保大场景和 protected spans，再按 README / release-note / forum-post / issue-reply 的发布目的处理。
-8. scope 判为 in-place 时不删整句、不合并相邻句、不重排段落。
-9. scope 判为 bounded 时句内洗实句，整句空话进「建议删除（待确认）」清单；不得把实句、带信息句或承担节奏的句子放进删除清单；不得把相邻句合并。
+1. Process every case in the given range one by one; don't skip, merge, or add/remove IDs.
+2. For each case, output the decision chain first, then the result.
+3. The decision chain always has four items, each a short phrase:
+   - Scene: chat / status / docs / public-writing / code-context, with README / release-note / forum-post / issue-reply / long where needed
+   - Tier: Tier 1 / Tier 2 / Tier 3 / protected / not-fix
+   - Level: minimal / standard / aggressive / audit-only / no-op
+   - scope: structural / bounded / in-place / not-applicable
+4. Change what should change: output the rewrite by default; if the rule says audit-only (e.g. unsourced citation in status/docs), output the risk note, don't fake proof.
+5. Keep what the rules say to keep, and state which rule passed it; if you made a minimal harmless adjustment, state why it didn't false-positive protected spans, terms, quotes, or a reasonable context.
+6. code-context: only comments, docstrings, or commit messages, never the code.
+7. Scene Packs: keep the main scene and protected spans first, then handle by README / release-note / forum-post / issue-reply publishing intent.
+8. When scope is in-place: don't delete whole sentences, merge adjacent sentences, or reorder paragraphs.
+9. When scope is bounded: clean real sentences intra-sentence, route whole empty sentences into a "Suggested deletions (to confirm)" list; don't put real, information-bearing, or rhythm-bearing sentences on the list; don't merge adjacent sentences.
 
-输出格式必须严格如下：
+Output format must be exactly:
 
-## <盲测编号>
+## <blind ID>
 
-判定链：场景=<...>；Tier=<...>；力度=<...>；scope=<...>
+Decision chain: scene=<...>; Tier=<...>; level=<...>; scope=<...>
 
-命中项：
-- <命中的问题类型、保护点或放行理由>
+Hits:
+- <the problem type hit, the protected point, or the pass reason>
 
-处理结果：
-<改写稿、audit-only 风险说明、或保留原文说明>
+Result:
+<the rewrite, the audit-only risk note, or the keep-original note>
 
-禁止：
-- 不要猜测或标注用例属于「该改」还是「不该改」的评测分类；按规则处理即可。
-- 不要输出自评通过 / 部分通过 / 未通过；判分是 judge 的事。
-- 不要跳过用例。
-- 不要把多条用例合并到一个标题下。
-- 不要改 `## <盲测编号>` 和 `判定链：场景=...；Tier=...；力度=...；scope=...` 这两个格式。
-- 不要为了让结果更好看而编造原文没有的来源、数据、责任主体、命令、版本号或指标。
+Forbidden:
+- Don't guess or label whether a case is "should fix" or "should not fix"; just process by the rules.
+- Don't self-score pass / partial / fail; scoring is the judge's job.
+- Don't skip cases.
+- Don't merge several cases under one title.
+- Don't change the two format lines `## <blind ID>` and `Decision chain: scene=...; Tier=...; level=...; scope=...`.
+- Don't invent sources, data, responsible subjects, commands, version numbers, or metrics the original lacks, to make the result look better.
 ```
