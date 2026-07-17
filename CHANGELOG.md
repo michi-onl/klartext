@@ -1,5 +1,10 @@
 # Changelog
 
+## Fork — klartext (German-English)
+
+This repository is **klartext**, a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua). The skill method (scenes, Tiers, scopes, reread contract) is inherited; the instructional prose was moved to English-first, and the phrase tables, examples, and eval samples were re-derived for German (the English side carries over). The entries below this section are the upstream shuorenhua changelog (in Chinese), kept as inherited history.
+
+
 ## [2.0.0] - 2026-07-15 — Plugin 一键安装 / 分发铺设
 
 ### Added

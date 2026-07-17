@@ -92,8 +92,8 @@ Before:
 After:
 
 > - Neu: `references/scene-packs.md`, deckt README, Release Note, Forum-Post und Issue-Antwort ab
-> - `evals/benchmark.md`: 8 neue Scene-Pack-Regressionsfälle
-> - Neu: `evals/results-v1.8.0.md` mit den Ergebnissen dieser Runde
+> - `evals/benchmark.md`: 4 neue Scene-Pack-Regressionsfälle (SF-25 bis SF-28)
+> - `evals/real-samples.md`: 2 neue Szenario-Samples (RS-01 README, RS-02 Release Note)
 
 ## `forum-post`
 
