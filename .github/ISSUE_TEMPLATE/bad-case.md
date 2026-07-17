@@ -1,39 +1,40 @@
 ---
-name: Bad case / 改完还是像 AI
-about: 提交一段“说人话”没处理好的文本，帮助改进规则和评测
+name: Bad case / still sounds AI
+about: Submit a text klartext didn't handle well, to improve the rules and evals
 title: "[bad case] "
 labels: bad-case
 assignees: ""
 ---
 
-## 原文
+## Original
 
-请贴出原文或已脱敏片段。不要提交未授权的私聊全文、敏感信息、账号、密钥、内部链接或真实个人身份信息。
+Paste the original or a redacted snippet. Don't submit unauthorized full private chats, sensitive info, accounts, secrets, internal links, or real personal identity data.
 
 ```text
 
 ```
 
-## 使用方式
+## Usage
 
-- 工具：Codex / Claude Code / Cursor / ChatGPT / OpenClaw / 其他
-- 加载方式：lite（只加载 `SKILL.md`）/ full（`SKILL.md` + `references/`）/ 不确定
-- 场景：chat / status / docs / public-writing / code-context / mixed
+- Tool: Codex / Claude Code / Cursor / ChatGPT / OpenClaw / other
+- Load mode: lite (only `SKILL.md`) / full (`SKILL.md` + `references/`) / not sure
+- Scene: chat / status / docs / public-writing / code-context / mixed
+- Language: German / English / mixed (Denglisch)
 
-## 问题
+## Problem
 
-你觉得哪里还是像 AI？可以只写最刺眼的一两处。
-
--
-
-## 不能改坏什么
-
-请列出需要保留的事实、术语、命令、路径、版本、引用原文、责任主体或语气边界。
+Where does it still sound AI? Just the one or two most jarring spots is fine.
 
 -
 
-## 期望方向
+## What must not be broken
 
-你希望它更接近哪种表达？例如：更像普通聊天、更像维护者回复、更像 release note、更保守、更短。
+List facts, terms, commands, paths, versions, quoted text, responsible subjects, or tone/register boundaries (including Sie/du) that must be preserved.
+
+-
+
+## Desired direction
+
+Which expression should it get closer to? E.g. more like normal chat, more like a maintainer reply, more like a release note, more conservative, shorter.
 
 -

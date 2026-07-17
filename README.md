@@ -1,257 +1,242 @@
-<h1 align="center">说人话：中文 AI 味清理 skill</h1>
+<h1 align="center">klartext — German-English de-AI rewrite skill</h1>
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-    <img src="assets/banner-light.svg" alt="说人话：中文 AI 味清理 skill — 先保信息，再谈风格" width="100%">
-  </picture>
+  <strong>Don't let the model put on airs for you.</strong>
 </p>
 
 <p align="center">
-  <strong>别让模型替你装腔。</strong>
-</p>
-
-<p align="center">
-  给 Codex、Claude Code、Cursor、ChatGPT 和自建 agent 用。
+  For Codex, Claude Code, Cursor, ChatGPT, and custom agents.
   <br>
-  改聊天、技术同步、README、论坛帖和中文长文：先保住事实，再把那股“一眼 AI”的腔调降下来。
+  Cleans chat, technical sync, README, forum posts, and long-form German text: keep the facts first, then take that "instantly AI" tone down.
 </p>
 
 <p align="center">
-  <a href="https://github.com/MrGeDiao/shuorenhua/stargazers"><img src="https://img.shields.io/github/stars/MrGeDiao/shuorenhua?style=for-the-badge&amp;label=stars" alt="GitHub stars"></a>
-  <a href="https://github.com/MrGeDiao/shuorenhua/releases"><img src="https://img.shields.io/github/v/release/MrGeDiao/shuorenhua?style=for-the-badge&amp;label=release" alt="GitHub release"></a>
-  <a href="evals/benchmark.md"><img src="https://img.shields.io/badge/benchmark-80%20cases-2563eb?style=for-the-badge" alt="Benchmark: 80 cases"></a>
-  <a href="evals/real-samples.md"><img src="https://img.shields.io/badge/scenario%20samples-19-16a34a?style=for-the-badge" alt="Scenario samples: 19"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/MrGeDiao/shuorenhua?style=for-the-badge" alt="License"></a>
+  <a href="https://github.com/michi-onl/shuorenhua/stargazers"><img src="https://img.shields.io/github/stars/michi-onl/shuorenhua?style=for-the-badge&amp;label=stars" alt="GitHub stars"></a>
+  <a href="https://github.com/michi-onl/shuorenhua/releases"><img src="https://img.shields.io/github/v/release/michi-onl/shuorenhua?style=for-the-badge&amp;label=release" alt="GitHub release"></a>
+  <a href="evals/benchmark.md"><img src="https://img.shields.io/badge/benchmark-44%20cases-2563eb?style=for-the-badge" alt="Benchmark: 44 cases"></a>
+  <a href="evals/real-samples.md"><img src="https://img.shields.io/badge/scenario%20samples-10-16a34a?style=for-the-badge" alt="Scenario samples: 10"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/michi-onl/shuorenhua?style=for-the-badge" alt="License"></a>
 </p>
 
 <p align="center">
-  <a href="#改成什么样">改成什么样</a> ·
-  <a href="#30-秒上手">30 秒上手</a> ·
-  <a href="#它怎么判断怎么改">怎么改</a> ·
-  <a href="#评测">评测</a> ·
-  <a href="#安装">安装</a> ·
-  <a href="#常见问题">FAQ</a>
+  <a href="#what-it-becomes">What it becomes</a> ·
+  <a href="#30-second-start">30-second start</a> ·
+  <a href="#how-it-decides">How it decides</a> ·
+  <a href="#evaluation">Evaluation</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#faq">FAQ</a>
 </p>
 
-`说人话` 专治那种“每个字都对，但一看就不是你写的”中文。它不把空话包装得更漂亮，也不替你编新事实；它先护住版本、命令、责任和证据，再拆掉过度承接、工程师腔、小红书 AI 腔、翻译腔和无源权威铺垫。目标很简单：改完你敢直接发。
+> **Auf Deutsch:** `klartext` reinigt genau das Deutsch, bei dem jedes Wort stimmt, aber sofort klar ist, dass es nicht von dir kommt. Es macht Floskeln nicht hübscher und erfindet keine Fakten; es sichert erst Versionen, Befehle, Verantwortung und Belege, dann räumt es Übermaß-Empathie, Ingenieurssprech, Influencer-Ton, Nominalstil und quellenlose Autoritätsfloskeln weg. Ziel: Nach dem Umschreiben kannst du es direkt abschicken.
 
-它适合这些场景：
+`klartext` is a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua), which does the same job for Chinese and English. Same method — scenes, Tiers, scopes, reread contract — but the phrase tables and examples are re-derived for German. It targets the text where every word is correct but you can tell at a glance it wasn't written by you. It doesn't dress empty phrases up prettier and it doesn't invent facts; it locks down versions, commands, ownership, and evidence first, then strips over-catching, engineer-speak, influencer tone, Nominalstil, and unsourced authority framing.
 
-| 场景 | 它会做什么 |
-|------|------------|
-| 日常聊天 | 删掉过度承接、推销式结尾和工程汇报腔，保留口语感 |
-| 技术状态同步 | 保住事实、版本、命令、报错和责任归属，压低套话 |
-| README / release note | 先讲清楚项目、变更、验证和限制，不写发布宣言 |
-| 论坛帖 / issue 回复 | 像维护者在认真沟通，不像客服公告或营销稿 |
-| 中文长文 | 句内清理保住节奏，整句空话列「建议删除」清单交你确认，不让长文越改越短 |
+It fits these scenes:
 
-英文去 AI 味已经有 [stop-slop](https://github.com/hardikpandya/stop-slop) 和 [humanizer](https://github.com/blader/humanizer)。`说人话` 补的是中文这一层：这些腔调在中文里长什么样、按发布场景分档处理、改写前先锁住事实。
+| Scene | What it does |
+|-------|--------------|
+| Everyday chat | remove over-catching, salesy endings, and report voice; keep the colloquial feel |
+| Technical status sync | keep facts, versions, commands, errors, and ownership; lower the phrases |
+| README / release note | say the project, changes, verification, and limits clearly; no release manifesto |
+| Forum post / issue reply | sound like a maintainer talking, not a customer-service announcement |
+| Long-form German | clean intra-sentence to keep the rhythm; whole empty sentences go on a "Suggested deletions" list you confirm, so long text doesn't shrink out of control |
 
-## 改成什么样
+English de-AI already has [stop-slop](https://github.com/hardikpandya/stop-slop) and [humanizer](https://github.com/blader/humanizer). `klartext` adds the German layer: what these tones look like in German, tiered by publishing scene, with facts locked before the rewrite.
 
-### 聊天答疑，先颁奖再推销
+## What it becomes
 
-**改写前**
+### Chat answer, award first then upsell
 
-> 你说的很对，这个问题一针见血。一句话总结：核心逻辑是先把流程跑通，再谈优化。我可以直接给你一版绝对没问题的最终方案，已经测试通过了，稳得很。要不要我顺手把文档也整理了？你一句话的事。
+**Before**
 
-**改写后**
+> Großartige Frage, du triffst damit voll den Kern! Kurz gesagt: Erst den Flow zum Laufen bringen, dann optimieren. Ich kann dir direkt eine absolut sichere finale Lösung geben, schon getestet, läuft rund. Soll ich dir die Doku gleich mit aufräumen? Nur ein Wort von dir.
 
-> 对，问题就在这：先把流程跑通，再谈优化。方案我发你。文档要不要一起弄？
+**After**
 
-开头发奖状、结尾追着卖，中间「一句话总结」「核心逻辑」轮着上——这条姿态链社区早就逐个点过名（[Linux.do 句式征集帖](https://linux.do/t/topic/1898176)、[「对象说我说话一股子AI味」](https://linux.do/t/topic/1765637)）。文本为合成示例，把被点名最多的口癖压进了一段。
+> Genau da liegt's: erst den Flow zum Laufen bringen, dann optimieren. Die Lösung schick ich dir. Doku auch mit dazu?
 
-### 发版感言，不见变更
+An award up front, an upsell chasing at the end, "kurz gesagt" and "der Kern" rotating in the middle — a posture chain that reads instantly as AI. The text is a synthetic example that packs the most-flagged tics into one paragraph.
 
-**改写前**
+### Release note, no changes in sight
+
+**Before**
 
 > ## v1.8.0 Release Highlights
 >
-> 本次版本是一次面向真实场景的系统性升级。我们不仅全面优化了改写体验，更通过全新的能力矩阵稳稳兜住了用户在 README、release note、论坛长帖和 issue 回复里的核心表达诉求。感谢所有用户的持续支持，让我们共同见证中文 AI 写作体验的全新跃迁。
+> Diese Version ist ein zukunftsweisendes, systemisches Upgrade. Wir haben nicht nur das Rewrite-Erlebnis rundum optimiert, sondern mit einer völlig neuen Fähigkeitsmatrix die zentralen Ausdrucksbedürfnisse der Nutzer in README, Release Note, Forum-Post und Issue-Antwort sicher aufgefangen. Danke an alle für die anhaltende Unterstützung!
 
-**改写后**
+**After**
 
 > ## v1.8.0
 >
-> - 新增 `references/scene-packs.md`，覆盖 README、release note、forum post 和 issue reply
-> - `evals/benchmark.md` 增加 8 条 scene pack 回归用例
-> - `evals/real-samples.md` 增加 4 条整段样本，继续按自然 / 保真 / 可直接发评分
+> - Neu: `references/scene-packs.md`, deckt README, Release Note, Forum-Post und Issue-Antwort ab
+> - `evals/benchmark.md`: 4 neue Scene-Pack-Regressionsfälle
+> - `evals/real-samples.md`: 2 neue Szenario-Samples
 >
-> 这版不做 Voice Calibration；相关方向推迟到 v1.9 评估。
+> Diese Version macht keine Voice Calibration; das Thema wird auf später verschoben.
 
-release note 的读者要的是变更清单，不是发布宣言。版本号保住，姿态层拆掉，没做的事也写出来。完整样本见 [evals/real-samples.md](evals/real-samples.md) RS-16。
+A release-note reader wants the change list, not a manifesto. Keep the version number, strip the posture layer, and write down what wasn't done too. Full sample in [evals/real-samples.md](evals/real-samples.md) RS-02.
 
-### 公开介绍的宏大开场
+### The grand opening of a public intro
 
-**改写前**
+**Before**
 
-> 在当今快速发展的人工智能时代，如何打造一个真正赋能开发者的工具，已经成为业界不容忽视的关键议题。
+> In einer Zeit, in der KI die Softwareentwicklung grundlegend neu gestaltet, ist die Frage, wie man ein wahrhaft entwickler-befähigendes Tool schafft, zu einer nicht zu unterschätzenden Schlüsselfrage der Branche geworden.
 
-**改写后**
+**After**
 
-> AI 工具很多，但改完的中文常常还留着套话。这个项目专门清这些残味：过度承接、工程师腔、翻译腔、无源权威和自我拔高。
+> Es gibt viele KI-Tools, aber das umgeschriebene Deutsch trägt oft noch Floskeln. Dieses Projekt räumt genau die weg: Übermaß-Empathie, Ingenieurssprech, Nominalstil, quellenlose Autorität und Selbstaufwertung.
 
-更多例子见 [references/examples.md](references/examples.md) 和 [evals/real-samples.md](evals/real-samples.md)。
+More examples in [references/examples.md](references/examples.md) and [evals/real-samples.md](evals/real-samples.md).
 
-## 30 秒上手
+## 30-second start
 
-**先试效果，什么都不用装** — [说人话 GPT](https://chatgpt.com/g/g-6a5829b1163481919e1e45851f6bc709-shuo-ren-hua)（ChatGPT，需 Plus / Pro），完整规则已内置，贴文本就能改。
-
-**Claude Code** — 对话里两条命令装完，之后自动触发：
+**Claude Code** — two commands in the conversation, then it triggers automatically:
 
 ```text
-/plugin marketplace add MrGeDiao/shuorenhua
-/plugin install shuorenhua@shuorenhua
+/plugin marketplace add michi-onl/shuorenhua
+/plugin install klartext@klartext
 ```
 
-装好后在对话里说「把这段去 AI 味」就会命中。手动安装（cp / 软链跟随更新）见 [install/claude-code.md](install/claude-code.md)。
+Once installed, say "de-AI this / mach das auf Deutsch natürlicher" in the conversation and it triggers. Manual install (cp / symlink to follow updates) in [install/claude-code.md](install/claude-code.md).
 
-**Codex** — clone 后单次使用：
+**Codex** — one-off use after clone:
 
 ```bash
-git clone https://github.com/MrGeDiao/shuorenhua.git && cd shuorenhua
-codex exec -C . "读取 ./SKILL.md，按其中规则改写以下文本：……"
+git clone https://github.com/michi-onl/shuorenhua.git && cd shuorenhua
+codex exec -C . "Read ./SKILL.md and rewrite the following text by its rules: …"
 ```
 
-项目内长期使用建议把 skill 文件拷进项目并在 `AGENTS.md` 写明触发条件，见 [install/codex.md](install/codex.md)。
+For long-term project use, copy the skill files into the project and note the trigger in `AGENTS.md`; see [install/codex.md](install/codex.md).
 
-**只想先看问题、不要改稿**：指令里加一句「按 annotation mode 只标注不改写」。
+**Just want to see the problems, not a rewrite**: add "in annotation mode, only flag problems, don't rewrite" to the instruction.
 
-Cursor、OpenClaw 和自建 agent 见[安装](#安装)。
+Cursor, OpenClaw, ChatGPT, and custom agents in [Install](#install).
 
-## 它怎么判断怎么改
+## How it decides
 
-`说人话` 不是见词就替换。一句话原则：
+`klartext` doesn't replace on sight. One principle:
 
-> **先保信息，再谈风格。**
+> **Information first, then style.**
 
-完整流程固定六步：
+The full flow is six fixed steps:
 
-1. 判场景：`chat / status / docs / public-writing`；命中 README、release note、论坛帖、issue 回复时，再进对应的 Scene Pack
-2. 划保护片段：数字、版本、命令、路径、报错、引用原文、人名和责任归属先锁住（完整清单见 [references/protected-spans.md](references/protected-spans.md)）
-3. 判命中强度（`Tier 1 / 2 / 3`），再分别定改写力度（`minimal / standard / aggressive`）和 scope（`structural / bounded / in-place`）；Tier 只描述问题命中多重，不直接等于力度
-4. 先按模式改，词表只兜底
-5. 保真回读：事实、术语、语域、保护片段逐项过
-6. 仍有残味才做第二遍 Residual Audit，只允许轻量修正
+1. Detect the scene: `chat / status / docs / public-writing`; on README, release note, forum post, issue reply, enter the matching Scene Pack
+2. Mark protected spans: numbers, versions, commands, paths, errors, quotes, names, and ownership are locked first (full list in [references/protected-spans.md](references/protected-spans.md))
+3. Judge hit strength (`Tier 1 / 2 / 3`), then set rewrite level (`minimal / standard / aggressive`) and scope (`structural / bounded / in-place`); Tier only describes how strongly a problem is hit, not the strength
+4. Change by pattern first, the word table is only a fallback
+5. Fidelity reread: facts, terms, register, protected spans, one by one
+6. Only if residue remains, do a second Residual Audit, light fixes only
 
-### 场景与力度
+### Scene and strength
 
-四个场景的默认力度：
+The four scenes' default strength:
 
-| 大场景 | 默认强度 | 处理策略 |
-|--------|----------|----------|
-| `chat` | 轻 | 只砍明显套话，不把聊天改成公文 |
-| `status` | 中 | 保留动作、状态、阻塞点和下一步 |
-| `docs` | 中 | 技术表达优先，二次回读更保守 |
-| `public-writing` | 重 | 全规则扫描，并按需要触发 Scene Packs |
+| Scene | Default | Strategy |
+|-------|---------|----------|
+| `chat` | light | cut only obvious phrases, don't turn chat into an official memo |
+| `status` | medium | keep action, state, blockers, and next step |
+| `docs` | medium | technical expression first, second pass more conservative |
+| `public-writing` | heavy | full-rule scan, and trigger Scene Packs as needed |
 
-### 按发布目的细分（Scene Packs）
+### By publishing intent (Scene Packs)
 
-可发布文本再按「发到哪里」细分，不是换语气，是按发布目的决定改法：README 第一屏要说清这是什么、给谁用；release note 要列清变更、验证和限制；论坛帖像维护者分享观察和取舍，不像公司公告；issue 回复先确认问题和下一步，不做客服式安抚。每个子场景的目标和常见病灶见 [references/scene-packs.md](references/scene-packs.md)。
+Publishable text is further split by "where it's going" — not a tone change, but a change of edit by publishing purpose: a README first screen says what this is and who it's for; a release note lists the changes, verification, and limits; a forum post reads like a maintainer sharing observations, not a corporate announcement; an issue reply confirms the problem and next step, no customer-service reassurance. Each sub-scene's goal and common symptoms in [references/scene-packs.md](references/scene-packs.md).
 
-### 长文不缩水：三档 scope
+### Long-form without shrinking: three scopes
 
-长文按默认动作改写，删句、并句会叠加，1800 字可能被压到 1000 字；反过来一句不删，整句的空话又留在文里。所以长文把「删到什么程度」单独分成三档，和力度档位正交：
+Long text under the default actions accumulates sentence deletions and merges, so 1800 words might get compressed to 1000; conversely, deleting nothing leaves whole empty sentences in place. So long-form splits "how much to delete" into three scopes, orthogonal to strength:
 
-| scope | 删整句吗 | 适用 |
-|-------|----------|------|
-| `structural` | 自由删并重排 | 短文、明确要重写 |
-| `bounded`（长文默认） | 整句空话列成「建议删除（待确认）」清单，删多少你拍板 | `public-writing` 长文 |
-| `in-place` | 一句都不删，只句内降调 | 明确要求「完全原样」 |
+| scope | Delete whole sentences? | For |
+|-------|-------------------------|-----|
+| `structural` | freely delete/merge/reorder | short text, explicit rewrite |
+| `bounded` (long-form default) | whole empty sentences become a "Suggested deletions (to confirm)" list, you decide | `public-writing` long text |
+| `in-place` | delete nothing, only lower tone intra-sentence | explicit "exactly as-is" |
 
-三档的取舍过程和模型实跑数据见 [#4](https://github.com/MrGeDiao/shuorenhua/issues/4) 和 [evals/results-v1.8.6.md](evals/results-v1.8.6.md)。
+### Which way the rewrite leans
 
-### 改完往哪个方向靠
+Cleaning isn't only deletion. It also pulls the text toward:
 
-清理不是只删词。它也会把文本往这些方向拉：
+- Concrete action over abstract inflation
+- A real subject and action over posture
+- Slight asymmetry allowed, not every sentence polished into one voice
+- Calibrated by scene: chat doesn't become an announcement, docs don't become a bit
 
-- 具体动作优先于抽象拔高
-- 真主语和真动作优先于姿态层
-- 允许轻微不对称，不把每句都抛光成同一种腔
-- 按场景校准，不把聊天改成公告，也不把文档改成段子
+## Evaluation
 
-## 评测
+The rule layer covers a native German phrase table, the English phrase table ([phrases-en.md](references/phrases-en.md)), and 21 structural anti-patterns.
 
-规则层覆盖 210+ 中文短语、96 条英文短语、20 类结构反模式。
+The current benchmark has 44 cases:
 
-当前评测集共 80 条：
+| Type | Count | Goal |
+|------|-------|------|
+| SF | 30 | text that should change must hit and fix the main problem |
+| SNF | 14 | text that shouldn't be touched must pass or get a light note |
+| Scenario samples | 10 | whole-passage samples scored on natural, faithful, ship-ready; long-form adds `length rhythm` |
+| Scene Packs | 4 | README / release-note / forum-post / issue-reply cases |
+| Long-form (in-place / bounded) | 2 | keep length / deletion list, checking retention, sentence alignment, and key transitions |
 
-| 类型 | 数量 | 目标 |
-|------|------|------|
-| SF | 45 | 应该改的文本必须命中并改掉主要问题 |
-| SNF | 35 | 不该误杀的文本必须放行或轻提示 |
-| 场景样本 | 19 | 整段样本按自然、保真、可直接发三项评分，长文加 `长度节奏` |
-| Scene Packs | 8 | README / release note / forum post / issue reply 的正反样本 |
-| Long-form In-place | 4 | 长文保长度场景，检查字数留存、句数对齐和关键转场 |
-| Bounded | 3 | 长文整句空话进删除清单，但不误删实句和节奏句 |
+The benchmark uses a blind real-run standard: the model under test reads only the anonymized, shuffled [benchmark-blind.md](evals/benchmark-blind.md) (no expectations), and the judge scores via the map table. The static walk-through is a pre-release quick self-check. Full case set in [evals/benchmark.md](evals/benchmark.md); whole-passage scenario samples (high-fidelity synthetic) in [evals/real-samples.md](evals/real-samples.md). Each real run's eval-set version, model, and standard are registered in [evals/run-manifest.md](evals/run-manifest.md). No German real run is recorded yet — see the manifest.
 
-v1.9.0 起 benchmark 改为双模型实跑口径（Codex + Claude 交叉判分，见 [evals/results-v1.9.0.md](evals/results-v1.9.0.md)）；v2.0.0 起实跑盲测化：被测模型只看匿名乱序、不含预期的 [evals/benchmark-blind.md](evals/benchmark-blind.md)，judge 按映射表判分，每次实跑的评测集版本、模型和口径登记在 [evals/run-manifest.md](evals/run-manifest.md)。静态走查退为发版前快速自查。完整用例集见 [evals/benchmark.md](evals/benchmark.md)，整段场景样本（高拟真合成）见 [evals/real-samples.md](evals/real-samples.md)。`results-v1.8.6.md` 保留为 v1.8.6 首次模型实跑归档。
+## Install
 
-## 安装
-
-| 平台 | 文档 |
-|------|------|
+| Platform | Doc |
+|----------|-----|
 | Codex | [install/codex.md](install/codex.md) |
 | Claude Code | [install/claude-code.md](install/claude-code.md) |
 | Cursor / Windsurf | [install/cursor.md](install/cursor.md) |
 | OpenClaw | [install/openclaw.md](install/openclaw.md) |
 | ChatGPT / Custom GPT | [install/chatgpt.md](install/chatgpt.md) |
 
-核心只需要 `SKILL.md` 一个文件（lite）；长期项目、公开文本和需要误杀防护的场景，建议带上 `references/` 完整包（full）。
+The core needs only `SKILL.md` (lite); for long-term projects, public text, and cases needing false-positive protection, bring the full `references/` package (full).
 
-项目内长期使用时，可以在 `AGENTS.md` 加一段触发规则：
+For long-term project use, add a trigger note to `AGENTS.md`:
 
 ```markdown
-## 写作风格
-当任务涉及“去 AI 味”“说人话”“自然一点”“别像模板”这类改写时，遵循 `shuorenhua/SKILL.md`。
-对外文本优先按它处理；代码、日志、配置和命令输出不套这个 skill。
+## Writing style
+When a task involves "de-AI", "auf Deutsch natürlicher", "sound human", "not like a template", follow `klartext/SKILL.md`.
+Apply it to external text first; don't apply it to code, logs, config, or command output.
 ```
 
-## English
+## FAQ
 
-**shuorenhua (说人话)** is a Chinese-first rewrite skill for Codex, Claude Code, Cursor, and ChatGPT. It removes AI-flavored patterns in Chinese text — sycophantic openers, performative engineer-speak, translationese, unsourced authority claims — while preserving facts, numbers, commands, terminology, and attribution. It ships with an 80-case model-tested benchmark including false-positive guards, and a long-form mode that cleans up the text without shrinking it. Claude Code users can install it in two commands: `/plugin marketplace add MrGeDiao/shuorenhua`, then `/plugin install shuorenhua@shuorenhua`. Other install guides: [install/](install/). Everything else in this repo is written in Chinese.
+### Is this for fooling AI detectors?
 
-## 常见问题
+No. The goal is to reduce template feel, performance, and register drift so text is more natural and shippable — not to evade detection.
 
-### 这是不是拿来骗 AI 检测器的？
+### Can I use it for English?
 
-不是。目标是减少模板感、表演感和语域漂移，让文本更自然、更可发布，不是绕过检测。
+Yes. This is a German-English project; the English side (carried over from the upstream) cleans common English phrases and the template feel in Denglisch (German-English mixing).
 
-### 英文能不能用？
+### Why does it sometimes still sound AI after the rewrite?
 
-可以，但这是一个中文优先项目。英文支持主要用于清理常见英文套话和中英混写里的模板感。
+"Removing obvious tics" is not "having a specific author's personal voice". The current version is better at clearing template feel and performance; it doesn't fit a specific person's long-term writing habits.
 
-### 为什么改完有时还是有 AI 味？
+### Will it break technical docs?
 
-“去掉明显套路”不等于“拥有具体作者的个人表达”。当前版本更擅长清理模板感和表演感，还不负责拟合某个具体人的长期写作习惯。
+Normally it won't edit technical docs in chat voice. `docs`, `status`, and `code-context` have more conservative protection; commands, paths, versions, errors, and metrics are kept faithful first.
 
-### 会不会把技术文档改坏？
+### German-specific: does it flip Sie/du?
 
-正常不会按聊天口吻去改技术文档。`docs`、`status`、`code-context` 都有更保守的保护策略，命令、路径、版本、报错和指标优先保真。
+No. The address form (Sie vs du) and grammatical attribution are treated as protected spans; it won't silently flip them to "sound more human".
 
-## 贡献：bad case 比 star 有用
+## Contributing: a bad case beats a star
 
-欢迎提交新的评测样本、边界案例、真实问题案例、改写前后样本和误杀防护。
+New eval samples, boundary cases, real problem cases, before/after samples, and false-positive guards are welcome. If you hit a "still sounds AI after the rewrite" text, submit it via the [bad-case template](.github/ISSUE_TEMPLATE/bad-case.md). Redact first — don't paste unauthorized full private chats, secrets, internal links, or real personal identity data.
 
-如果你遇到“改完还是像 AI”的具体文本，可以用 [bad case 模板](.github/ISSUE_TEMPLATE/bad-case.md) 提交。请先脱敏，不要贴未授权私聊全文、密钥、内部链接或真实个人身份信息。也可以直接贴到[征集 issue](https://github.com/MrGeDiao/shuorenhua/issues/5)。
+Before submitting a new word, ask one thing:
 
-在提交新词之前，先想一件事：
+> Is this a "new pattern", or just "a variant of an existing pattern"?
 
-> 这是一个“新模式”，还是只是“现有模式的变体”？
+Full rules in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-详细规则见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+## Related projects
 
-## 相关项目
+- [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua): the Chinese-English upstream this fork is based on
+- [stop-slop](https://github.com/hardikpandya/stop-slop): English AI-slop rules and scoring framework
+- [humanizer](https://github.com/blader/humanizer): English AI-pattern taxonomy
+- [avoid-ai-writing](https://github.com/conorbronsdon/avoid-ai-writing): AI-writing problem taxonomy and severity reference
 
-- [stop-slop](https://github.com/hardikpandya/stop-slop)：英文 AI slop 规则和评分框架
-- [humanizer](https://github.com/blader/humanizer)：英文 AI 模式分类
-- [avoid-ai-writing](https://github.com/conorbronsdon/avoid-ai-writing)：AI 写作问题分类和严重度参考
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=MrGeDiao/shuorenhua&type=Date)](https://www.star-history.com/#MrGeDiao/shuorenhua&Date)
-
-## 许可
+## License
 
 [MIT](LICENSE)
