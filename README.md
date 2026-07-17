@@ -11,11 +11,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/michi-onl/shuorenhua/stargazers"><img src="https://img.shields.io/github/stars/michi-onl/shuorenhua?style=for-the-badge&amp;label=stars" alt="GitHub stars"></a>
-  <a href="https://github.com/michi-onl/shuorenhua/releases"><img src="https://img.shields.io/github/v/release/michi-onl/shuorenhua?style=for-the-badge&amp;label=release" alt="GitHub release"></a>
+  <a href="https://github.com/michi-onl/klartext/stargazers"><img src="https://img.shields.io/github/stars/michi-onl/klartext?style=for-the-badge&amp;label=stars" alt="GitHub stars"></a>
+  <a href="https://github.com/michi-onl/klartext/releases"><img src="https://img.shields.io/github/v/release/michi-onl/klartext?style=for-the-badge&amp;label=release" alt="GitHub release"></a>
   <a href="evals/benchmark.md"><img src="https://img.shields.io/badge/benchmark-44%20cases-2563eb?style=for-the-badge" alt="Benchmark: 44 cases"></a>
   <a href="evals/real-samples.md"><img src="https://img.shields.io/badge/scenario%20samples-10-16a34a?style=for-the-badge" alt="Scenario samples: 10"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/michi-onl/shuorenhua?style=for-the-badge" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/michi-onl/klartext?style=for-the-badge" alt="License"></a>
 </p>
 
 <p align="center">
@@ -94,7 +94,7 @@ More examples in [references/examples.md](references/examples.md) and [evals/rea
 **Claude Code** — two commands in the conversation, then it triggers automatically:
 
 ```text
-/plugin marketplace add michi-onl/shuorenhua
+/plugin marketplace add michi-onl/klartext
 /plugin install klartext@klartext
 ```
 
@@ -103,7 +103,7 @@ Once installed, say "de-AI this / mach das auf Deutsch natürlicher" in the conv
 **Codex** — one-off use after clone:
 
 ```bash
-git clone https://github.com/michi-onl/shuorenhua.git && cd shuorenhua
+git clone https://github.com/michi-onl/klartext.git && cd klartext
 codex exec -C . "Read ./SKILL.md and rewrite the following text by its rules: …"
 ```
 

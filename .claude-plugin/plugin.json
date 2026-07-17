@@ -5,8 +5,8 @@
   "author": {
     "name": "michi-onl"
   },
-  "homepage": "https://github.com/michi-onl/shuorenhua",
-  "repository": "https://github.com/michi-onl/shuorenhua",
+  "homepage": "https://github.com/michi-onl/klartext",
+  "repository": "https://github.com/michi-onl/klartext",
   "license": "MIT",
   "keywords": ["german", "english", "writing", "de-ai", "ai-slop", "rewrite"]
 }

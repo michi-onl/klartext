@@ -3,7 +3,7 @@
 ## Option 1: plugin, one command (recommended)
 
 ```text
-/plugin marketplace add michi-onl/shuorenhua
+/plugin marketplace add michi-onl/klartext
 /plugin install klartext@klartext
 ```
 
@@ -31,9 +31,9 @@ This is the full usage and the default recommendation for project-level installs
 ## Option 3: global
 
 ```bash
-git clone https://github.com/michi-onl/shuorenhua.git
+git clone https://github.com/michi-onl/klartext.git
 mkdir -p ~/.claude/skills
-cp -r shuorenhua ~/.claude/skills/klartext
+cp -r klartext ~/.claude/skills/klartext
 ```
 
 Copy the whole repo in; the extra evals and install files don't affect triggering. For a minimal install, copy only `SKILL.md` (lite) or `SKILL.md` + `references/` (full).
@@ -41,8 +41,8 @@ Copy the whole repo in; the extra evals and install files don't affect triggerin
 ## Option 4: follow updates
 
 ```bash
-git clone https://github.com/michi-onl/shuorenhua.git
-ln -s "$PWD/shuorenhua" ~/.claude/skills/klartext
+git clone https://github.com/michi-onl/klartext.git
+ln -s "$PWD/klartext" ~/.claude/skills/klartext
 ```
 
 The symlink points at your local repo, so `git pull` upgrades it — no re-copying.
