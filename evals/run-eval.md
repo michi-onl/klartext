@@ -1,107 +1,107 @@
-# 说人话 评测指令
+# klartext eval instructions
 
-> 本文件是静态走查 / 发版前快速自查的口径（评测员可见预期），也是 judge 判分标准的单源。
-> 双模型实跑的正式口径是盲测：被测模型只读 `benchmark-blind.md`，不读本文件和 `benchmark.md`，见 `automation/eval/README.md`（2026-07-11 起）。
+> This file is the standard for the static walk-through / pre-release quick self-check (evaluator sees the expectations), and the single source for the judge's scoring criteria.
+> The formal dual-model real-run standard is blind: the model under test reads only `benchmark-blind.md`, not this file or `benchmark.md`. See `automation/eval/README.md`.
 
-## 通用评测提示词
+## Generic eval prompt
 
-把以下内容直接粘贴给任意支持长上下文的模型即可运行评测：
+Paste the following to any long-context model to run the eval:
 
 ---
 
-你是一个"去 AI 味"规则的评测员。
+You are an evaluator for a "de-AI" rule set that works on German and English text.
 
-**规则文件位置：**
-- 核心入口：`./SKILL.md`
-- Positive Style Contract：`./references/positive-style.md`
-- Protected Spans：`./references/protected-spans.md`
-- 中文禁用短语表：`./references/phrases-zh.md`
-- 英文禁用短语表：`./references/phrases-en.md`
-- 结构反模式：`./references/structures.md`
-- 严重度分级：`./references/severity.md`
-- 改写示例：`./references/examples.md`
-- 微操作手册：`./references/operation-manual.md`
-- 场景禁改表：`./references/scene-guardrails.md`
-- Scene Packs：`./references/scene-packs.md`
-- 边界案例：`./references/boundary-cases.md`
+**Rule file locations:**
+- Core entry: `./SKILL.md`
+- Positive Style Contract: `./references/positive-style.md`
+- Protected Spans: `./references/protected-spans.md`
+- German banned phrases: `./references/phrases-de.md`
+- English banned phrases: `./references/phrases-en.md`
+- Structural anti-patterns: `./references/structures.md`
+- Severity: `./references/severity.md`
+- Rewrite examples: `./references/examples.md`
+- Operation manual: `./references/operation-manual.md`
+- Scene guardrails: `./references/scene-guardrails.md`
+- Scene Packs: `./references/scene-packs.md`
+- Boundary cases: `./references/boundary-cases.md`
 
-**评测集位置：**
+**Benchmark location:**
 `./evals/benchmark.md`
 
-**你的任务：**
+**Your task:**
 
-1. 先读取 `SKILL.md`，理解主流程：场景判断 → protected spans → Tier 判断 → 改写档位 → scope 判断 → 保真回读 → 残留味回读 → 输出合同
-2. 再按需读取 `references/` 下的文件，补齐短语、结构、边界和误杀防护
-3. 然后读取 `./evals/benchmark.md`，对其中每一条测试用例执行评测
+1. Read `SKILL.md` first, understand the main flow: scene detection → protected spans → Tier → rewrite level → scope → fidelity reread → residual reread → output contract
+2. Read files under `references/` as needed for phrases, structures, boundaries, and false-positive protection
+3. Read `./evals/benchmark.md` and evaluate each case in it
 
-### 对 Should Fix（SF-01 到 SF-45）：
-- 先判断主场景（chat / status / docs / public-writing）和问题类型
-- 判断改写档位（minimal / standard / aggressive）
-- 判断 scope（structural / bounded / in-place）；长 `public-writing` 默认 `bounded`（整句空话进删除清单、实句句内洗、不并句不重排）；用户要求完全原样、或样本明确标为 `Long-form / in-place` 时，按 `in-place` 的句内改写边界处理
-- 回读先做保真回读；只有第一遍已经保住事实、但仍有明显残留味时，才再做 `Residual Audit`
-- 第二遍固定只查 5 件事：开场残留、总结残留、narrator 残留、空泛判断残留、句长过匀
-- 按规则处理原文：默认输出改写后的文本；如果该样本按 `audit-only` 通过，允许只输出缺来源 / 缺归属的风险说明，不强行给整段重写
-- 列出命中项（问题类型 + 命中的具体词/结构）
-- 判断是否通过（✅ 通过 / ⚠️ 部分通过 / ❌ 未通过），简短说明理由
-- 对无源引用类 SF 用例，额外按场景判定：`public-writing / chat` 默认以删掉无证据权威铺垫为 `✅`；`docs / status` 默认以明确标注缺来源且不伪装成已证实为 `✅`
-- 对 `Residual Audit` 类 SF 用例，额外检查第二遍是否只做轻量修正；如果为了抛光而重写全文、补新事实，或把 `status / docs` 写得更口语，记 `❌`
-- 对 `Scene Packs` 类 SF 用例，额外判断是否命中 `README / release-note / forum-post / issue-reply` 子场景，并按发布目的收束语气
-- 对 `Long-form / in-place` 类 SF 用例，额外检查是否保留句数、段落顺序和关键转场；如果删整句、合并相邻句、重排段落，记 `❌`
+### For Should Fix (SF-01 to SF-30):
+- Judge the main scene (chat / status / docs / public-writing) and the problem type
+- Judge the rewrite level (minimal / standard / aggressive)
+- Judge the scope (structural / bounded / in-place); long `public-writing` defaults to `bounded` (whole empty sentences to the deletion list, real sentences cleaned intra-sentence, no merging, no reordering); when the user asks for exactly-as-is or the sample is marked `Long-form / in-place`, use the `in-place` intra-sentence boundary
+- Do the fidelity reread first; only when pass 1 preserved the facts but obvious residue remains, do the `Residual Audit`
+- Pass 2 checks only 5 things: opener residue, summary residue, narrator residue, empty-judgment residue, uniform sentence length
+- Process the original by the rules: output the rewrite by default; if the sample passes as `audit-only`, output only the missing-source / missing-attribution risk note, without forcing a full rewrite
+- List the hits (problem type + the specific word/structure hit)
+- Judge pass/fail (✅ pass / ⚠️ partial / ❌ fail) with a short reason
+- For unsourced-citation SF cases, judge by scene: `public-writing / chat` pass by deleting the unsupported authority framing; `docs / status` pass by flagging the missing source without faking proof
+- For `Residual Audit` SF cases, check pass 2 did only light fixes; if it rewrote everything, added facts, or made `status / docs` more colloquial, mark `❌`
+- For `Scene Packs` SF cases, check it hit the `README / release-note / forum-post / issue-reply` sub-scene and tightened tone by publishing intent
+- For `Long-form / in-place` SF cases, check it kept the sentence count, paragraph order, and key transitions; if it deleted whole sentences, merged adjacent sentences, or reordered paragraphs, mark `❌`
 
-### 对 Should NOT Fix（SNF-01 到 SNF-35）：
-- 判断这条文本为什么不该改
-- 如果保持原样或只做最小无害调整 → ✅ 通过
-- 如果错误修改了术语、系统主语、技术报告、引用原文、边界案例中的合理表达 → ❌ 误杀，说明误杀点
-- 对 `Scene Packs` 类 SNF 用例，额外确认没有把已经直接的 README、release note、forum post、issue reply 误改成另一种场景
-- 对 `Long-form / in-place` 类 SNF 用例，额外确认没有把承担节奏的重复、承接句或转场句删掉
+### For Should NOT Fix (SNF-01 to SNF-14):
+- Judge why this text should not change
+- If it kept the original or made only minimal harmless adjustments → ✅ pass
+- If it wrongly changed terms, system subjects, technical reports, quoted text, or reasonable expressions in boundary cases → ❌ false positive, name the spot
+- For `Scene Packs` SNF cases, confirm it didn't turn an already-direct README/release note/forum post/issue reply into another scene
+- For `Long-form / in-place` SNF cases, confirm it didn't delete rhythm-bearing repetition, connectors, or transitions
 
-### 最终汇总：
-输出一个汇总表格：
+### Final summary:
+Output a summary table:
 
 ```text
-| 用例 | 类型 | 结果 | 备注 |
-|------|------|------|------|
+| Case | Type | Result | Note |
+|------|------|--------|------|
 | SF-01 | Should Fix | ✅/⚠️/❌ | ... |
 | ... | ... | ... | ... |
 | SNF-01 | Should NOT Fix | ✅/❌ | ... |
 | ... | ... | ... | ... |
 ```
 
-并给出：
-- SF 通过率：X/45
-- SNF 误杀率：X/35
-- 是否达到目标：SF > 90%，SNF 误杀率 < 10%
+And give:
+- SF pass rate: X/30
+- SNF false-positive rate: X/14
+- Targets met: SF > 90%, SNF false-positive rate < 10%
 
-**注意：**
-- 不要误伤系统主语、技术术语、学术被动、真人 debug 对话等已知边界
-- `code-context` 样本只处理注释 / docstring / commit message 中的文字，不改动代码本身
-- `Scene Packs` 样本先保大场景和 protected spans，再按子场景的发布目的处理，不要把 release note 写成营销稿、forum post 写成公告、issue reply 写成客服话术
-- `Long-form / in-place` 样本不删整句、不合并相邻句、不重排段落；字数留存率目标 ≥ 0.90，硬下限 0.85
-- `Bounded` 样本不直接删整句空话，不把实句放进删除清单，也不把商业黑话壳句和紧随其后的数据句合并成一句
+**Notes:**
+- Don't false-positive system subjects, technical terms, academic passive, real debug dialogue, and other known boundaries
+- `code-context` samples: only touch text in comments / docstrings / commit messages, never the code
+- `Scene Packs` samples: keep the main scene and protected spans first, then handle by sub-scene publishing intent; don't turn a release note into marketing, a forum post into an announcement, or an issue reply into customer-service talk
+- `Long-form / in-place` samples: don't delete whole sentences, merge adjacent sentences, or reorder paragraphs; word-count retention target ≥ 0.90, hard floor 0.85
+- `Bounded` samples: don't directly delete whole empty sentences, don't put real sentences on the deletion list, and don't merge a business-jargon shell sentence with the data sentence that follows it
 
 ---
 
-## Codex 快速运行
+## Codex quick run
 
 ```bash
 codex exec -C . --sandbox read-only \
-  "先读取 ./SKILL.md，再结合 ./references/ 下的相关文件，评测 ./evals/benchmark.md 中的所有用例。对 SF 用例先判断场景、Tier、改写档位和 scope，再按规则处理并判断是否通过；如果是 README、release note、forum post、issue reply，补看 ./references/scene-packs.md 并按对应子场景处理；如果是 Long-form / in-place 样本，必须遵守不删整句、不合并相邻句、不重排段落的边界，检查字数留存、句数对齐和关键转场保留。回读先做保真回读，只有第一遍已经保住事实、但仍有明显残留味时，才再做 Residual Audit。Residual Audit 只查开场残留、总结残留、narrator 残留、空泛判断残留、句长过匀，且只允许轻量修正。默认输出改写结果，但对按 audit-only 通过的无源引用样本，允许只输出缺来源或缺归属的风险说明，不强行整段重写。无源引用类 SF 需要按场景判定：public-writing/chat 默认删掉无证据权威铺垫算通过，docs/status 默认明确标注缺来源且不伪装成已证实算通过。对 SNF 用例判断是否误杀。注意 mixed 样本只处理真正有问题的正文，不要改用户指令、引用和被讨论词。code-context 样本只改注释/docstring/commit message，不动代码。Scene Packs 样本不能删版本号、路径、链接、编号和责任归属。最后输出汇总表格、SF 通过率和 SNF 误杀率。"
+  "Read ./SKILL.md first, then the relevant files under ./references/, and evaluate all cases in ./evals/benchmark.md. For SF cases, judge scene, Tier, rewrite level, and scope, then process by the rules and judge pass/fail; for README, release note, forum post, issue reply, also read ./references/scene-packs.md and handle by the sub-scene; for Long-form / in-place samples, honor the no-delete-whole-sentence, no-merge, no-reorder boundary and check word-count retention, sentence-count alignment, and key transitions. Do the fidelity reread first; only when pass 1 preserved the facts but obvious residue remains, do a Residual Audit. The Residual Audit checks only opener residue, summary residue, narrator residue, empty-judgment residue, uniform sentence length, and allows only light fixes. Output the rewrite by default, but for unsourced-citation samples passing as audit-only, output only the missing-source risk note. Unsourced-citation SF cases are judged by scene: public-writing/chat pass by deleting the unsupported framing, docs/status pass by flagging the missing source without faking proof. For SNF cases, judge false positives. Note: mixed samples only touch the truly problematic body, not user instructions, quotes, or discussed words. code-context samples only touch comments/docstrings/commit messages, not code. Scene Packs samples must not delete version numbers, paths, links, IDs, or attribution. Finally output a summary table, SF pass rate, and SNF false-positive rate."
 ```
 
-## Claude Code 快速运行
+## Claude Code quick run
 
-在项目目录下启动 Claude Code，对话里直接说：
+Start Claude Code in the project directory and say:
 
 ```text
-读取 ./SKILL.md 和 ./references/ 下的所有文件，然后评测 ./evals/benchmark.md 中的所有用例。对 SF 用例先判断场景、Tier、改写档位和 scope，再按规则处理并判断是否通过；如果是 README、release note、forum post、issue reply，补看 ./references/scene-packs.md 并按对应子场景处理；如果是 Long-form / in-place 样本，必须遵守不删整句、不合并相邻句、不重排段落的边界，检查字数留存、句数对齐和关键转场保留。回读先做保真回读，只有第一遍已经保住事实、但仍有明显残留味时，才再做 Residual Audit。Residual Audit 只查开场残留、总结残留、narrator 残留、空泛判断残留、句长过匀，且只允许轻量修正。默认输出改写结果，但对按 audit-only 通过的无源引用样本，允许只输出缺来源或缺归属的风险说明，不强行整段重写。无源引用类 SF 按场景判定：public-writing/chat 默认删掉无证据权威铺垫算通过，docs/status 默认明确标注缺来源且不伪装成已证实算通过。对 SNF 用例判断是否误杀。注意 mixed 样本只处理真正有问题的正文，不要改用户指令、引用和被讨论词。code-context 样本只改注释/docstring/commit message，不动代码。Scene Packs 样本不能删版本号、路径、链接、编号和责任归属。最后输出汇总表格、SF 通过率和 SNF 误杀率。
+Read ./SKILL.md and all files under ./references/, then evaluate all cases in ./evals/benchmark.md. For SF cases, judge scene, Tier, rewrite level, and scope, then process by the rules and judge pass/fail; for README, release note, forum post, issue reply, also read ./references/scene-packs.md and handle by the sub-scene; for Long-form / in-place samples, honor the no-delete-whole-sentence, no-merge, no-reorder boundary and check word-count retention, sentence-count alignment, and key transitions. Do the fidelity reread first; only when pass 1 preserved the facts but obvious residue remains, do a Residual Audit. The Residual Audit checks only opener residue, summary residue, narrator residue, empty-judgment residue, uniform sentence length, and allows only light fixes. Output the rewrite by default, but for unsourced-citation samples passing as audit-only, output only the missing-source risk note. Unsourced-citation SF cases are judged by scene: public-writing/chat pass by deleting the unsupported framing, docs/status pass by flagging the missing source. For SNF cases, judge false positives. Note: mixed samples only touch the truly problematic body, not user instructions, quotes, or discussed words. code-context samples only touch comments/docstrings/commit messages, not code. Scene Packs samples must not delete version numbers, paths, links, IDs, or attribution. Finally output a summary table, SF pass rate, and SNF false-positive rate.
 ```
 
-## 通用 LLM / API
+## Generic LLM / API
 
-如果用的是 ChatGPT、Claude Web、或其他 API：
+If you use ChatGPT, Claude Web, or another API:
 
-1. 把上面"通用评测提示词"部分（两条横线之间）作为 system prompt 或首条消息
-2. 把 `SKILL.md`、`references/` 下的文件和 `evals/benchmark.md` 的内容一起贴给模型
-3. token 不够时，优先保留 `SKILL.md` + `benchmark.md` + `scene-packs.md` + `severity.md` + `boundary-cases.md`
+1. Use the "Generic eval prompt" section above (between the two horizontal rules) as the system prompt or first message
+2. Paste `SKILL.md`, the `references/` files, and `evals/benchmark.md` together
+3. When tokens are tight, prioritize `SKILL.md` + `benchmark.md` + `scene-packs.md` + `severity.md` + `boundary-cases.md`
 
-注意：token 窗口较短的模型可能无法一次跑完 80 条，可以分批（先跑 SF，再跑 SNF）。
+Note: models with a short context window may not run all cases at once; batch them (SF first, then SNF).

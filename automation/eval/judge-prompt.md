@@ -1,62 +1,62 @@
 # Benchmark Judge Prompt
 
-把下面这段 prompt 直接用于交叉判分。它只负责按 `evals/run-eval.md` 判定被测输出，不负责重新改写。
+Use the prompt below directly for cross-scoring. It only judges the model-under-test output by `evals/run-eval.md`; it does not rewrite.
 
 ```text
-你正在执行「说人话」benchmark 交叉判分。你的任务是读取 benchmark 用例、被测模型输出，并按 ./evals/run-eval.md 的既有口径判定每条结果。
+You are cross-scoring the klartext benchmark. Read the benchmark cases and the model-under-test output, and judge each result by the existing standard in ./evals/run-eval.md.
 
-路径边界：
-- 只使用当前工作目录里的 `./evals/`、`./SKILL.md`、`./references/` 和被测输出文件。
-- 不要读取或引用全局安装副本，例如 `~/.codex/skills/shuorenhua`、`~/.claude/skills/shuorenhua` 或其他仓库外路径。
-- 如果某个全局 skill 被自动触发，也只能把它当作运行环境噪音；本轮判分口径以当前工作目录文件为准。
+Path boundary:
+- Use only `./evals/`, `./SKILL.md`, `./references/`, and the model-under-test output file in the current working directory.
+- Do not read or reference a globally installed copy such as `~/.codex/skills/klartext`, `~/.claude/skills/klartext`, or any path outside the repo.
+- If a global skill is auto-triggered, treat it as environment noise; this run's standard is the current working-directory files.
 
-开始前先读取：
+Read first:
 - ./evals/run-eval.md
 - ./evals/benchmark.md
 - ./evals/benchmark-map.md
 
-被测输出的标题是盲测编号（B-xx）。判分前先用 ./evals/benchmark-map.md 把盲测编号映射回 benchmark.md 的用例编号（SF-xx / SNF-xx），再按该用例的 `**预期**` / `**理由**` 判分；输出表格用映射后的用例编号。
+The model-under-test titles are blind IDs (B-xx). Before scoring, map each blind ID back to the benchmark.md case ID (SF-xx / SNF-xx) via ./evals/benchmark-map.md, then score by that case's `**Expected**` / `**Reason**`; use the mapped case ID in the output table.
 
-必要时再读取：
+Read as needed:
 - ./SKILL.md
 - ./references/scene-packs.md
 - ./references/protected-spans.md
 - ./references/operation-manual.md
 - ./references/boundary-cases.md
 
-输入会提供：
-- 盲测区间（例如 B-01 到 B-16）
-- 被测模型输出
-- 若包含 Long-form / in-place 用例，运行者会提供原文字符数、输出字符数和留存百分比
+The input provides:
+- A blind range (e.g. B-01 to B-15)
+- The model-under-test output
+- If Long-form / in-place cases are included, the runner provides original char count, output char count, and retention percentage
 
-判分标准：
-- 直接引用 ./evals/run-eval.md 的口径，不另造标准。
-- SF：主要问题被消除、原意和 protected spans 保留、不过度改写，记 ✅。
-- SF：识别到问题但动作不完整、只标注风险但该直接改写、bounded 直接删或软化整句空话等，记 ⚠️。
-- SF：主要问题没处理、编造事实、误改 protected spans、错改场景、长文误删并句重排，记 ❌。
-- SNF：保持原样或只做最小无害调整，记 ✅。
-- SNF：错误修改术语、系统主语、技术报告、引用原文、被讨论词、合理转场、实句或 protected spans，记 ❌。
-- Scene Packs、Long-form / in-place、Bounded、Residual Audit、fact-preservation、无源引用类用例按 ./evals/run-eval.md 的对应小节判。
-- 长文留存百分比只使用运行者提供的数字；你不要自己数，也不要估算。
+Scoring standard:
+- Cite the standard in ./evals/run-eval.md; don't invent a new one.
+- SF: main problem removed, meaning and protected spans kept, no over-rewriting → ✅.
+- SF: problem identified but action incomplete, flagged risk when it should have rewritten directly, bounded directly deleted or softened a whole empty sentence → ⚠️.
+- SF: main problem untouched, invented facts, changed protected spans, wrong scene, long-form wrongly deleted/merged/reordered → ❌.
+- SNF: kept the original or made only a minimal harmless adjustment → ✅.
+- SNF: wrongly changed terms, system subjects, technical reports, quoted text, discussed words, a reasonable transition, real sentences, or protected spans → ❌.
+- Scene Packs, Long-form / in-place, Bounded, Residual Audit, fact-preservation, and unsourced-citation cases are judged by the matching section of ./evals/run-eval.md.
+- Use only the retention percentage the runner provides; don't count or estimate it yourself.
 
-输出格式必须严格如下：
+Output format must be exactly:
 
-| 编号 | 判定 ✅/⚠️/❌ | 一句依据 |
-|------|--------------|----------|
-| SF-01（B-xx） | ✅ | <一句依据> |
+| Case | Verdict ✅/⚠️/❌ | One-line basis |
+|------|------------------|----------------|
+| SF-01 (B-xx) | ✅ | <one-line basis> |
 
-末尾再输出：
+Then output:
 
-## 汇总
+## Summary
 
-- SF 通过：X/Y
-- SNF 误杀：X/Y
-- ⚠️ 清单：<编号列表；没有就写“无”>
-- ❌ 清单：<编号列表；没有就写“无”>
+- SF pass: X/Y
+- SNF false positive: X/Y
+- ⚠️ list: <case IDs; "none" if empty>
+- ❌ list: <case IDs; "none" if empty>
 
-禁止：
-- 不要重写被测输出。
-- 不要输出评分标准以外的新等级。
-- 不要用“文风还可以 / 不够自然”这类主观理由替代 ./evals/run-eval.md 的标准。
-- 不要跳过用例；如果被测输出缺某条，按 ❌ 并说明缺输出。
+Forbidden:
+- Don't rewrite the model-under-test output.
+- Don't output a grade outside the scoring scale.
+- Don't replace the ./evals/run-eval.md standard with subjective reasons like "style is okay / not natural enough".
+- Don't skip cases; if the output is missing one, mark ❌ and note the missing output.
 ```
