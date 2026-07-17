@@ -7,7 +7,7 @@
 This file carries each case's `Expected` / `Reason` for manual walk-through and judge scoring.
 
 - **Static walk-through / quick self-check**: hand the test text to an AI tool, ask it to "rewrite by the klartext rules", and check against the expectation.
-- **Dual-model real run (formal, blind since v2.0.0)**: the model under test reads only [benchmark-blind.md](./benchmark-blind.md) (anonymized IDs, shuffled order, no expectations, generated from this file by `automation/eval/make_blind.py`) and **must not read this file**; the judge maps the blind IDs back via [benchmark-map.md](./benchmark-map.md) and scores against this file. Flow in `automation/eval/README.md`.
+- **Dual-model real run (formal; blind protocol inherited from upstream v2.0.0)**: the model under test reads only [benchmark-blind.md](./benchmark-blind.md) (anonymized IDs, shuffled order, no expectations, generated from this file by `automation/eval/make_blind.py`) and **must not read this file**; the judge maps the blind IDs back via [benchmark-map.md](./benchmark-map.md) and scores against this file. Flow in `automation/eval/README.md`.
 - After adding/removing cases here, re-run `python3 automation/eval/make_blind.py` to regenerate the blind files.
 
 ## Coverage matrix

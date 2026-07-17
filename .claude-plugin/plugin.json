@@ -1,6 +1,6 @@
 {
   "name": "klartext",
-  "version": "2.0.0",
+  "version": "0.1.0",
   "description": "German-English de-AI rewrite skill: information first, then style. Cleans over-catching, engineer-speak, influencer/clickbait tone, Nominalstil, and unsourced authority framing while preserving facts, versions, commands, and attribution. Fork of shuorenhua (Chinese-English).",
   "author": {
     "name": "michi-onl"

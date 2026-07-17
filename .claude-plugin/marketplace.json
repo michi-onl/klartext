@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "klartext: marketplace for the German-English de-AI rewrite skill (a fork of shuorenhua).",
-    "version": "2.0.0"
+    "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "klartext",
       "description": "German-English de-AI rewrite skill: information first, then style.",
-      "version": "2.0.0",
+      "version": "0.1.0",
       "author": {
         "name": "michi-onl"
       },

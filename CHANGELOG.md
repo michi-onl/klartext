@@ -2,7 +2,40 @@
 
 ## Fork — klartext (German-English)
 
-This repository is **klartext**, a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua). The skill method (scenes, Tiers, scopes, reread contract) is inherited; the instructional prose was moved to English-first, and the phrase tables, examples, and eval samples were re-derived for German (the English side carries over). The entries below this section are the upstream shuorenhua changelog (in Chinese), kept as inherited history.
+This repository is **klartext**, a German-English fork of [shuorenhua (说人话)](https://github.com/MrGeDiao/shuorenhua). The skill method (scenes, Tiers, scopes, reread contract) is inherited; the instructional prose was moved to English-first, and the phrase tables, examples, and eval samples were re-derived for German (the English side carries over). klartext's own entries follow directly below; the upstream shuorenhua changelog (in Chinese) is kept further down under *Inherited upstream history*.
+
+
+## [0.1.0] - 2026-07-17 — German-English fork
+
+Forked from shuorenhua v2.0.0. The method is inherited; the language core is not.
+
+### Added
+- `references/phrases-de.md`: German AI stock phrases, re-derived from German sources rather than translated from the Chinese table.
+- German scene logic in place of the Chinese one: Denglisch, Nominalstil, German forums (heise / Reddit), influencer / clickbait tone.
+- `evals/benchmark.md`: 44 German + English cases (30 SF + 14 SNF) with scene matrix and false-positive guards; blind set and map regenerated via `make_blind.py`.
+- `evals/real-samples.md`: 10 German scenario samples.
+- `LICENSE`: fork copyright added, upstream attribution kept.
+
+### Changed
+- Instructional prose (`SKILL.md`, `references/`, `install/`, `automation/`) moved to English-first; the target languages the skill cleans are German and English.
+- Plugin identity is now `klartext@klartext` against `michi-onl/klartext`; install docs, badges, and clone paths follow.
+- Version line reset to 0.1.0 from the inherited 2.0.0 — see Notes.
+
+### Removed
+- `references/phrases-zh.md` and the Chinese scene-specific logic (公众号 / 小红书 / 翻译腔 / 中英混排).
+- Upstream run archives `evals/results-v*.md` (twelve files, v1.3.0–v1.9.2): they score the Chinese skill against an eval set this fork no longer has.
+
+### Notes
+- **No German real run is recorded yet.** Upstream earned 2.0.0 across the twelve recorded runs removed above; the German phrase tables and benchmark here are unvalidated by any run. The version therefore starts at 0.x rather than inheriting upstream's number, and 1.0.0 is gated on a first German baseline landing in `evals/run-manifest.md`.
+- `references/phrases-en.md` carries over from upstream unchanged.
+- Version numbers in `README.md` and `evals/real-samples.md` (`v1.8.0`, `v0.5.0`) are example and fixture text, not release declarations.
+
+
+---
+
+# Inherited upstream history (shuorenhua)
+
+The entries below are the upstream [shuorenhua](https://github.com/MrGeDiao/shuorenhua) changelog, kept in Chinese as inherited history. Their version numbers refer to shuorenhua releases and are unrelated to klartext's version line above.
 
 
 ## [2.0.0] - 2026-07-15 — Plugin 一键安装 / 分发铺设
